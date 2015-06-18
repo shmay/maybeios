@@ -7,16 +7,43 @@
 //
 
 import UIKit
+import CoreLocation
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
+  
+  let ref = Firebase(url: "https://androidkye.firebaseio.com")
+  
+  let locationManager = CLLocationManager() // Add this statement
 
   var window: UIWindow?
 
-
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    locationManager.delegate = self                // Add this line
+    locationManager.requestAlwaysAuthorization()   // And this one
     // Override point for customization after application launch.
+    
+//    ref.observeAuthEventWithBlock({ authData in
+//      if authData != nil {
+//        // user authenticated with Firebase
+//        
+//        println("appdel: \(authData)")
+//        
+//        let newUser = [
+//          "provider": authData.provider,
+//          "email": authData.providerData["email"] as? NSString as? String,
+//          "provider_id": (split(authData.uid) { $0 == ":"})[1]
+//        ]
+//        
+//        self.ref.childByAppendingPath("users").childByAppendingPath(authData.uid).setValue(newUser)
+//      } else {
+//        // No user is logged in
+//      }
+//    })
+    
     return true
+    
+
   }
 
   func applicationWillResignActive(application: UIApplication) {

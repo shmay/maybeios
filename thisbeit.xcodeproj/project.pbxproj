@@ -7,12 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		840A8644A5911FD12B9D060C /* libPods-thisbeit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C427526CDB58F79FB775EA /* libPods-thisbeit.a */; };
 		AD122BD01B2B5B13007B0872 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD122BCF1B2B5B13007B0872 /* AppDelegate.swift */; };
-		AD122BD21B2B5B13007B0872 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD122BD11B2B5B13007B0872 /* ViewController.swift */; };
+		AD122BD21B2B5B13007B0872 /* AddSpotController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD122BD11B2B5B13007B0872 /* AddSpotController.swift */; };
 		AD122BD51B2B5B13007B0872 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD122BD31B2B5B13007B0872 /* Main.storyboard */; };
 		AD122BD71B2B5B13007B0872 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD122BD61B2B5B13007B0872 /* Images.xcassets */; };
 		AD122BDA1B2B5B13007B0872 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD122BD81B2B5B13007B0872 /* LaunchScreen.xib */; };
 		AD122BE61B2B5B13007B0872 /* thisbeitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD122BE51B2B5B13007B0872 /* thisbeitTests.swift */; };
+		AD122BF01B2B5C56007B0872 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD122BEF1B2B5C56007B0872 /* LoginController.swift */; };
+		ADB3005F1B2BE398006D3B7F /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3005E1B2BE398006D3B7F /* SignUpController.swift */; };
+		ADB300661B2C99DA006D3B7F /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB300651B2C99DA006D3B7F /* LocationsViewController.swift */; };
+		ADB3006A1B2DE94D006D3B7F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB300691B2DE94D006D3B7F /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,16 +31,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04C427526CDB58F79FB775EA /* libPods-thisbeit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-thisbeit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E78DA8EF784F53FA5625DFC /* Pods-thisbeit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-thisbeit.release.xcconfig"; path = "Pods/Target Support Files/Pods-thisbeit/Pods-thisbeit.release.xcconfig"; sourceTree = "<group>"; };
+		5D41F68F63EF4D4A3492A921 /* Pods-thisbeit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-thisbeit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-thisbeit/Pods-thisbeit.debug.xcconfig"; sourceTree = "<group>"; };
 		AD122BCA1B2B5B13007B0872 /* thisbeit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = thisbeit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD122BCE1B2B5B13007B0872 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD122BCF1B2B5B13007B0872 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		AD122BD11B2B5B13007B0872 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		AD122BD11B2B5B13007B0872 /* AddSpotController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSpotController.swift; sourceTree = "<group>"; };
 		AD122BD41B2B5B13007B0872 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AD122BD61B2B5B13007B0872 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		AD122BD91B2B5B13007B0872 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		AD122BDF1B2B5B13007B0872 /* thisbeitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = thisbeitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD122BE41B2B5B13007B0872 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD122BE51B2B5B13007B0872 /* thisbeitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = thisbeitTests.swift; sourceTree = "<group>"; };
+		AD122BEF1B2B5C56007B0872 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		ADB3005E1B2BE398006D3B7F /* SignUpController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
+		ADB300601B2BF76D006D3B7F /* thisbeit-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "thisbeit-Bridging-Header.h"; sourceTree = "<group>"; };
+		ADB300651B2C99DA006D3B7F /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsViewController.swift; sourceTree = "<group>"; };
+		ADB300691B2DE94D006D3B7F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +56,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADB3006A1B2DE94D006D3B7F /* MapKit.framework in Frameworks */,
+				840A8644A5911FD12B9D060C /* libPods-thisbeit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,12 +71,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		109402BBD962FF5BAE2F4488 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ADB300691B2DE94D006D3B7F /* MapKit.framework */,
+				04C427526CDB58F79FB775EA /* libPods-thisbeit.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		AD122BC11B2B5B13007B0872 = {
 			isa = PBXGroup;
 			children = (
 				AD122BCC1B2B5B13007B0872 /* thisbeit */,
 				AD122BE21B2B5B13007B0872 /* thisbeitTests */,
 				AD122BCB1B2B5B13007B0872 /* Products */,
+				F89F0461041E45D7087B7499 /* Pods */,
+				109402BBD962FF5BAE2F4488 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -78,11 +104,15 @@
 			isa = PBXGroup;
 			children = (
 				AD122BCF1B2B5B13007B0872 /* AppDelegate.swift */,
-				AD122BD11B2B5B13007B0872 /* ViewController.swift */,
+				ADB300651B2C99DA006D3B7F /* LocationsViewController.swift */,
+				AD122BD11B2B5B13007B0872 /* AddSpotController.swift */,
 				AD122BD31B2B5B13007B0872 /* Main.storyboard */,
 				AD122BD61B2B5B13007B0872 /* Images.xcassets */,
 				AD122BD81B2B5B13007B0872 /* LaunchScreen.xib */,
 				AD122BCD1B2B5B13007B0872 /* Supporting Files */,
+				AD122BEF1B2B5C56007B0872 /* LoginController.swift */,
+				ADB3005E1B2BE398006D3B7F /* SignUpController.swift */,
+				ADB300601B2BF76D006D3B7F /* thisbeit-Bridging-Header.h */,
 			);
 			path = thisbeit;
 			sourceTree = "<group>";
@@ -112,6 +142,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		F89F0461041E45D7087B7499 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5D41F68F63EF4D4A3492A921 /* Pods-thisbeit.debug.xcconfig */,
+				3E78DA8EF784F53FA5625DFC /* Pods-thisbeit.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -119,9 +158,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AD122BE91B2B5B13007B0872 /* Build configuration list for PBXNativeTarget "thisbeit" */;
 			buildPhases = (
+				4DCDBD85517289DFBF09A88E /* Check Pods Manifest.lock */,
 				AD122BC61B2B5B13007B0872 /* Sources */,
 				AD122BC71B2B5B13007B0872 /* Frameworks */,
 				AD122BC81B2B5B13007B0872 /* Resources */,
+				F2275BE621131CA0615962E7 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -156,6 +197,7 @@
 		AD122BC21B2B5B13007B0872 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Kyle Murphy";
 				TargetAttributes = {
@@ -207,13 +249,49 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4DCDBD85517289DFBF09A88E /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F2275BE621131CA0615962E7 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-thisbeit/Pods-thisbeit-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		AD122BC61B2B5B13007B0872 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD122BD21B2B5B13007B0872 /* ViewController.swift in Sources */,
+				AD122BD21B2B5B13007B0872 /* AddSpotController.swift in Sources */,
+				AD122BF01B2B5C56007B0872 /* LoginController.swift in Sources */,
 				AD122BD01B2B5B13007B0872 /* AppDelegate.swift in Sources */,
+				ADB3005F1B2BE398006D3B7F /* SignUpController.swift in Sources */,
+				ADB300661B2C99DA006D3B7F /* LocationsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,21 +416,28 @@
 		};
 		AD122BEA1B2B5B13007B0872 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D41F68F63EF4D4A3492A921 /* Pods-thisbeit.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = thisbeit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "thisbeit/thisbeit-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		AD122BEB1B2B5B13007B0872 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3E78DA8EF784F53FA5625DFC /* Pods-thisbeit.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = thisbeit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "thisbeit/thisbeit-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -409,6 +494,7 @@
 				AD122BEB1B2B5B13007B0872 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		AD122BEC1B2B5B13007B0872 /* Build configuration list for PBXNativeTarget "thisbeitTests" */ = {
 			isa = XCConfigurationList;
@@ -417,6 +503,7 @@
 				AD122BEE1B2B5B13007B0872 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
