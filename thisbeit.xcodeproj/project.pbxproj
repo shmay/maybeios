@@ -15,6 +15,10 @@
 		AD122BDA1B2B5B13007B0872 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD122BD81B2B5B13007B0872 /* LaunchScreen.xib */; };
 		AD122BE61B2B5B13007B0872 /* thisbeitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD122BE51B2B5B13007B0872 /* thisbeitTests.swift */; };
 		AD122BF01B2B5C56007B0872 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD122BEF1B2B5C56007B0872 /* LoginController.swift */; };
+		AD3F2E831B3474200071D2B4 /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F2E821B3474200071D2B4 /* Spot.swift */; };
+		AD3F2E851B34742D0071D2B4 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F2E841B34742D0071D2B4 /* User.swift */; };
+		AD3F2E871B34E0750071D2B4 /* Utilties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F2E861B34E0750071D2B4 /* Utilties.swift */; };
+		AD3F2E891B34FD2B0071D2B4 /* SpotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F2E881B34FD2B0071D2B4 /* SpotViewController.swift */; };
 		ADB3005F1B2BE398006D3B7F /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3005E1B2BE398006D3B7F /* SignUpController.swift */; };
 		ADB300661B2C99DA006D3B7F /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB300651B2C99DA006D3B7F /* LocationsViewController.swift */; };
 		ADB3006A1B2DE94D006D3B7F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB300691B2DE94D006D3B7F /* MapKit.framework */; };
@@ -45,6 +49,10 @@
 		AD122BE41B2B5B13007B0872 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD122BE51B2B5B13007B0872 /* thisbeitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = thisbeitTests.swift; sourceTree = "<group>"; };
 		AD122BEF1B2B5C56007B0872 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		AD3F2E821B3474200071D2B4 /* Spot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
+		AD3F2E841B34742D0071D2B4 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		AD3F2E861B34E0750071D2B4 /* Utilties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilties.swift; sourceTree = "<group>"; };
+		AD3F2E881B34FD2B0071D2B4 /* SpotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotViewController.swift; sourceTree = "<group>"; };
 		ADB3005E1B2BE398006D3B7F /* SignUpController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		ADB300601B2BF76D006D3B7F /* thisbeit-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "thisbeit-Bridging-Header.h"; sourceTree = "<group>"; };
 		ADB300651B2C99DA006D3B7F /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsViewController.swift; sourceTree = "<group>"; };
@@ -113,6 +121,10 @@
 				AD122BEF1B2B5C56007B0872 /* LoginController.swift */,
 				ADB3005E1B2BE398006D3B7F /* SignUpController.swift */,
 				ADB300601B2BF76D006D3B7F /* thisbeit-Bridging-Header.h */,
+				AD3F2E821B3474200071D2B4 /* Spot.swift */,
+				AD3F2E841B34742D0071D2B4 /* User.swift */,
+				AD3F2E861B34E0750071D2B4 /* Utilties.swift */,
+				AD3F2E881B34FD2B0071D2B4 /* SpotViewController.swift */,
 			);
 			path = thisbeit;
 			sourceTree = "<group>";
@@ -288,10 +300,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD122BD21B2B5B13007B0872 /* AddSpotController.swift in Sources */,
+				AD3F2E891B34FD2B0071D2B4 /* SpotViewController.swift in Sources */,
+				AD3F2E831B3474200071D2B4 /* Spot.swift in Sources */,
 				AD122BF01B2B5C56007B0872 /* LoginController.swift in Sources */,
 				AD122BD01B2B5B13007B0872 /* AppDelegate.swift in Sources */,
+				AD3F2E871B34E0750071D2B4 /* Utilties.swift in Sources */,
 				ADB3005F1B2BE398006D3B7F /* SignUpController.swift in Sources */,
 				ADB300661B2C99DA006D3B7F /* LocationsViewController.swift in Sources */,
+				AD3F2E851B34742D0071D2B4 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

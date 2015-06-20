@@ -9,10 +9,17 @@
 import UIKit
 import MapKit
 
+protocol AddSpotControllerDelegate {
+  func addSpotController(controller: AddSpotController, didAddCoordinate coordinate:CLLocationCoordinate2D, radius: Double, name: String)
+}
+
 class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
-  var radius: Double!
+  var radius: Double = Double(100)
   var circle: MKCircle?
-  let pin = MKPointAnnotation()
+  
+  private var mapChangedFromUserInteraction = false
+  
+  var delegate: AddSpotControllerDelegate!
   
   @IBOutlet weak var mapView: MKMapView!
   
@@ -38,11 +45,7 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     var region = MKCoordinateRegionMakeWithDistance(location, 5000, 5000)
     mapView.setRegion(region, animated: true)
     
-//    pin.coordinate = location
-//    pin.title = "drag me"
-//    mapView.addAnnotation(pin)
-    
-    circle = MKCircle(centerCoordinate: location, radius: 100 as CLLocationDistance)
+    circle = MKCircle(centerCoordinate: location, radius: radius as CLLocationDistance)
     self.mapView.addOverlay(circle)
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -53,48 +56,52 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     addButton.enabled = !nameTextField.text.isEmpty
   }
   
-  func mapView(mapView: MKMapView!, annotationView view: MKAnnotationView!, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
-    
-    if newState == MKAnnotationViewDragState.Ending || newState == MKAnnotationViewDragState.Canceling {
-      let location = CLLocationCoordinate2DMake(self.pin.coordinate.latitude as CLLocationDegrees,self.pin.coordinate.longitude as CLLocationDegrees)
-
-      mapView.removeOverlay(circle)
-      circle = MKCircle(centerCoordinate: location, radius: 100 as CLLocationDistance)
-      mapView.addOverlay(circle)
-      
-    }
-    println("annotationView")
-
+  @IBAction func onCancel(sender: AnyObject) {
+    dismissViewControllerAnimated(true, completion: nil)
   }
   
-//  func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
-//    println("callerina")
-//    if annotation is MKPointAnnotation {
-//      println("okkkk")
-//      let pinAnnotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "myPin")
-//      
-//      pinAnnotationView.pinColor = .Purple
-//      pinAnnotationView.draggable = true
-//      pinAnnotationView.canShowCallout = true
-//      pinAnnotationView.animatesDrop = true
-//      
-//      return pinAnnotationView
-//    }
-//    
-//    return nil
-//  }
-//  
-//  func mapView(mapView: MKMapView!, rendererForOverlay overlay: MKOverlay!) -> MKOverlayRenderer! {
-//    if overlay is MKCircle {
-//      var circle = MKCircleRenderer(overlay: overlay)
-//      circle.strokeColor = UIColor.redColor()
-//      circle.fillColor = UIColor(red: 255, green: 0, blue: 0, alpha: 0.1)
-//      circle.lineWidth = 1
-//      return circle
-//    } else {
-//      return nil
-//    }
-//  }
+  private func mapViewRegionDidChangeFromUserInteraction() -> Bool {
+    let view = self.mapView.subviews[0] as! UIView
+    //  Look through gesture recognizers to determine whether this region change is from user interaction
+    if let gestureRecognizers = view.gestureRecognizers {
+      for recognizer in gestureRecognizers {
+        if( recognizer.state == UIGestureRecognizerState.Began || recognizer.state == UIGestureRecognizerState.Ended ) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+  
+  func mapView(mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+    mapChangedFromUserInteraction = mapViewRegionDidChangeFromUserInteraction()
+    if (mapChangedFromUserInteraction) {
+      // user changed map region
+    }
+  }
+  
+  func mapView(mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+    if (mapChangedFromUserInteraction) {
+      println("did change region2")
+      
+      mapView.removeOverlay(circle)
+      circle = MKCircle(centerCoordinate: mapView.centerCoordinate, radius: radius as CLLocationDistance)
+      mapView.addOverlay(circle)
+      // user changed map region
+    }
+  }
+
+  func mapView(mapView: MKMapView!, rendererForOverlay overlay: MKOverlay!) -> MKOverlayRenderer! {
+    if overlay is MKCircle {
+      var circle = MKCircleRenderer(overlay: overlay)
+      circle.strokeColor = UIColor.redColor()
+      circle.fillColor = UIColor(red: 255, green: 0, blue: 0, alpha: 0.1)
+      circle.lineWidth = 1
+      return circle
+    } else {
+      return nil
+    }
+  }
   
   // This method is called when the player moves the slider.
   @IBAction func sliderMoved(slider: UISlider) {
@@ -105,11 +112,9 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     radiusLabel.text = "\(radius)m"
     
-    let location = CLLocationCoordinate2DMake(self.pin.coordinate.latitude as CLLocationDegrees,self.pin.coordinate.longitude as CLLocationDegrees)
-    
     mapView.removeOverlay(circle)
    
-    circle = MKCircle(centerCoordinate: location, radius: radius as CLLocationDistance)
+    circle = MKCircle(centerCoordinate: mapView.centerCoordinate, radius: radius as CLLocationDistance)
     mapView.addOverlay(circle)
     
     // If you want to see the current value as you're moving the slider, then
@@ -128,8 +133,11 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     println("zoom")
     zoomToUserLocationInMapView(mapView)
   }
-  
   @IBAction private func onAdd(sender: AnyObject) {
+    var coordinate = mapView.centerCoordinate
+    var name = nameTextField.text
+    
+    delegate!.addSpotController(self, didAddCoordinate: coordinate, radius: radius, name: name)
   }
   
   func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
