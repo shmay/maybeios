@@ -18,9 +18,7 @@ class Spot: NSObject {
   var yes = 0
   var no = 0
   var maybe = 0
-  
-  var users = [User]()
-  
+    
   init(name: String, id: String) {
     self.name = name
     self.id = id

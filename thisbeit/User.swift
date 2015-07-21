@@ -31,11 +31,13 @@ class User: NSObject {
   var name = ""
   var id: String
   var isThere: IsThere
+  var token: String?
 
   init(name: String, id: String, isThere: IsThere) {
     self.name = name
     self.id = id
     self.isThere = isThere
+    
     super.init()
   }
   

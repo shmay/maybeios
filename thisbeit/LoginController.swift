@@ -8,25 +8,28 @@
 
 import UIKit
 
-class LoginController: UIViewController {
+class LoginController: UIViewController, UITextFieldDelegate {
   var ref = Firebase(url:"https://androidkye.firebaseio.com")
   
   @IBOutlet weak var email: UITextField!
   @IBOutlet weak var password: UITextField!
   @IBOutlet weak var spinner: UIActivityIndicatorView!
+  @IBOutlet weak var invalidPw: UILabel!
+  @IBOutlet weak var invalidEmail: UILabel!
+  @IBOutlet weak var invalidUser: UILabel!
   
   @IBAction func toggle() {
     performSegueWithIdentifier("SignUp", sender:self)
   }
   
   @IBAction func signin() {
+    if !spinner.hidden {
+      return
+    }
+    
     spinner.hidden = false
     spinner.startAnimating()
     
-//    var users = ["simplelogin:1": false]
-//    
-//    ref.childByAppendingPath("spots/2").updateChildValues(users)
-
     ref.authUser("kmurph73@gmail.com", password:"pass1212") {
       error, authData in
       if error != nil {
@@ -34,26 +37,60 @@ class LoginController: UIViewController {
         if let errorCode = FAuthenticationError(rawValue: error.code) {
           switch (errorCode) {
           case .UserDoesNotExist:
-            println("Handle invalid user")
+            self.spinner.hidden = true
+            self.invalidUser.hidden = false
           case .InvalidEmail:
-            println("Handle invalid email")
+            self.spinner.hidden = true
+            self.invalidEmail.hidden = false
           case .InvalidPassword:
-            println("Handle invalid password")
+            self.spinner.hidden = true
+            self.invalidPw.hidden = false
           default:
             println("Handle default situation")
           }
         }
       } else {
-        NSUserDefaults.standardUserDefaults().setValue(authData.uid!, forKey: "uid")
-//        NSUserDefaults.standardUserDefaults().setValue(authData.token!, forKey: "token")
-
-        self.performSegueWithIdentifier("gogo", sender:self)
-        println("token \(authData.token)")
+        let uid: String = authData.uid!
+        currentUser = User(name: "", id: uid, isThere: .No)
+        NSUserDefaults.standardUserDefaults().setValue(uid, forKey: "uid")
+        NSUserDefaults.standardUserDefaults().setValue(authData.token, forKey: "token")
+        NSUserDefaults.standardUserDefaults().setValue(authData.provider, forKey: "provider")
+        NSUserDefaults.standardUserDefaults().setValue(authData.providerData["email"], forKey: "provider")
+        
+        if let name = NSUserDefaults.standardUserDefaults().valueForKey("name") as? String {
+          if count(name) > 0 {
+            println("defaults has name: \(name)")
+            self.performSegueWithIdentifier("gogo", sender:self)
+          } else {
+            self.checkForUsername(uid)
+          }
+        } else {
+          self.checkForUsername(uid)
+        }
 
         // user is logged in, check authData for data
       }
     }
-
+  }
+  
+  func checkForUsername(uid: String) {
+    println("checkForUsername: \(uid)")
+    self.ref.childByAppendingPath("users/\(uid)/name").observeEventType(.Value, withBlock: { snapshot in
+      if let name = snapshot.value as? String {
+        println("fbname found: \(name)")
+        NSUserDefaults.standardUserDefaults().setValue(name, forKey: "name")
+        self.performSegueWithIdentifier("gogo", sender:self)
+      } else {
+        self.performSegueWithIdentifier("username", sender:self)
+      }
+    })
+  }
+  
+  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    if let touch = touches.first as? UITouch {
+      self.view.endEditing(true)
+    }
+    super.touchesBegan(touches , withEvent:event)
   }
   
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -66,13 +103,30 @@ class LoginController: UIViewController {
   
   @IBAction func unwindToMainMenu(sender: UIStoryboardSegue)
   {
-    let sourceViewController = sender.sourceViewController as! SignUpController
-    email.text = sourceViewController.email!.text
-    password.text = sourceViewController.password!.text
+    if let sourceViewController = sender.sourceViewController as? SignUpController {
+      email.text = sourceViewController.email!.text
+      password.text = sourceViewController.password!.text
+    } else if let sourceViewController = sender.sourceViewController as? LocationsViewController {
+      email.text = ""
+      password.text = ""
+      spinner.stopAnimating()
+      spinner.hidden = true
+    }
+  }
+  
+  func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    let oldText: NSString = textField.text
+    let newText: NSString = oldText.stringByReplacingCharactersInRange(range, withString: string)
+    invalidEmail.hidden = true
+    invalidPw.hidden = true
+    invalidUser.hidden = true
+    return true
   }
   
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
+    
+    println("viewdidappear")
     
     let uid = NSUserDefaults.standardUserDefaults().stringForKey("uid")
 
@@ -82,7 +136,13 @@ class LoginController: UIViewController {
 
   }
   
+  override func viewWillAppear(animated: Bool) {
+    println("viewWillAppear")
+  }
+  
   override func viewDidLoad() {
+    (UIApplication.sharedApplication().delegate as! AppDelegate).justLoggedOut = false
+
     println("viewDidLoad")
     super.viewDidLoad()
     

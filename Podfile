@@ -3,6 +3,7 @@
 
 target 'thisbeit' do
   pod 'Firebase', '>= 2.3.1'
+  pod 'Google/SignIn'
 end
 
 target 'thisbeitTests' do

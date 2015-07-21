@@ -23,6 +23,7 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
   
   @IBOutlet weak var mapView: MKMapView!
   
+  @IBOutlet weak var spinner: UIActivityIndicatorView!
   @IBOutlet weak var radiusLabel: UILabel!
   @IBOutlet weak var slider: UISlider!
   @IBOutlet var addButton: UIBarButtonItem!
@@ -41,14 +42,6 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     locationManager.requestAlwaysAuthorization()
     mapView.delegate = self
 
-    var location = CLLocationCoordinate2DMake(35.268788 as CLLocationDegrees,-120.647849 as CLLocationDegrees)
-    var region = MKCoordinateRegionMakeWithDistance(location, 5000, 5000)
-    mapView.setRegion(region, animated: true)
-    
-    circle = MKCircle(centerCoordinate: location, radius: radius as CLLocationDistance)
-    self.mapView.addOverlay(circle)
-    
-    // Do any additional setup after loading the view, typically from a nib.
   }
 //  35.268788, -120.647849
   
@@ -130,9 +123,9 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
   }
   
   @IBAction private func onZoomToCurrentLocation(sender: AnyObject) {
-    println("zoom")
     zoomToUserLocationInMapView(mapView)
   }
+  
   @IBAction private func onAdd(sender: AnyObject) {
     var coordinate = mapView.centerCoordinate
     var name = nameTextField.text
@@ -141,7 +134,7 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
   }
   
   func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-    //mapView.showsUserLocation = (status == .AuthorizedAlways)
+    mapView.showsUserLocation = (status == .AuthorizedAlways)
   }
   
   func zoomToUserLocationInMapView(mapView: MKMapView) {
