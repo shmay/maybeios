@@ -20,15 +20,8 @@ class OAuthController: UIViewController, GPPSignInDelegate {
     signIn.clientID = "32887541704-4eoj50cbpgvg7rgkhvh5084usp5pq1ur.apps.googleusercontent.com"
     signIn.scopes = []
     signIn.delegate = self
-//    
-//    let button = GPPSignInButton()
-//    button.center = self.view.center
-//    self.view.addSubview(button)
-    
-//    let loginButton = FBSDKLoginButton()
-//    loginButton.center = self.view.center
-//    self.view.addSubview(loginButton)
   }
+  
   func spin() {
     spinner.hidden = false
     spinner.startAnimating()
@@ -40,9 +33,6 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   }
   
   @IBAction func authWithFacebook(sender: AnyObject) {
-    if !spinner.hidden {
-      return
-    }
     
     spin()
     let facebookLogin = FBSDKLoginManager()
@@ -127,9 +117,6 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   @IBAction func unwindToMainMenu(sender: UIStoryboardSegue) {}
   
   @IBAction func authWithTwitter(sender: AnyObject) {
-    if !spinner.hidden {
-      return
-    }
     spin()
     let twitterAuthHelper = TwitterAuthHelper(firebaseRef: ref, apiKey:"EPOngDM26zvGi5sHuDpYXsAiM")
     twitterAuthHelper.selectTwitterAccountWithCallback { error, accounts in
@@ -244,7 +231,11 @@ class OAuthController: UIViewController, GPPSignInDelegate {
     if let uid = NSUserDefaults.standardUserDefaults().stringForKey("uid") {
       createUser(uid)
     }
-  
+    
+    dispatch_async(dispatch_get_main_queue(), {
+      self.stopSpin()
+    })
+    
   }
   
 }

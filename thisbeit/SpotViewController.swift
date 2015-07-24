@@ -10,12 +10,14 @@ import Foundation
 import UIKit
 import MessageUI
 
-class SpotViewController: UITableViewController, EditSpotControllerDelegate {
+class SpotViewController: UITableViewController, EditSpotControllerDelegate,UserControllerDelegate {
   
   let messageComposer = MessageComposer()
   
+  var locationsController: LocationsViewController!
+  let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+  
   var spot: Spot!
-  var admin: Bool?
   
   var yes = [User]()
   var no = [User]()
@@ -26,6 +28,7 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate {
   @IBOutlet var actionItem: UIBarButtonItem!
   @IBOutlet var editBtn: UIBarButtonItem!
   @IBOutlet weak var inviteBtn: UIBarButtonItem!
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -48,13 +51,10 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate {
         let name = user["name"] as! String
         let isAdmin = user["admin"] as! Bool
         
-        if id == key && isAdmin == true {
-          self.admin = true
-        }
-        
         let isThere = IsThere(rawValue: user["isthere"] as! Int)
         
         let u = User(name: name, id: userSnap.key!, isThere: isThere!)
+        u.admin = isAdmin
         
         if isThere == .Yes {
           self.yes.append(u)
@@ -65,8 +65,8 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate {
         }
       }
 
-      if self.admin != nil && self.admin == true {
-        self.navigationItem.rightBarButtonItems = [self.inviteBtn, self.editBtn]
+      if self.spot!.admin {
+        self.navigationItem.rightBarButtonItems = [self.inviteBtn, self.editBtn, self.actionItem]
       } else {
         self.navigationItem.rightBarButtonItems = [self.actionItem]
       }
@@ -78,15 +78,27 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate {
     
   }
   
+  func spotSettingsController(controller: SpotSettingsController, hitSwitch flag: Bool) {
+    if flag == true {
+      appDelegate.startMonitoringGeotification(spot, ctrl: self)
+    } else {
+      appDelegate.stopMonitoringSpot(spot, ctrl: self)
+    }
+  }
+
+  
   func userSheet() {
     let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+    
+    let settingsAction = UIAlertAction(title: "Location Settings", style: .Default, handler: {action in
+      self.performSegueWithIdentifier("SpotSettings", sender: self)
+    })
+    alertController.addAction(settingsAction)
     
     let leaveAction = UIAlertAction(title: "Leave Spot", style: .Destructive, handler: { action in
       var alert = UIAlertController(title: "Are you sure?", message: "You will not be able to rejoin the spot without receiving a new invitation", preferredStyle: UIAlertControllerStyle.Alert)
       
-      alert.addAction(UIAlertAction(title: "I'm sure", style: .Destructive, handler: { action in
-        println("leave spot")
-      }))
+      alert.addAction(UIAlertAction(title: "I'm sure", style: .Destructive, handler: { action in self.leaveSpot() }))
       
       alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
       
@@ -96,9 +108,16 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate {
     alertController.addAction(leaveAction)
     
     let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+
     alertController.addAction(cancelAction)
     
     presentViewController(alertController, animated: true, completion: nil)
+  }
+  
+  func leaveSpot() {
+    if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+      postRequest("leave_spot", ["token":token, "spotid":spot.id], {json in }, {_ in })
+    }
   }
   
   @IBAction func editTapped(sender: AnyObject) {
@@ -136,7 +155,25 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate {
   }
   
   override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    if spot.admin == true {
+      if let user = getUser(indexPath.section, row: indexPath.row) {
+        performSegueWithIdentifier("ShowUser", sender: user)
+      }
+    } else {
+      tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+  }
+  
+  func getUser(section: Int, row: Int) -> User? {
+    if section == 0 {
+      return self.yes[row]
+    } else if section == 1 {
+      return self.no[row]
+    } else if section == 2 {
+      return self.maybe[row]
+    } else {
+      return nil
+    }
   }
   
   func showSheet() {
@@ -252,6 +289,15 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate {
     
     return str
   }
+  
+  func userController(controller: UserController, removedUser user:User) {
+    controller.dismissViewControllerAnimated(true, completion: nil)
+ 
+    if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+      println("wtf")
+      postRequest("remove_user", ["token": token, "uid": user.id, "spotid":spot.id], {json in }, {_ in })
+    }
+  }
 
   func editSpotController(controller: EditSpotController, updatedName name: String) {
     controller.dismissViewControllerAnimated(true, completion: nil)
@@ -263,9 +309,20 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate {
     }
   }
   
-  func handleResp(json: NSDictionary?) {
-    
+  func editSpotControllerRemoveSpot(controller: EditSpotController) {
+    if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+      postRequest("remove_spot", ["token": token, "spotid":spot.id], { json in
+        controller.dismissViewControllerAnimated(true, completion: nil)
+        self.dismissViewControllerAnimated(true, completion: nil)
+      }, { _ in self.handleErr() })
+    }
   }
+  
+  func trackingChanged() {
+    locationsController.tableView.reloadData()
+  }
+  
+  func handleResp(json: NSDictionary?) {}
     
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     if segue.identifier == "EditSpot" {
@@ -273,6 +330,18 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate {
       let vc = navigationController.viewControllers.first as! EditSpotController
       vc.name = spot.name
       vc.delegate = self
+    } else if segue.identifier == "SpotSettings" {
+      println("trans SpotSettings")
+      let navigationController = segue.destinationViewController as! UINavigationController
+      let vc = navigationController.viewControllers.first as! SpotSettingsController
+      vc.spotView = self
+      vc.spot = spot
+    } else if segue.identifier == "ShowUser" {
+      let navigationController = segue.destinationViewController as! UINavigationController
+      let vc = navigationController.viewControllers.first as! UserController
+
+      vc.delegate = self
+      vc.user = sender as! User
     }
   }
 }

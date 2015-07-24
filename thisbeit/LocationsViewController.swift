@@ -15,69 +15,102 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   var ref = Firebase(url:"https://androidkye.firebaseio.com/")
   var spotsRef = Firebase(url:"https://androidkye.firebaseio.com/spots")
   var spots = [Spot]()
-
-  let locationManager = CLLocationManager()
+  let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+  var spotCnt: UInt = 0
   
-  func loadChild(key:String) {
-    spotsRef.childByAppendingPath(key).observeEventType(.Value,  withBlock: {child in
-      var yes = 0
-      var no = 0
-      var maybe = 0
-
-      let name = child.childSnapshotForPath("name").value as! String
-      
-      var spot = self.spots.filter{ $0.id == child.key! }.first
-      
-      if spot == nil {
-        spot = Spot(name:name as! String, id:child.key!)
-        self.spots.append(spot!)
-      } else {
-        spot!.name = name
-      }
-
-      let users = child.childSnapshotForPath("users").children
-
-      while let userSnap = users.nextObject() as? FDataSnapshot {
-        let user = userSnap.value
-        let isThere = IsThere(rawValue: user["isthere"] as! Int)
-
-        if isThere == .Yes {
-          yes += 1
-        } else if isThere == .No {
-          no += 1
-        } else if isThere == .Maybe {
-          maybe += 1
-        }
-      }
-      
-      spot!.yes = yes
-      spot!.no = no
-      spot!.maybe = maybe
-      
+  func shouldUpdate(cnt: UInt) {
+    println("shouldUPdate: cnt: \(cnt) spotCnt: \(spotCnt)")
+    if cnt == spotCnt {
       dispatch_async(dispatch_get_main_queue(), { () -> Void in
         self.tableView.reloadData()
       })
+    }
+  
+  }
+  
+  func loadChild(key:String, admin:Int, cnt: UInt) {
+    spotsRef.childByAppendingPath(key).observeEventType(.Value,  withBlock: {child in
+      println("child val: \(child.value)")
+      println("child val type: \(child.value.dynamicType)")
+      
+      // check for existence of spot... not the greatest way
+      if let name = child.childSnapshotForPath("name").value as? String {
+        var yes = 0
+        var no = 0
+        var maybe = 0
+
+        let lat = (child.childSnapshotForPath("lat").value).doubleValue
+        let lng = (child.childSnapshotForPath("lat").value).doubleValue
+        let radius = (child.childSnapshotForPath("lat").value).doubleValue
+        
+        var spot = self.spots.filter{ $0.id == child.key! }.first
+        
+        let coords = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+        
+        if spot == nil {
+          spot = Spot(name:name, id:child.key!)
+          self.spots.append(spot!)
+        } else {
+          spot!.name = name
+        }
+        
+        if admin == 1 {
+          spot!.admin = true
+        } else if admin == 0 {
+          spot!.admin = false
+        }
+        
+        spot!.coordinate = coords
+        spot!.radius = radius
+        
+        if let region = self.appDelegate.getRegionByID(spot!.id) {
+          spot!.tracking = true
+        } else {
+          spot!.tracking = false
+        }
+
+        let users = child.childSnapshotForPath("users").children
+
+        while let userSnap = users.nextObject() as? FDataSnapshot {
+          let user = userSnap.value
+          let isThere = IsThere(rawValue: user["isthere"] as! Int)
+
+          if isThere == .Yes {
+            yes += 1
+          } else if isThere == .No {
+            no += 1
+          } else if isThere == .Maybe {
+            maybe += 1
+          }
+        }
+        
+        spot!.yes = yes
+        spot!.no = no
+        spot!.maybe = maybe
+        
+        self.shouldUpdate(cnt)
+      }
+
     })
+    
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    println("uid: \(currentUser?.id)")
-    let arr = ["-JsDTIykg3FjwvSEel8o","-JsTaOolmh3mhgbBuLir"]
-    
-    for a in arr {
-      spotsRef.childByAppendingPath(a).observeEventType(.Value, withBlock: {snapshot in
-        println("nawsnap: \(snapshot.key)")
-      })
-    }
-    
     if let uid = currentUser?.id {
       ref.childByAppendingPath("users/\(uid)/spots").observeEventType(.Value, withBlock: {snapshot in
         let children = snapshot.children
+        self.spotCnt = snapshot.childrenCount
         self.spots = [Spot]()
+        var cnt: UInt = 0
         while let child = children.nextObject() as? FDataSnapshot {
-          self.loadChild(child.key)
+          if child.value as! Int == -1 {
+            self.appDelegate.removeGeofence(child.key)
+          } else {
+            cnt += 1
+            self.loadChild(child.key,admin: child.value as! Int, cnt: cnt)
+          }
         }
       })
     }
@@ -91,6 +124,11 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   
   func showSheet() {
     let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+    
+    let profileAction = UIAlertAction(title: "Your Profile", style: .Default, handler: {action in
+      self.performSegueWithIdentifier("Profile", sender: self)
+    })
+    alertController.addAction(profileAction)
     
     let aboutAction = UIAlertAction(title: "About", style: .Default, handler: nil)
     alertController.addAction(aboutAction)
@@ -118,7 +156,16 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   
   override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
     let spot = spots[indexPath.row]
-    performSegueWithIdentifier("ShowSpot", sender: spot)
+    performSegueWithIdentifier("ShowSpot", sender:spot)
+  }
+  
+  func getImageWithColor(color: UIColor, size: CGSize) -> UIImage {
+    UIGraphicsBeginImageContextWithOptions(size, false, 0)
+    color.setFill()
+    UIRectFill(CGRectMake(0, 0, 100, 100))
+    var image = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    return image
   }
   
   override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -138,48 +185,20 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
     let maybe = cell.viewWithTag(1003) as! UILabel
     maybe.text = "\(spot.maybe)"
     
+    let img = cell.viewWithTag(1004) as! UIImageView
+    
+    img.image = img.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+    img.tintColor = UIColor(red: 0.0, green: 128/255.0, blue: 1, alpha: 1.0)
+    if spot.tracking {
+      img.hidden = false
+    } else {
+      img.hidden = true
+    }
+    
     return cell
   }
   
-  func stopMonitoringSpots() {
-    for region in locationManager.monitoredRegions {
-      if let circularRegion = region as? CLCircularRegion {
-        locationManager.stopMonitoringForRegion(circularRegion)
-      }
-    }
-  }
-  
-  func regionWithSpot(spot: Spot) -> CLCircularRegion? {
-    // 1
-    if let coordinate = spot.coordinate, radius = spot.radius {
-      let region = CLCircularRegion(center: coordinate, radius: radius, identifier: spot.id)
-      // 2
-      region.notifyOnEntry = true
-      region.notifyOnExit = true
-      return region
-    }
-    
-    return nil
-  }
-  
-  func startMonitoringGeotification(spot: Spot) {
-    if !CLLocationManager.isMonitoringAvailableForClass(CLCircularRegion) {
-      showSimpleAlertWithTitle("Error", message: "Geofencing is not supported on this device!", viewController: self)
-      return
-    }
-    if CLLocationManager.authorizationStatus() != .AuthorizedAlways {
-      showSimpleAlertWithTitle("Warning", message: "Your geotification is saved but will only be activated once you grant Geotify permission to access the device location.", viewController: self)
-    }
-    
-    if let region = regionWithSpot(spot) {
-      locationManager.startMonitoringForRegion(region)
-    } else {
-      showSimpleAlertWithTitle("Error", message: "Geofence not created due to an error", viewController: self)
-    }
-  }
-  
   func addSpotController(controller: AddSpotController, didAddCoordinate coordinate: CLLocationCoordinate2D, radius: Double, name: String) {
-    
     if let uid = currentUser?.id, username = currentUser?.name {
       if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
         let values = ["name": name, "lat": "\(coordinate.latitude)", "lng": "\(coordinate.longitude)", "radius": "\(radius)",
@@ -187,9 +206,6 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         postRequest("new_spot", values, {json in self.handleResp(json,controller:controller)}, {self.handleErr(controller)})
       }
     }
-    
-//    let ref = spotsRef.childByAutoId()
-//    ref.setValue(values)
   }
   
   func handleResp(json: NSDictionary?, controller: AddSpotController) {
@@ -198,9 +214,18 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
     if let parseJSON = json {
       var success = parseJSON["success"] as? Int
       println("json: \(parseJSON)")
-      if success > 0 {
-        println("trans")
-        // transition
+      if success == 1 {
+        println("parseJson: \(parseJSON)")
+        if let lat = parseJSON["lat"] as? Double, lng = parseJSON["lng"] as? Double, radius = parseJSON["radius"] as? Double, name = parseJSON["name"] as? String, id = parseJSON["id"] as? String  {
+          
+          let spot = Spot(name: name, id: id)
+          spot.radius = radius
+          let coords = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+          spot.coordinate = coords
+
+          appDelegate.startMonitoringGeotification(spot,ctrl:self)
+        }
+
       }
     }
   }
@@ -216,6 +241,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
       vc.delegate = self
     } else if segue.identifier == "ShowSpot" {
       let ctrl = segue.destinationViewController as! SpotViewController
+      ctrl.locationsController = self
       ctrl.spot = sender as! Spot
     }
   }

@@ -11,6 +11,7 @@ import UIKit
 
 protocol EditSpotControllerDelegate {
   func editSpotController(controller: EditSpotController, updatedName name:String)
+  func editSpotControllerRemoveSpot(controller: EditSpotController)
 }
 
 class EditSpotController: UIViewController {
@@ -42,8 +43,10 @@ class EditSpotController: UIViewController {
   func showSheet() {
     let alertController = UIAlertController(title: "Are you sure?", message: "All users will be removed, and the spot destroyed", preferredStyle: .ActionSheet)
     
-    let logoutAction = UIAlertAction(title: "Destroy Spot", style: .Destructive, handler: nil)
-    alertController.addAction(logoutAction)
+    let destroyAction = UIAlertAction(title: "Destroy Spot", style: .Destructive, handler: { action in
+      self.delegate!.editSpotControllerRemoveSpot(self)
+    })
+    alertController.addAction(destroyAction)
     
     let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
     alertController.addAction(cancelAction)

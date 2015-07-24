@@ -45,6 +45,9 @@
 		ADFA99451B59C9C300F88371 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99441B59C9C300F88371 /* UIKit.framework */; };
 		ADFA99491B59E0CB00F88371 /* GoogleService-Info1.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADFA99481B59E0CB00F88371 /* GoogleService-Info1.plist */; };
 		ADFA994B1B59FDD100F88371 /* twtr.png in Resources */ = {isa = PBXBuildFile; fileRef = ADFA994A1B59FDD100F88371 /* twtr.png */; };
+		ADFA994D1B5EB42100F88371 /* SpotSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA994C1B5EB42100F88371 /* SpotSettings.swift */; };
+		ADFA994F1B5EEE4B00F88371 /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA994E1B5EEE4B00F88371 /* UserController.swift */; };
+		ADFA99511B60FC8300F88371 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA99501B60FC8300F88371 /* ProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +107,9 @@
 		ADFA99441B59C9C300F88371 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		ADFA99481B59E0CB00F88371 /* GoogleService-Info1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info1.plist"; path = "../../../../Downloads/GoogleService-Info1.plist"; sourceTree = "<group>"; };
 		ADFA994A1B59FDD100F88371 /* twtr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = twtr.png; path = ../../../../Documents/twtr.png; sourceTree = "<group>"; };
+		ADFA994C1B5EB42100F88371 /* SpotSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotSettings.swift; sourceTree = "<group>"; };
+		ADFA994E1B5EEE4B00F88371 /* UserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
+		ADFA99501B60FC8300F88371 /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +215,9 @@
 				ADFA991C1B599E8100F88371 /* TwitterAuthHelper.h */,
 				ADFA991D1B599EAE00F88371 /* TwitterAuthHelper.m */,
 				ADFA991F1B59A12200F88371 /* OAuthController.swift */,
+				ADFA994C1B5EB42100F88371 /* SpotSettings.swift */,
+				ADFA994E1B5EEE4B00F88371 /* UserController.swift */,
+				ADFA99501B60FC8300F88371 /* ProfileView.swift */,
 			);
 			path = thisbeit;
 			sourceTree = "<group>";
@@ -391,10 +400,13 @@
 				AD3F2E891B34FD2B0071D2B4 /* SpotViewController.swift in Sources */,
 				AD3F2E831B3474200071D2B4 /* Spot.swift in Sources */,
 				ADFA991E1B599EAE00F88371 /* TwitterAuthHelper.m in Sources */,
+				ADFA994D1B5EB42100F88371 /* SpotSettings.swift in Sources */,
 				AD122BF01B2B5C56007B0872 /* LoginController.swift in Sources */,
+				ADFA994F1B5EEE4B00F88371 /* UserController.swift in Sources */,
 				ADB019041B38F67800C1C21F /* EditSpotController.swift in Sources */,
 				AD122BD01B2B5B13007B0872 /* AppDelegate.swift in Sources */,
 				AD3F2E871B34E0750071D2B4 /* Utilties.swift in Sources */,
+				ADFA99511B60FC8300F88371 /* ProfileView.swift in Sources */,
 				ADB3005F1B2BE398006D3B7F /* SignUpController.swift in Sources */,
 				AD58B70B1B3EF66D00621AB8 /* JoinController.swift in Sources */,
 				ADB300661B2C99DA006D3B7F /* LocationsViewController.swift in Sources */,

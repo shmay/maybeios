@@ -73,8 +73,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     return true
   }
   
-  func dismissJoin(controller: JoinController) {
-    controller.dismissViewControllerAnimated(true, completion: nil)
+  func removeGeofence(spotid: String) {
+    self.stopMonitoringForID(spotid)
   }
   
   func handleResp(json: NSDictionary?) {
@@ -84,17 +84,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
       if success == 1 {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         
-        if let pin = parseJSON["pin"] as? String, lat = parseJSON["lat"] as? Double, lng = parseJSON["lng"] as? Double, radius = parseJSON["radius"] as? Double {
+        if let pin = parseJSON["pin"] as? String, lat = parseJSON["lat"] as? Double, lng = parseJSON["lng"] as? Double, radius = parseJSON["radius"] as? Double, name = parseJSON["name"] as? String, id = parseJSON["id"] as? String  {
           let vc = storyboard.instantiateViewControllerWithIdentifier("JoinController") as! JoinController
-          vc.radius = radius
-          vc.latitude = lat
+          let spot = Spot(name: name, id: id)
+          spot.radius = radius
+          let coords = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+          spot.coordinate = coords
           vc.pin = pin
-          vc.longitude = lng
-          println("WHAAAAt")
+          vc.spot = spot
 
           if let rootViewController = self.window!.rootViewController {
             if let presentedViewController = rootViewController.presentedViewController {
-              self.holdViewController = presentedViewController
+//              self.holdViewController = presentedViewController
               dispatch_async(dispatch_get_main_queue(), {
                 presentedViewController.presentViewController(vc, animated: true, completion: nil)
               })
@@ -108,6 +109,118 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         showAlert("Sorry, an error occurred while trying add you to the spot.")
       }
     }
+  }
+  
+  func startMonitoringGeotification(spot: Spot, ctrl: UIViewController) -> Bool {
+    if !CLLocationManager.isMonitoringAvailableForClass(CLCircularRegion) {
+      showSimpleAlertWithTitle("Error", message: "Geofencing is not supported on this device!", viewController: ctrl)
+      return false
+    }
+    if CLLocationManager.authorizationStatus() != .AuthorizedAlways {
+      showSimpleAlertWithTitle("Warning", message: "Your geotification is saved but will only be activated once you grant Geotify permission to access the device location.", viewController: ctrl)
+      return false
+    }
+    
+    let reg = getRegionByID(spot.id)
+    
+    if reg == nil {
+      if let region = regionWithSpot(spot) {
+        locationManager.startMonitoringForRegion(region)
+        return true
+      } else {
+        showSimpleAlertWithTitle("Error", message: "Geofence not created due to an error", viewController: ctrl)
+      }
+    }
+    
+    return false
+  }
+  
+  func stopMonitoringSpots() {
+    for region in locationManager.monitoredRegions {
+      if let circularRegion = region as? CLCircularRegion {
+        locationManager.stopMonitoringForRegion(circularRegion)
+      }
+    }
+  }
+  func stopMonitoringForID(id: String) {
+    if let reg = getRegionByID(id) {
+      locationManager.stopMonitoringForRegion(reg)
+    }
+    
+    if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+      postRequest("remove_fence_for_user", ["token":token,"spotid":id], {json in
+        if let parseJSON = json {
+          println("remove_Fence: \(json)")
+          var success = parseJSON["success"] as? Int
+          if success == 1 {
+            println("successery")
+          }
+        }
+        }, {_ in})
+    }
+
+  }
+  func stopMonitoringSpot(spot: Spot, ctrl: UIViewController) -> Bool {
+    println("stopMonitor")
+    if let reg = getRegionByID(spot.id) {
+      println("is good")
+      locationManager.stopMonitoringForRegion(reg)
+      spot.tracking = false
+      return true
+    } else {
+      showSimpleAlertWithTitle("Error", message: "Geofence not created due to an error", viewController: ctrl)
+      return false
+    }
+  }
+  
+  func getRegionByID(id: String) -> CLCircularRegion? {
+    for region in locationManager.monitoredRegions {
+      if let circularRegion = region as? CLCircularRegion {
+        if circularRegion.identifier == id {
+          return circularRegion
+        }
+      }
+    }
+    
+    return nil
+  }
+  
+  func locStatusChanged(region: CLRegion, status: Int) {
+    println("locStatusChanged: \(status)")
+    if region is CLCircularRegion {
+      if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+        postRequest("spot_status_changed", ["token": token, "spotid": region.identifier, "status": "\(status)"], {json in
+          if let p = json {
+            if let s = p["success"] as? Int {
+              if s < 0 {
+                self.locationManager.stopMonitoringForRegion(region)
+              }
+            }
+          }
+        }, {_ in })
+      }
+    }
+    
+  }
+  
+  func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
+
+    locStatusChanged(region, status: IsThere.Yes.rawValue)
+  }
+  
+  func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
+    locStatusChanged(region, status: IsThere.No.rawValue)
+  }
+  
+  func regionWithSpot(spot: Spot) -> CLCircularRegion? {
+    if let coordinate = spot.coordinate, radius = spot.radius {
+      let region = CLCircularRegion(center: coordinate, radius: radius, identifier: spot.id)
+      region.notifyOnEntry = true
+      region.notifyOnExit = true
+      return region
+    }
+    
+    return nil
   }
   
   func handleErr() {}

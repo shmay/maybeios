@@ -32,6 +32,7 @@ class User: NSObject {
   var id: String
   var isThere: IsThere
   var token: String?
+  var admin = false
 
   init(name: String, id: String, isThere: IsThere) {
     self.name = name

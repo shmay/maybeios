@@ -14,6 +14,9 @@ class Spot: NSObject {
   let id: String
   var coordinate: CLLocationCoordinate2D?
   var radius: CLLocationDistance?
+  var tracking: Bool = false
+  
+  var admin = false
   
   var yes = 0
   var no = 0

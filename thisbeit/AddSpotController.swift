@@ -13,7 +13,7 @@ protocol AddSpotControllerDelegate {
   func addSpotController(controller: AddSpotController, didAddCoordinate coordinate:CLLocationCoordinate2D, radius: Double, name: String)
 }
 
-class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
   var radius: Double = Double(100)
   var circle: MKCircle?
   
@@ -41,7 +41,8 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     locationManager.delegate = self
     locationManager.requestAlwaysAuthorization()
     mapView.delegate = self
-
+    
+    nameTextField.delegate = self
   }
 //  35.268788, -120.647849
   
@@ -51,6 +52,16 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
   
   @IBAction func onCancel(sender: AnyObject) {
     dismissViewControllerAnimated(true, completion: nil)
+  }
+  
+  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    nameTextField.resignFirstResponder()
+  }
+  
+  func textFieldShouldReturn(textField: UITextField!) -> Bool // called when 'return' key pressed. return NO to ignore.
+  {
+    textField.resignFirstResponder()
+    return true;
   }
   
   private func mapViewRegionDidChangeFromUserInteraction() -> Bool {

@@ -11,21 +11,18 @@ import UIKit
 import MapKit
 
 class JoinController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
-  var radius: Double?
-  var latitude: CLLocationDegrees?
-  var longitude: CLLocationDegrees?
+  var spot: Spot!
   var pin: String?
   
-  var delegate: UIViewController!
-  
+  let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
   @IBOutlet weak var mapView: MKMapView!
   @IBAction func tapCancel(sender: AnyObject) {
     dismissJoin()
   }
   
   func dismissJoin() {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    appDelegate.dismissJoin(self)
+    self.dismissViewControllerAnimated(true, completion: nil)
   }
   
   @IBAction func tapJoin(sender: AnyObject) {
@@ -37,11 +34,10 @@ class JoinController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
   func handleResp(json: NSDictionary?) {
     if let pson = json {
       if let success = pson["success"] as? Int {
-        println("success: \(success)")
         if success == 1 {
+          appDelegate.startMonitoringGeotification(spot, ctrl: self)
           dismissJoin()
         } else {
-          println("err")
           showAlert("Sorry, but you could not be added to this spot", forController:self)
         }
       }
@@ -54,12 +50,12 @@ class JoinController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     super.viewDidLoad()
     mapView.delegate = self
 
-    if let lat = latitude, lng = longitude, rad = radius {
+    if let coord = spot.coordinate {
       var span = MKCoordinateSpanMake(0.075, 0.075)
-      var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: lat, longitude: lng), span: span)
+      var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: coord.latitude, longitude: coord.longitude), span: span)
       mapView.setRegion(region, animated: false)
       
-      let circle = MKCircle(centerCoordinate: mapView.centerCoordinate, radius: rad)
+      let circle = MKCircle(centerCoordinate: mapView.centerCoordinate, radius: spot.radius!)
       mapView.addOverlay(circle)
     }
   }
