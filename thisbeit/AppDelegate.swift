@@ -25,6 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     println("options: \(launchOptions)")
     
+
+    
     NSUserDefaults.standardUserDefaults().removeObjectForKey("name")
     
     return FBSDKApplicationDelegate.sharedInstance()
@@ -42,6 +44,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
       println(NSString(data: data, encoding: NSUTF8StringEncoding))
     }
     
+    var str:String? = UIPasteboard.generalPasteboard().string
+    if let s = str {
+      if count(s) == 10 {
+        let matches = regexMatches("(^X\\w+)", s)
+        
+        if count(matches) > 0 {
+          let pin = matches[0]
+        }
+        
+      }
+      print("String is \(s)")
+    }
+    
     task.resume()
     return true
   }
@@ -55,10 +70,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
       let url = NSURL(string: "\(serverURL)/join_w_pin")
       
       if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-        if let uid = NSUserDefaults.standardUserDefaults().valueForKey("uid") as? String {
-          let dict = ["uid" : uid, "token": token, "pin":pin]
-          postRequest("join_w_pin", dict, {json in self.handleResp(json)}, {self.handleErr()})
-        }
+        let dict = ["token": token, "pin":pin]
+        postRequest("join_w_pin", dict, {json in self.handleResp(json)}, {self.handleErr()})        
       }
     }
     

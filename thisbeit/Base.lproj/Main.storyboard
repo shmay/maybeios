@@ -908,7 +908,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Awz-oh-3Mc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2599" y="2525"/>
+            <point key="canvasLocation" x="2496" y="2524"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7JC-8f-7Nf">
@@ -1010,15 +1010,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j9w-Kq-GrB">
-                                <rect key="frame" x="16" y="25" width="568" height="329"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j9w-Kq-GrB">
+                                <rect key="frame" x="16" y="25" width="568" height="400"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="329" id="inu-PI-xm5"/>
+                                    <constraint firstAttribute="height" constant="400" id="inu-PI-xm5"/>
                                 </constraints>
-                                <mutableString key="text">MaybeSo is a social geofencing app... in other words it allows you to see if you friends are currently at your favorite spots (if they want you to 😄).  We've gone to extra measures to keep your location secure.
+                                <mutableString key="text">MaybeSo is a social geofencing app... in other words it allows you to see if you friends are currently at your favorite spots (if they want you to 🌝).  We've gone to extra measures to keep your location secure.
 
-Read more on our website: http://maybeso.io/#about
+Read more on our website: 
+http://maybeso.io/#about
 
 In conclusion, emojis are fun  🇮🇪🔔⌚️🍣
 
@@ -1051,7 +1052,7 @@ In conclusion, emojis are fun  🇮🇪🔔⌚️🍣
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uzW-y7-Bpv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1777" y="4017"/>
+            <point key="canvasLocation" x="1743" y="3974"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="eIC-7V-8vT">

@@ -19,7 +19,7 @@ class ProfileView: UIViewController {
       let name = textField.text
       currentUser!.name = name
       if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-        postRequest("update_name", ["token": token, "uid": currentUser!.id, "newname": name], {json in
+        postRequest("update_name", ["token": token, "newname": name], {json in
           self.working = false
           self.dismiss()
         }, { _ in
