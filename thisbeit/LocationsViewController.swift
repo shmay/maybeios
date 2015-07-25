@@ -25,7 +25,6 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         self.tableView.reloadData()
       })
     }
-  
   }
   
   func loadChild(key:String, admin:Int, cnt: UInt) {
@@ -130,7 +129,9 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
     })
     alertController.addAction(profileAction)
     
-    let aboutAction = UIAlertAction(title: "About", style: .Default, handler: nil)
+    let aboutAction = UIAlertAction(title: "About", style: .Default, handler: {action in
+      self.performSegueWithIdentifier("AboutUs", sender: self)
+    })
     alertController.addAction(aboutAction)
     
     let logoutAction = UIAlertAction(title: "Logout", style: .Destructive, handler: { action in

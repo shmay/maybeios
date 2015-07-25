@@ -393,6 +393,7 @@
                         <segue destination="arP-dQ-xqP" kind="show" identifier="ShowSpot" id="nnI-bl-RPp"/>
                         <segue destination="wB6-uG-eHa" kind="unwind" identifier="GoHome" unwindAction="unwindToMainMenu:" id="bo5-CZ-dvn"/>
                         <segue destination="Fee-vN-Zfb" kind="showDetail" identifier="Profile" id="Ha7-59-Vc0"/>
+                        <segue destination="t4U-8x-rpL" kind="show" identifier="AboutUs" id="8mr-eq-fDR"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Iv0-HR-NTo" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -658,7 +659,7 @@
                     </connections>
                 </barButtonItem>
             </objects>
-            <point key="canvasLocation" x="1777" y="3981"/>
+            <point key="canvasLocation" x="1038" y="4684"/>
         </scene>
         <!--JoinViewController-->
         <scene sceneID="NGb-WM-5SX">
@@ -850,11 +851,41 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="8CR-SH-8Ik">
+                                                    <rect key="frame" x="290" y="12" width="20" height="20"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="centerX" secondItem="8CR-SH-8Ik" secondAttribute="centerX" id="Llp-bt-raC"/>
                                                 <constraint firstItem="uCW-Hl-Jaz" firstAttribute="leading" secondItem="2bt-10-j9i" secondAttribute="leading" constant="15" id="Z7E-RE-VBK"/>
                                                 <constraint firstAttribute="trailing" secondItem="4wl-TE-qD3" secondAttribute="trailing" constant="10" id="bw7-4H-xHb"/>
                                                 <constraint firstItem="4wl-TE-qD3" firstAttribute="leading" secondItem="iTP-Ho-5la" secondAttribute="trailing" constant="10" id="pNw-e1-OjW"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="Dlt-3s-Bb3">
+                                <cells>
+                                    <tableViewCell tag="1006" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="8JI-eh-qZQ">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8JI-eh-qZQ" id="UO4-iR-F4z">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tl2-kS-aJw">
+                                                    <rect key="frame" x="187" y="7" width="187" height="30"/>
+                                                    <color key="backgroundColor" red="0.80784313725490198" green="0.28235294117647058" blue="0.26666666666666666" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <state key="normal" title="Leave this Spot">
+                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="leaveSpot:" destination="6j3-OE-rka" eventType="touchUpInside" id="jGN-gG-PhS"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="centerX" secondItem="tl2-kS-aJw" secondAttribute="centerX" id="8il-kA-hfG"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -871,6 +902,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="flag" destination="iTP-Ho-5la" id="SH7-ua-xam"/>
+                        <outlet property="spinner" destination="8CR-SH-8Ik" id="r2q-PE-ytI"/>
                         <outlet property="trackingLabel" destination="4wl-TE-qD3" id="ZJN-vN-5xg"/>
                     </connections>
                 </tableViewController>
@@ -965,6 +997,61 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2lM-Os-RXZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3143" y="3974"/>
+        </scene>
+        <!--About-->
+        <scene sceneID="J22-9P-EmJ">
+            <objects>
+                <viewController title="About" id="t4U-8x-rpL" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="kjK-y2-tLv"/>
+                        <viewControllerLayoutGuide type="bottom" id="tUt-lx-yWa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="o8O-e7-uGZ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j9w-Kq-GrB">
+                                <rect key="frame" x="16" y="25" width="568" height="329"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="329" id="inu-PI-xm5"/>
+                                </constraints>
+                                <mutableString key="text">MaybeSo is a social geofencing app... in other words it allows you to see if you friends are currently at your favorite spots (if they want you to 😄).  We've gone to extra measures to keep your location secure.
+
+Read more on our website: http://maybeso.io/#about
+
+In conclusion, emojis are fun  🇮🇪🔔⌚️🍣
+
+
+
+</mutableString>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="j9w-Kq-GrB" firstAttribute="leading" secondItem="o8O-e7-uGZ" secondAttribute="leadingMargin" id="1wg-bT-kNO"/>
+                            <constraint firstItem="j9w-Kq-GrB" firstAttribute="top" secondItem="o8O-e7-uGZ" secondAttribute="topMargin" constant="25" id="Lpw-rG-UvA"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="j9w-Kq-GrB" secondAttribute="trailing" id="RQ1-R8-Rgh"/>
+                            <constraint firstAttribute="centerX" secondItem="j9w-Kq-GrB" secondAttribute="centerX" id="V9i-VO-Yag"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="j9w-Kq-GrB" secondAttribute="trailing" id="hpl-Ig-eEK"/>
+                            <constraint firstItem="j9w-Kq-GrB" firstAttribute="leading" secondItem="o8O-e7-uGZ" secondAttribute="leadingMargin" id="pwE-Vb-u95"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="V9i-VO-Yag"/>
+                                <exclude reference="hpl-Ig-eEK"/>
+                                <exclude reference="pwE-Vb-u95"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" title="About" id="pG3-3g-WeZ"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uzW-y7-Bpv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1777" y="4017"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="eIC-7V-8vT">

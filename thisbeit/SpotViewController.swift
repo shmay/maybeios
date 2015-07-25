@@ -85,47 +85,13 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
       appDelegate.stopMonitoringSpot(spot, ctrl: self)
     }
   }
-
-  
-  func userSheet() {
-    let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-    
-    let settingsAction = UIAlertAction(title: "Location Settings", style: .Default, handler: {action in
-      self.performSegueWithIdentifier("SpotSettings", sender: self)
-    })
-    alertController.addAction(settingsAction)
-    
-    let leaveAction = UIAlertAction(title: "Leave Spot", style: .Destructive, handler: { action in
-      var alert = UIAlertController(title: "Are you sure?", message: "You will not be able to rejoin the spot without receiving a new invitation", preferredStyle: UIAlertControllerStyle.Alert)
-      
-      alert.addAction(UIAlertAction(title: "I'm sure", style: .Destructive, handler: { action in self.leaveSpot() }))
-      
-      alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-      
-      self.presentViewController(alert, animated: true, completion: nil)
-    })
-
-    alertController.addAction(leaveAction)
-    
-    let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-
-    alertController.addAction(cancelAction)
-    
-    presentViewController(alertController, animated: true, completion: nil)
-  }
-  
-  func leaveSpot() {
-    if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-      postRequest("leave_spot", ["token":token, "spotid":spot.id], {json in }, {_ in })
-    }
-  }
   
   @IBAction func editTapped(sender: AnyObject) {
     performSegueWithIdentifier("EditSpot", sender: spot)
   }
   
   @IBAction func tapAction(sender: AnyObject) {
-    userSheet()
+    self.performSegueWithIdentifier("SpotSettings", sender: self)
   }
   
   @IBAction func inviteTapped(sender: AnyObject) {
@@ -155,13 +121,16 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   }
   
   override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    if spot.admin == true {
+    if spot.admin == true  {
       if let user = getUser(indexPath.section, row: indexPath.row) {
-        performSegueWithIdentifier("ShowUser", sender: user)
+        if (!user.admin) {
+          performSegueWithIdentifier("ShowUser", sender: user)
+          return
+        }
       }
-    } else {
-      tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
+    
+    tableView.deselectRowAtIndexPath(indexPath, animated: true)
   }
   
   func getUser(section: Int, row: Int) -> User? {

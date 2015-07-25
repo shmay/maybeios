@@ -22,13 +22,9 @@ class UserController: UITableViewController {
   @IBAction func tapCancel(sender: AnyObject) {
     self.dismissViewControllerAnimated(true, completion: nil)
   }
+  
   @IBAction func tapRemove(sender: AnyObject) {
-    var msg = ""
-    if user.admin {
-      msg = "You will not be able to rejoin this spot"
-    } else {
-      msg = "User will not be able to rejoin this spot without receiving an invitation"
-    }
+    let msg = "User will not be able to rejoin this spot without receiving an invitation"
     
     var alert = UIAlertController(title: "Are you sure?", message: msg, preferredStyle: UIAlertControllerStyle.Alert)
     
@@ -46,12 +42,6 @@ class UserController: UITableViewController {
     
     self.title = user.name
     
-    if user.admin {
-      removeBtn.setTitle("Remove yourself from Spot", forState: UIControlState.Normal)
-    } else {
-      removeBtn.setTitle("Remove from Spot", forState: UIControlState.Normal)
-
-    }
   }
   
   
