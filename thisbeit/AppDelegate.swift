@@ -24,9 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   
   func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     println("options: \(launchOptions)")
-    
-
-    
+  
     NSUserDefaults.standardUserDefaults().removeObjectForKey("name")
     
     return FBSDKApplicationDelegate.sharedInstance()
@@ -38,41 +36,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     locationManager.delegate = self
     locationManager.requestAlwaysAuthorization()
     
-    let url = NSURL(string: "http://localhost:3000/heyo")
-    
-    let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {(data, response, error) in
-      println(NSString(data: data, encoding: NSUTF8StringEncoding))
-    }
-    
     var str:String? = UIPasteboard.generalPasteboard().string
     if let s = str {
       if count(s) == 10 {
         let matches = regexMatches("(^X\\w+)", s)
-        
+      
         if count(matches) > 0 {
-          let pin = matches[0]
+          joinWithPin(matches[0])
         }
         
       }
-      print("String is \(s)")
     }
     
-    task.resume()
     return true
   }
   
+  func joinWithPin(pin: String) {
+    if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+      let dict = ["token": token, "pin":pin]
+      postRequest("join_w_pin", dict, {json in self.handleResp(json)}, {self.handleErr()})
+    }
+  }
+  
   func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-    let matches = regexMatches("pin\\=([\\w\\d]+)", url.absoluteString!)
+    let matches = regexMatches("pin\\=(^X[\\w]{9})", url.absoluteString!)
     
     if count(matches) > 0 {
       let pin = matches[0]
       
-      let url = NSURL(string: "\(serverURL)/join_w_pin")
-      
-      if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-        let dict = ["token": token, "pin":pin]
-        postRequest("join_w_pin", dict, {json in self.handleResp(json)}, {self.handleErr()})        
-      }
+      joinWithPin(pin)
     }
     
     FBSDKApplicationDelegate.sharedInstance()
