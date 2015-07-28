@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>38D21E39-FFB6-4F8E-A015-313CEB8AFBBA</string>
+	<key>IDESourceControlProjectName</key>
+	<string>thisbeit</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>425B5597AF8A74E5E2F495C3E388EAF0FF4F9131</key>
+		<string>gitlab.com:kmurph73/maybeios.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>thisbeit.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>425B5597AF8A74E5E2F495C3E388EAF0FF4F9131</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>gitlab.com:kmurph73/maybeios.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>425B5597AF8A74E5E2F495C3E388EAF0FF4F9131</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>425B5597AF8A74E5E2F495C3E388EAF0FF4F9131</string>
+			<key>IDESourceControlWCCName</key>
+			<string>thisbeit</string>
+		</dict>
+	</array>
+</dict>
+</plist>

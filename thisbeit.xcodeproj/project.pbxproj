@@ -30,19 +30,6 @@
 		ADFA99201B59A12200F88371 /* OAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA991F1B59A12200F88371 /* OAuthController.swift */; };
 		ADFA99221B59A94E00F88371 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99211B59A94E00F88371 /* FBSDKCoreKit.framework */; };
 		ADFA99241B59AA3800F88371 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99231B59AA3800F88371 /* FBSDKLoginKit.framework */; };
-		ADFA99281B59BE1700F88371 /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99251B59BE1600F88371 /* GoogleOpenSource.framework */; };
-		ADFA992A1B59BE1700F88371 /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99271B59BE1600F88371 /* GooglePlus.framework */; };
-		ADFA99351B59C93400F88371 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA992B1B59BE6900F88371 /* AddressBook.framework */; };
-		ADFA99361B59C97900F88371 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA992D1B59BE7500F88371 /* AssetsLibrary.framework */; };
-		ADFA99371B59C98300F88371 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA992F1B59BE8200F88371 /* Foundation.framework */; };
-		ADFA99381B59C98C00F88371 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99311B59BE8A00F88371 /* CoreLocation.framework */; };
-		ADFA99391B59C99400F88371 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99331B59BE9300F88371 /* CoreMotion.framework */; };
-		ADFA993B1B59C99B00F88371 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA993A1B59C99B00F88371 /* CoreGraphics.framework */; };
-		ADFA993D1B59C9A200F88371 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA993C1B59C9A200F88371 /* CoreText.framework */; };
-		ADFA993F1B59C9AA00F88371 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA993E1B59C9AA00F88371 /* MediaPlayer.framework */; };
-		ADFA99411B59C9B200F88371 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99401B59C9B200F88371 /* Security.framework */; };
-		ADFA99431B59C9BB00F88371 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99421B59C9BB00F88371 /* SystemConfiguration.framework */; };
-		ADFA99451B59C9C300F88371 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99441B59C9C300F88371 /* UIKit.framework */; };
 		ADFA99491B59E0CB00F88371 /* GoogleService-Info1.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADFA99481B59E0CB00F88371 /* GoogleService-Info1.plist */; };
 		ADFA994B1B59FDD100F88371 /* twtr.png in Resources */ = {isa = PBXBuildFile; fileRef = ADFA994A1B59FDD100F88371 /* twtr.png */; };
 		ADFA994D1B5EB42100F88371 /* SpotSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA994C1B5EB42100F88371 /* SpotSettings.swift */; };
@@ -92,19 +79,6 @@
 		ADFA991F1B59A12200F88371 /* OAuthController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthController.swift; sourceTree = "<group>"; };
 		ADFA99211B59A94E00F88371 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../Documents/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		ADFA99231B59AA3800F88371 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../Documents/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
-		ADFA99251B59BE1600F88371 /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleOpenSource.framework; path = "../../google-plus-ios-sdk-1.7.1/GoogleOpenSource.framework"; sourceTree = "<group>"; };
-		ADFA99271B59BE1600F88371 /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlus.framework; path = "../../google-plus-ios-sdk-1.7.1/GooglePlus.framework"; sourceTree = "<group>"; };
-		ADFA992B1B59BE6900F88371 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
-		ADFA992D1B59BE7500F88371 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
-		ADFA992F1B59BE8200F88371 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		ADFA99311B59BE8A00F88371 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		ADFA99331B59BE9300F88371 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
-		ADFA993A1B59C99B00F88371 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		ADFA993C1B59C9A200F88371 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		ADFA993E1B59C9AA00F88371 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		ADFA99401B59C9B200F88371 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		ADFA99421B59C9BB00F88371 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		ADFA99441B59C9C300F88371 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		ADFA99481B59E0CB00F88371 /* GoogleService-Info1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info1.plist"; path = "../../../../Downloads/GoogleService-Info1.plist"; sourceTree = "<group>"; };
 		ADFA994A1B59FDD100F88371 /* twtr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = twtr.png; path = ../../../../Documents/twtr.png; sourceTree = "<group>"; };
 		ADFA994C1B5EB42100F88371 /* SpotSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotSettings.swift; sourceTree = "<group>"; };
@@ -117,19 +91,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADFA99451B59C9C300F88371 /* UIKit.framework in Frameworks */,
-				ADFA99431B59C9BB00F88371 /* SystemConfiguration.framework in Frameworks */,
-				ADFA99411B59C9B200F88371 /* Security.framework in Frameworks */,
-				ADFA993F1B59C9AA00F88371 /* MediaPlayer.framework in Frameworks */,
-				ADFA993D1B59C9A200F88371 /* CoreText.framework in Frameworks */,
-				ADFA993B1B59C99B00F88371 /* CoreGraphics.framework in Frameworks */,
-				ADFA99391B59C99400F88371 /* CoreMotion.framework in Frameworks */,
-				ADFA99381B59C98C00F88371 /* CoreLocation.framework in Frameworks */,
-				ADFA99371B59C98300F88371 /* Foundation.framework in Frameworks */,
-				ADFA99361B59C97900F88371 /* AssetsLibrary.framework in Frameworks */,
-				ADFA99351B59C93400F88371 /* AddressBook.framework in Frameworks */,
-				ADFA99281B59BE1700F88371 /* GoogleOpenSource.framework in Frameworks */,
-				ADFA992A1B59BE1700F88371 /* GooglePlus.framework in Frameworks */,
 				ADB3006A1B2DE94D006D3B7F /* MapKit.framework in Frameworks */,
 				ADFA99221B59A94E00F88371 /* FBSDKCoreKit.framework in Frameworks */,
 				ADFA99241B59AA3800F88371 /* FBSDKLoginKit.framework in Frameworks */,
@@ -150,19 +111,6 @@
 		109402BBD962FF5BAE2F4488 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				ADFA99441B59C9C300F88371 /* UIKit.framework */,
-				ADFA99421B59C9BB00F88371 /* SystemConfiguration.framework */,
-				ADFA99401B59C9B200F88371 /* Security.framework */,
-				ADFA993E1B59C9AA00F88371 /* MediaPlayer.framework */,
-				ADFA993C1B59C9A200F88371 /* CoreText.framework */,
-				ADFA993A1B59C99B00F88371 /* CoreGraphics.framework */,
-				ADFA99331B59BE9300F88371 /* CoreMotion.framework */,
-				ADFA99311B59BE8A00F88371 /* CoreLocation.framework */,
-				ADFA992F1B59BE8200F88371 /* Foundation.framework */,
-				ADFA992D1B59BE7500F88371 /* AssetsLibrary.framework */,
-				ADFA992B1B59BE6900F88371 /* AddressBook.framework */,
-				ADFA99251B59BE1600F88371 /* GoogleOpenSource.framework */,
-				ADFA99271B59BE1600F88371 /* GooglePlus.framework */,
 				ADFA99231B59AA3800F88371 /* FBSDKLoginKit.framework */,
 				ADFA99211B59A94E00F88371 /* FBSDKCoreKit.framework */,
 				ADB300691B2DE94D006D3B7F /* MapKit.framework */,

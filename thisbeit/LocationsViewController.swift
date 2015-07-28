@@ -17,23 +17,25 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   var spots = [Spot]()
   let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
   var spotCnt: UInt = 0
+  var cnt: UInt = 0
   
-  func shouldUpdate(cnt: UInt) {
+  func shouldUpdate() {
     println("shouldUPdate: cnt: \(cnt) spotCnt: \(spotCnt)")
-    if cnt == spotCnt {
+    if cnt >= spotCnt {
       dispatch_async(dispatch_get_main_queue(), { () -> Void in
         self.tableView.reloadData()
       })
     }
   }
   
-  func loadChild(key:String, admin:Int, cnt: UInt) {
+  func loadChild(key:String, admin:Int) {
     spotsRef.childByAppendingPath(key).observeEventType(.Value,  withBlock: {child in
       println("child val: \(child.value)")
       println("child val type: \(child.value.dynamicType)")
       
       // check for existence of spot... not the greatest way
       if let name = child.childSnapshotForPath("name").value as? String {
+        self.cnt += 1
         var yes = 0
         var no = 0
         var maybe = 0
@@ -87,7 +89,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         spot!.no = no
         spot!.maybe = maybe
         
-        self.shouldUpdate(cnt)
+        self.shouldUpdate()
       }
 
     })
@@ -102,13 +104,13 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         let children = snapshot.children
         self.spotCnt = snapshot.childrenCount
         self.spots = [Spot]()
-        var cnt: UInt = 0
+        println("reset cnt")
+        self.cnt = 0
         while let child = children.nextObject() as? FDataSnapshot {
           if child.value as! Int == -1 {
             self.appDelegate.removeGeofence(child.key)
           } else {
-            cnt += 1
-            self.loadChild(child.key,admin: child.value as! Int, cnt: cnt)
+            self.loadChild(child.key,admin: child.value as! Int)
           }
         }
       })

@@ -28,9 +28,6 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hnc-5q-0lX" customClass="GPPSignInButton">
                                 <rect key="frame" x="207" y="217" width="187" height="34"/>
-                                <state key="normal">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
                                 <connections>
                                     <action selector="authWitGoog:" destination="Qv5-67-oSb" eventType="touchUpInside" id="FHq-h9-CNF"/>
                                 </connections>
@@ -67,6 +64,7 @@
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="goog" destination="Hnc-5q-0lX" id="oGU-nQ-AMh"/>
                         <outlet property="spinner" destination="l3G-1a-TKk" id="G7z-ME-M6a"/>
                         <segue destination="ecY-le-3RL" kind="presentation" identifier="showSignin" id="ean-ko-xyw"/>
                         <segue destination="fut-Cf-3Ws" kind="showDetail" identifier="gogo" id="pxe-I4-5Kk"/>
@@ -356,7 +354,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jc9-3P-jWv">
                                             <rect key="frame" x="18" y="11" width="250" height="20.5"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="250" id="dRr-kR-zni"/>
+                                                <constraint firstAttribute="width" constant="220" id="dRr-kR-zni"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -871,7 +869,7 @@
                             </tableViewSection>
                             <tableViewSection id="Dlt-3s-Bb3">
                                 <cells>
-                                    <tableViewCell tag="1006" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="8JI-eh-qZQ">
+                                    <tableViewCell tag="1006" contentMode="scaleToFill" horizontalHuggingPriority="1000" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="8JI-eh-qZQ">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8JI-eh-qZQ" id="UO4-iR-F4z">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -1020,7 +1018,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="400" id="inu-PI-xm5"/>
                                 </constraints>
-                                <mutableString key="text">MaybeSo is a social geofencing app... in other words it allows you to see if you friends are currently at your favorite spots (if they want you to 🌝).  We've gone to extra measures to keep your location secure.
+                                <string key="text">MaybeSo is a social geofencing app... in other words it allows you to see if you friends are currently at your favorite spots (if they want you to 🌝).  We've gone to extra measures to keep your location secure.
 
 Read more on our website: 
 http://maybeso.io/#about
@@ -1029,7 +1027,7 @@ In conclusion, emojis are fun  🇮🇪🔔⌚️🍣
 
 
 
-</mutableString>
+</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>

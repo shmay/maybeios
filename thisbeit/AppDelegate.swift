@@ -36,18 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     locationManager.delegate = self
     locationManager.requestAlwaysAuthorization()
     
-    var str:String? = UIPasteboard.generalPasteboard().string
-    if let s = str {
-      if count(s) == 10 {
-        let matches = regexMatches("(^X\\w+)", s)
-      
-        if count(matches) > 0 {
-          joinWithPin(matches[0])
-        }
-        
-      }
-    }
-    
     return true
   }
   
@@ -98,9 +86,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
           vc.pin = pin
           vc.spot = spot
 
+          println("rootview")
           if let rootViewController = self.window!.rootViewController {
+            println("rootViewCtrl")
             if let presentedViewController = rootViewController.presentedViewController {
 //              self.holdViewController = presentedViewController
+              println("presented")
               dispatch_async(dispatch_get_main_queue(), {
                 presentedViewController.presentViewController(vc, animated: true, completion: nil)
               })
@@ -209,7 +200,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   }
   
   func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
-
     locStatusChanged(region, status: IsThere.Yes.rawValue)
   }
   

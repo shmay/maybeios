@@ -10,76 +10,99 @@ import Foundation
 import UIKit
 
 class OAuthController: UIViewController, GPPSignInDelegate {
+  @IBOutlet weak var goog: GPPSignInButton!
+  
+  var spinning = true
+  
   let ref = Firebase(url: "https://androidkye.firebaseio.com")
+  let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
   @IBOutlet weak var spinner: UIActivityIndicatorView!
   override func viewDidLoad() {
     super.viewDidLoad()
+    spin()
+
     let signIn = GPPSignIn.sharedInstance()
     signIn.shouldFetchGooglePlusUser = true
     signIn.clientID = "32887541704-4eoj50cbpgvg7rgkhvh5084usp5pq1ur.apps.googleusercontent.com"
     signIn.scopes = []
     signIn.delegate = self
+    
+    var str:String? = UIPasteboard.generalPasteboard().string
+    println("STR: \(str)")
+    if let s = str {
+      if count(s) == 10 {
+        let matches = regexMatches("(^X\\w+)", s)
+        
+        if count(matches) > 0 {
+          appDelegate.joinWithPin(matches[0])
+          UIPasteboard.generalPasteboard().string = ""
+        }
+      }
+    }
   }
   
   func spin() {
+    spinning = true
     spinner.hidden = false
     spinner.startAnimating()
   }
   
   func stopSpin() {
+    spinning = false
     spinner.hidden = true
     spinner.stopAnimating()
   }
   
   @IBAction func authWithFacebook(sender: AnyObject) {
-    
-    spin()
-    let facebookLogin = FBSDKLoginManager()
-    
-    facebookLogin.logInWithReadPermissions(["email"], handler: {
-      (facebookResult, facebookError) -> Void in
+    if !spinning {
+      spin()
+      let facebookLogin = FBSDKLoginManager()
       
-      if facebookError != nil {
-        println("Facebook login failed. Error \(facebookError)")
-        self.stopSpin()
+      facebookLogin.logInWithReadPermissions(["email"], handler: {
+        (facebookResult, facebookError) -> Void in
         
-        if facebookError.code == -1 {
-          let msg = "Please go to your iOS Settings -> Facebook and fill in your login information so you can authenticate via Twitter.  Also make sure MaybeSo is allowed to use your Facebook account if that option exists"
-          let alertController = UIAlertController(title: nil, message: msg, preferredStyle: .Alert)
-          let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)
-          alertController.addAction(okAction)
-          self.presentViewController(alertController, animated: true, completion: nil)
+        if facebookError != nil {
+          println("Facebook login failed. Error \(facebookError)")
+          self.stopSpin()
+          
+          if facebookError.code == -1 {
+            let msg = "Please go to your iOS Settings -> Facebook and fill in your login information so you can authenticate with Twitter.  Also make sure MaybeSo is allowed to use your Facebook account if that option exists"
+            let alertController = UIAlertController(title: nil, message: msg, preferredStyle: .Alert)
+            let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)
+            alertController.addAction(okAction)
+            self.presentViewController(alertController, animated: true, completion: nil)
+          }
+        } else if facebookResult.isCancelled {
+          self.stopSpin()
+          println("Facebook login was cancelled.")
+        } else {
+          let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+          
+          self.ref.authWithOAuthProvider("facebook", token: accessToken,
+            withCompletionBlock: { error, authData in
+              if error != nil {
+                println("Login failed. \(error)")
+              } else {
+                println("Logged in! \(authData)")
+                self.handleAuthData(authData)
+              }
+              
+              self.stopSpin()
+          })
         }
-      } else if facebookResult.isCancelled {
-        self.stopSpin()
-        println("Facebook login was cancelled.")
-      } else {
-        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
-        
-        self.ref.authWithOAuthProvider("facebook", token: accessToken,
-          withCompletionBlock: { error, authData in
-            
-            if error != nil {
-              println("Login failed. \(error)")
-            } else {
-              println("Logged in! \(authData)")
-              self.handleAuthData(authData)
-            }
-            
-            self.stopSpin()
-        })
-      }
-    })
+      })
+    }
   }
   
   @IBAction func authWithPW(sender: AnyObject) {
-    performSegueWithIdentifier("showSignin", sender: self)
+//    performSegueWithIdentifier("showSignin", sender: self)
   }
   
   @IBAction func authWitGoog(sender: AnyObject) {
-    spin()
-//    authenticateWithGoogle()
+    if !spinning {
+      spin()
+    }
   }
   
   func authenticateWithGoogle() {
@@ -117,80 +140,82 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   @IBAction func unwindToMainMenu(sender: UIStoryboardSegue) {}
   
   @IBAction func authWithTwitter(sender: AnyObject) {
-    spin()
-    let twitterAuthHelper = TwitterAuthHelper(firebaseRef: ref, apiKey:"EPOngDM26zvGi5sHuDpYXsAiM")
-    twitterAuthHelper.selectTwitterAccountWithCallback { error, accounts in
-      println("a f resp")
-      println("error: \(error)")
-      println("accounts: \(accounts)")
-      
-      if error != nil {
-        println("err")
+    if !spinning {
+      spin()
+      let twitterAuthHelper = TwitterAuthHelper(firebaseRef: ref, apiKey:"EPOngDM26zvGi5sHuDpYXsAiM")
+      twitterAuthHelper.selectTwitterAccountWithCallback { error, accounts in
+        println("a f resp")
+        println("error: \(error)")
+        println("accounts: \(accounts)")
         
-        println("code:\(error.code)")
-        println("domain:\(error.domain)")
-        println("desc:\(error.description)")
-        self.stopSpin()
+        if error != nil {
+          println("err")
+          
+          println("code:\(error.code)")
+          println("domain:\(error.domain)")
+          println("desc:\(error.description)")
+          self.stopSpin()
 
-        if error.code == -1 {
-          let msg = "Please go to your iOS Settings -> Twitter and fill in your login information so you can authenticate via Twitter.  Also make sure MaybeSo is allowed to use your Twitter account if that option exists"
-          let alertController = UIAlertController(title: nil, message: msg, preferredStyle: .Alert)
-          let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)
-          alertController.addAction(okAction)
-          self.presentViewController(alertController, animated: true, completion: nil)
+          if error.code == -1 {
+            let msg = "Please go to your iOS Settings -> Twitter and fill in your login information so you can authenticate via Twitter.  Also make sure MaybeSo is allowed to use your Twitter account if that option exists"
+            let alertController = UIAlertController(title: nil, message: msg, preferredStyle: .Alert)
+            let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)
+            alertController.addAction(okAction)
+            self.presentViewController(alertController, animated: true, completion: nil)
+          }
+          
+          // Error retrieving Twitter accounts
+        } else if accounts.count > 1 {
+          // Select an account. Here we pick the first one for simplicity
+          let account = accounts[0] as? ACAccount
+          twitterAuthHelper.authenticateAccount(account, withCallback: { error, authData in
+            println("authDate: \(authData)")
+            self.stopSpin()
+
+            if error == nil {
+              println("error:")
+              // Error authenticating account
+            } else {
+              println("authData: \(authData)")
+              // User logged in!
+            }
+          })
+        } else {
+          println("acts: \(accounts)")
+          let account = accounts[0] as? ACAccount
+          println("desc: \(account?.accountDescription)")
+          println("cred: \(account?.credential)")
+          println("id: \(account?.identifier)")
+          println("type: \(account?.accountType)")
+          twitterAuthHelper.authenticateAccount(account, withCallback: { error, authData in
+            println("authDater: \(authData)")
+            self.stopSpin()
+            if error != nil {
+              println("error:")
+              // Error authenticating account
+            } else {
+              self.handleAuthData(authData)
+              println("uid: \(authData.uid)")
+              // User logged in!
+            }
+          })
         }
-        
-        // Error retrieving Twitter accounts
-      } else if accounts.count > 1 {
-        // Select an account. Here we pick the first one for simplicity
-        let account = accounts[0] as? ACAccount
-        twitterAuthHelper.authenticateAccount(account, withCallback: { error, authData in
-          println("authDate: \(authData)")
-          self.stopSpin()
-
-          if error == nil {
-            println("error:")
-            // Error authenticating account
-          } else {
-            println("authData: \(authData)")
-            // User logged in!
-          }
-        })
-      } else {
-        println("acts: \(accounts)")
-        let account = accounts[0] as? ACAccount
-        println("desc: \(account?.accountDescription)")
-        println("cred: \(account?.credential)")
-        println("id: \(account?.identifier)")
-        println("type: \(account?.accountType)")
-        twitterAuthHelper.authenticateAccount(account, withCallback: { error, authData in
-          println("authDater: \(authData)")
-          self.stopSpin()
-          if error != nil {
-            println("error:")
-            // Error authenticating account
-          } else {
-            self.handleAuthData(authData)
-            println("uid: \(authData.uid)")
-            // User logged in!
-          }
-        })
       }
     }
   }
   
   func handleAuthData(authData: FAuthData) {
     let uid: String = authData.uid!
-    NSUserDefaults.standardUserDefaults().setValue(uid, forKey: "uid")
+//    NSUserDefaults.standardUserDefaults().setValue(uid, forKey: "uid")
     NSUserDefaults.standardUserDefaults().setValue(authData.token, forKey: "token")
-    NSUserDefaults.standardUserDefaults().setValue(authData.provider, forKey: "provider")
-    NSUserDefaults.standardUserDefaults().setValue(authData.providerData["email"], forKey: "provider")
+//    NSUserDefaults.standardUserDefaults().setValue(authData.provider, forKey: "provider")
+//    NSUserDefaults.standardUserDefaults().setValue(authData.providerData["email"], forKey: "email")
     
     createUser(uid)
     currentUser!.token = authData.token
   }
   
-  func createUser(uid:String) {
+  func createUser(uid: String) {
     currentUser = User(name: "", id: uid, isThere: .No)
     if let name = NSUserDefaults.standardUserDefaults().valueForKey("name") as? String {
       if count(name) > 0 {
@@ -218,6 +243,18 @@ class OAuthController: UIViewController, GPPSignInDelegate {
     })
   }
   
+  func authUser(token:String) {
+    ref.authWithCustomToken(token, withCompletionBlock: {error, authData in
+      self.stopSpin()
+      
+      if let err = error {
+        println("authError: \(err)")
+      } else {
+        self.handleAuthData(authData)
+      }
+    })
+  }
+  
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
@@ -226,15 +263,13 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
     
-    println("viewdidappear")
-    
-    if let uid = NSUserDefaults.standardUserDefaults().stringForKey("uid") {
-      createUser(uid)
+    if let token = NSUserDefaults.standardUserDefaults().stringForKey("token") {
+      authUser(token)
     }
     
-    dispatch_async(dispatch_get_main_queue(), {
-      self.stopSpin()
-    })
+//    dispatch_async(dispatch_get_main_queue(), {
+//      self.stopSpin()
+//    })
     
   }
   
