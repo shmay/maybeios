@@ -9,11 +9,13 @@
 import UIKit
 import CoreLocation
 
+let fbaseURL = "https://maybeso.firebaseio.com"
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
   var justLoggedOut = false
   
-  let ref = Firebase(url: "https://androidkye.firebaseio.com")
+  let ref = Firebase(url: fbaseURL)
   var pin: String?
   
   var holdViewController: UIViewController?

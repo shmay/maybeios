@@ -14,7 +14,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   
   var spinning = true
   
-  let ref = Firebase(url: "https://androidkye.firebaseio.com")
+  let ref = Firebase(url: fbaseURL)
   let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
   @IBOutlet weak var spinner: UIActivityIndicatorView!
@@ -122,7 +122,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
       // There was an error obtaining the Google+ OAuth Token
     } else {
       // We successfully obtained an OAuth token, authenticate on Firebase with it
-      let ref = Firebase(url: "https://androidkye.firebaseio.com")
+      let ref = Firebase(url: fbaseURL)
       ref.authWithOAuthProvider("google", token: auth.accessToken,
         withCompletionBlock: { error, authData in
           if error != nil {
@@ -245,10 +245,15 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   
   func authUser(token:String) {
     ref.authWithCustomToken(token, withCompletionBlock: {error, authData in
+      println("wtf")
       self.stopSpin()
       
       if let err = error {
         println("authError: \(err)")
+        if err.code == 9999 {
+          println("code 9999")
+          NSUserDefaults.standardUserDefaults().setValue(nil, forKey: "token")
+        }
       } else {
         self.handleAuthData(authData)
       }
@@ -264,7 +269,10 @@ class OAuthController: UIViewController, GPPSignInDelegate {
     super.viewDidAppear(animated)
     
     if let token = NSUserDefaults.standardUserDefaults().stringForKey("token") {
+      println("authuser")
       authUser(token)
+    } else {
+      stopSpin()
     }
     
 //    dispatch_async(dispatch_get_main_queue(), {

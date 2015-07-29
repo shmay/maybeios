@@ -9,7 +9,7 @@
 import UIKit
 
 class LoginController: UIViewController, UITextFieldDelegate {
-  var ref = Firebase(url:"https://androidkye.firebaseio.com")
+  var ref = Firebase(url:fbaseURL)
   
   @IBOutlet weak var email: UITextField!
   @IBOutlet weak var password: UITextField!

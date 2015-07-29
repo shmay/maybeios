@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class SignUpController: UIViewController, UITextFieldDelegate {
-  var ref = Firebase(url:"https://androidkye.firebaseio.com")
+  var ref = Firebase(url:fbaseURL)
 
   var emailHold: String = ""
   var pwHold: String = ""

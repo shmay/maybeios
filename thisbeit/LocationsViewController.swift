@@ -12,8 +12,8 @@ import MapKit
 import CoreLocation
 
 class LocationsViewController: UITableViewController, AddSpotControllerDelegate {
-  var ref = Firebase(url:"https://androidkye.firebaseio.com/")
-  var spotsRef = Firebase(url:"https://androidkye.firebaseio.com/spots")
+  var ref = Firebase(url:fbaseURL)
+  var spotsRef = Firebase(url:"\(fbaseURL)/spots")
   var spots = [Spot]()
   let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
   var spotCnt: UInt = 0
@@ -109,6 +109,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         while let child = children.nextObject() as? FDataSnapshot {
           if child.value as! Int == -1 {
             self.appDelegate.removeGeofence(child.key)
+            self.tableView.reloadData()
           } else {
             self.loadChild(child.key,admin: child.value as! Int)
           }

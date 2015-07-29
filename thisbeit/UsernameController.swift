@@ -15,7 +15,7 @@ class UsernameController: UIViewController, UITextFieldDelegate {
   @IBOutlet weak var textField: UITextField!
   @IBOutlet weak var spinner: UIActivityIndicatorView!
   
-  let ref = Firebase(url: "https://androidkye.firebaseio.com/users")
+  let ref = Firebase(url: "\(fbaseURL)/users")
   
   override func viewDidLoad() {
     super.viewDidLoad()

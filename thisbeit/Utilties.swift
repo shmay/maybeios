@@ -8,8 +8,8 @@
 
 import UIKit
 var currentUser: User?
-let serverURL = "http://localhost:3000"
-//let serverURL = "https://maybeserver.xyz"
+//let serverURL = "http://localhost:3000"
+let serverURL = "https://maybeserver.xyz"
 
 func showSimpleAlertWithTitle(title: String!, #message: String, #viewController: UIViewController) {
   let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)

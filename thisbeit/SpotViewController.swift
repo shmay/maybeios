@@ -23,7 +23,7 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   var no = [User]()
   var maybe = [User]()
     
-  let ref = Firebase(url: "https://androidkye.firebaseio.com/spots/")
+  let ref = Firebase(url: "\(fbaseURL)/spots/")
   
   @IBOutlet var actionItem: UIBarButtonItem!
   @IBOutlet var editBtn: UIBarButtonItem!
@@ -161,14 +161,14 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   }
   
   func openSMS() {
-    if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-      postRequest("gen_invite", ["spotid": spot.id, "token":token], { json in self.handleToken(json)} , { _ in self.handleErr()})
-      // Obtain a configured MFMessageComposeViewController
-      
-      // Present the configured MFMessageComposeViewController instance
-      // Note that the dismissal of the VC will be handled by the messageComposer instance,
-      // since it implements the appropriate delegate call-back
-    }
+//    if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+//      postRequest("gen_invite", ["spotid": spot.id, "token":token], { json in self.handleToken(json)} , { _ in self.handleErr()})
+//      // Obtain a configured MFMessageComposeViewController
+//      
+//      // Present the configured MFMessageComposeViewController instance
+//      // Note that the dismissal of the VC will be handled by the messageComposer instance,
+//      // since it implements the appropriate delegate call-back
+//    }
     if (messageComposer.canSendText()) {
       if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
         postRequest("gen_invite", ["spotid": spot.id, "token":token], { json in self.handleToken(json)} , { _ in self.handleErr()})
@@ -281,8 +281,9 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   func editSpotControllerRemoveSpot(controller: EditSpotController) {
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
       postRequest("remove_spot", ["token": token, "spotid":spot.id], { json in
-        controller.dismissViewControllerAnimated(true, completion: nil)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        controller.dismissViewControllerAnimated(true, completion: { action in
+          self.locationsController.navigationController?.popViewControllerAnimated(true)
+        })
       }, { _ in self.handleErr() })
     }
   }
@@ -300,7 +301,6 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
       vc.name = spot.name
       vc.delegate = self
     } else if segue.identifier == "SpotSettings" {
-      println("trans SpotSettings")
       let navigationController = segue.destinationViewController as! UINavigationController
       let vc = navigationController.viewControllers.first as! SpotSettingsController
       vc.spotView = self
