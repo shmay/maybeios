@@ -27,7 +27,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hnc-5q-0lX" customClass="GPPSignInButton">
-                                <rect key="frame" x="207" y="217" width="187" height="34"/>
+                                <rect key="frame" x="223" y="217" width="160" height="34"/>
                                 <connections>
                                     <action selector="authWitGoog:" destination="Qv5-67-oSb" eventType="touchUpInside" id="FHq-h9-CNF"/>
                                 </connections>

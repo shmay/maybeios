@@ -31,7 +31,6 @@
 		ADFA99221B59A94E00F88371 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99211B59A94E00F88371 /* FBSDKCoreKit.framework */; };
 		ADFA99241B59AA3800F88371 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99231B59AA3800F88371 /* FBSDKLoginKit.framework */; };
 		ADFA99491B59E0CB00F88371 /* GoogleService-Info1.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADFA99481B59E0CB00F88371 /* GoogleService-Info1.plist */; };
-		ADFA994B1B59FDD100F88371 /* twtr.png in Resources */ = {isa = PBXBuildFile; fileRef = ADFA994A1B59FDD100F88371 /* twtr.png */; };
 		ADFA994D1B5EB42100F88371 /* SpotSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA994C1B5EB42100F88371 /* SpotSettings.swift */; };
 		ADFA994F1B5EEE4B00F88371 /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA994E1B5EEE4B00F88371 /* UserController.swift */; };
 		ADFA99511B60FC8300F88371 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA99501B60FC8300F88371 /* ProfileView.swift */; };
@@ -80,7 +79,6 @@
 		ADFA99211B59A94E00F88371 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../Documents/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		ADFA99231B59AA3800F88371 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../Documents/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		ADFA99481B59E0CB00F88371 /* GoogleService-Info1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info1.plist"; path = "../../../../Downloads/GoogleService-Info1.plist"; sourceTree = "<group>"; };
-		ADFA994A1B59FDD100F88371 /* twtr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = twtr.png; path = ../../../../Documents/twtr.png; sourceTree = "<group>"; };
 		ADFA994C1B5EB42100F88371 /* SpotSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotSettings.swift; sourceTree = "<group>"; };
 		ADFA994E1B5EEE4B00F88371 /* UserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
 		ADFA99501B60FC8300F88371 /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -173,7 +171,6 @@
 		AD122BCD1B2B5B13007B0872 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				ADFA994A1B59FDD100F88371 /* twtr.png */,
 				AD122BCE1B2B5B13007B0872 /* Info.plist */,
 				ADFA99481B59E0CB00F88371 /* GoogleService-Info1.plist */,
 			);
@@ -290,7 +287,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD122BD51B2B5B13007B0872 /* Main.storyboard in Resources */,
-				ADFA994B1B59FDD100F88371 /* twtr.png in Resources */,
 				AD122BDA1B2B5B13007B0872 /* LaunchScreen.xib in Resources */,
 				ADFA99491B59E0CB00F88371 /* GoogleService-Info1.plist in Resources */,
 				AD122BD71B2B5B13007B0872 /* Images.xcassets in Resources */,

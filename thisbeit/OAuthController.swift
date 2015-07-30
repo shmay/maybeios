@@ -142,7 +142,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   @IBAction func authWithTwitter(sender: AnyObject) {
     if !spinning {
       spin()
-      let twitterAuthHelper = TwitterAuthHelper(firebaseRef: ref, apiKey:"EPOngDM26zvGi5sHuDpYXsAiM")
+      let twitterAuthHelper = TwitterAuthHelper(firebaseRef: ref, apiKey:twitterAPIKey)
       twitterAuthHelper.selectTwitterAccountWithCallback { error, accounts in
         println("a f resp")
         println("error: \(error)")
@@ -191,7 +191,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
             println("authDater: \(authData)")
             self.stopSpin()
             if error != nil {
-              println("error:")
+              println("error: \(error)")
               // Error authenticating account
             } else {
               self.handleAuthData(authData)
@@ -206,7 +206,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   
   func handleAuthData(authData: FAuthData) {
     let uid: String = authData.uid!
-//    NSUserDefaults.standardUserDefaults().setValue(uid, forKey: "uid")
+    NSUserDefaults.standardUserDefaults().setValue(uid, forKey: "uid")
     NSUserDefaults.standardUserDefaults().setValue(authData.token, forKey: "token")
 //    NSUserDefaults.standardUserDefaults().setValue(authData.provider, forKey: "provider")
 //    NSUserDefaults.standardUserDefaults().setValue(authData.providerData["email"], forKey: "email")
@@ -251,7 +251,6 @@ class OAuthController: UIViewController, GPPSignInDelegate {
       if let err = error {
         println("authError: \(err)")
         if err.code == 9999 {
-          println("code 9999")
           NSUserDefaults.standardUserDefaults().setValue(nil, forKey: "token")
         }
       } else {
@@ -269,7 +268,6 @@ class OAuthController: UIViewController, GPPSignInDelegate {
     super.viewDidAppear(animated)
     
     if let token = NSUserDefaults.standardUserDefaults().stringForKey("token") {
-      println("authuser")
       authUser(token)
     } else {
       stopSpin()

@@ -10,6 +10,10 @@ import UIKit
 import CoreLocation
 
 let fbaseURL = "https://maybeso.firebaseio.com"
+let twitterAPIKey = "LHOdkJjlt1SyDBxsrUpEirAGl"
+
+//let fbaseURL = "https://androidkye.firebaseio.com"
+//let twitterAPIKey = "EPOngDM26zvGi5sHuDpYXsAiM"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
@@ -49,8 +53,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   }
   
   func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-    let matches = regexMatches("pin\\=(^X[\\w]{9})", url.absoluteString!)
+    println("url: \(url.absoluteString!)")
+    let matches = regexMatches("pin\\=(X\\w{9})", url.absoluteString!)
     
+    println("cnt:\(count(matches))")
     if count(matches) > 0 {
       let pin = matches[0]
       
@@ -92,8 +98,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
           if let rootViewController = self.window!.rootViewController {
             println("rootViewCtrl")
             if let presentedViewController = rootViewController.presentedViewController {
-//              self.holdViewController = presentedViewController
-              println("presented")
               dispatch_async(dispatch_get_main_queue(), {
                 presentedViewController.presentViewController(vc, animated: true, completion: nil)
               })

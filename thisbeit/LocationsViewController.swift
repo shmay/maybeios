@@ -139,6 +139,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
     
     let logoutAction = UIAlertAction(title: "Logout", style: .Destructive, handler: { action in
       NSUserDefaults.standardUserDefaults().removeObjectForKey("uid")
+      NSUserDefaults.standardUserDefaults().removeObjectForKey("token")
       (UIApplication.sharedApplication().delegate as! AppDelegate).justLoggedOut = true
 
       self.spotsRef.unauth()
