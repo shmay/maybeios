@@ -15,6 +15,7 @@
 		AD122BDA1B2B5B13007B0872 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD122BD81B2B5B13007B0872 /* LaunchScreen.xib */; };
 		AD122BE61B2B5B13007B0872 /* thisbeitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD122BE51B2B5B13007B0872 /* thisbeitTests.swift */; };
 		AD122BF01B2B5C56007B0872 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD122BEF1B2B5C56007B0872 /* LoginController.swift */; };
+		AD15BAB31B6AD62A00A82397 /* GoogleService-Info1.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD15BAB21B6AD62A00A82397 /* GoogleService-Info1.plist */; };
 		AD3F2E831B3474200071D2B4 /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F2E821B3474200071D2B4 /* Spot.swift */; };
 		AD3F2E851B34742D0071D2B4 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F2E841B34742D0071D2B4 /* User.swift */; };
 		AD3F2E871B34E0750071D2B4 /* Utilties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F2E861B34E0750071D2B4 /* Utilties.swift */; };
@@ -30,7 +31,6 @@
 		ADFA99201B59A12200F88371 /* OAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA991F1B59A12200F88371 /* OAuthController.swift */; };
 		ADFA99221B59A94E00F88371 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99211B59A94E00F88371 /* FBSDKCoreKit.framework */; };
 		ADFA99241B59AA3800F88371 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99231B59AA3800F88371 /* FBSDKLoginKit.framework */; };
-		ADFA99491B59E0CB00F88371 /* GoogleService-Info1.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADFA99481B59E0CB00F88371 /* GoogleService-Info1.plist */; };
 		ADFA994D1B5EB42100F88371 /* SpotSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA994C1B5EB42100F88371 /* SpotSettings.swift */; };
 		ADFA994F1B5EEE4B00F88371 /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA994E1B5EEE4B00F88371 /* UserController.swift */; };
 		ADFA99511B60FC8300F88371 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA99501B60FC8300F88371 /* ProfileView.swift */; };
@@ -61,6 +61,7 @@
 		AD122BE41B2B5B13007B0872 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD122BE51B2B5B13007B0872 /* thisbeitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = thisbeitTests.swift; sourceTree = "<group>"; };
 		AD122BEF1B2B5C56007B0872 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		AD15BAB21B6AD62A00A82397 /* GoogleService-Info1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info1.plist"; sourceTree = "<group>"; };
 		AD3F2E821B3474200071D2B4 /* Spot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
 		AD3F2E841B34742D0071D2B4 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		AD3F2E861B34E0750071D2B4 /* Utilties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilties.swift; sourceTree = "<group>"; };
@@ -78,7 +79,6 @@
 		ADFA991F1B59A12200F88371 /* OAuthController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthController.swift; sourceTree = "<group>"; };
 		ADFA99211B59A94E00F88371 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../Documents/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		ADFA99231B59AA3800F88371 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../Documents/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
-		ADFA99481B59E0CB00F88371 /* GoogleService-Info1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info1.plist"; path = "../../../../Downloads/GoogleService-Info1.plist"; sourceTree = "<group>"; };
 		ADFA994C1B5EB42100F88371 /* SpotSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotSettings.swift; sourceTree = "<group>"; };
 		ADFA994E1B5EEE4B00F88371 /* UserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
 		ADFA99501B60FC8300F88371 /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -171,8 +171,8 @@
 		AD122BCD1B2B5B13007B0872 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				AD15BAB21B6AD62A00A82397 /* GoogleService-Info1.plist */,
 				AD122BCE1B2B5B13007B0872 /* Info.plist */,
-				ADFA99481B59E0CB00F88371 /* GoogleService-Info1.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -288,8 +288,8 @@
 			files = (
 				AD122BD51B2B5B13007B0872 /* Main.storyboard in Resources */,
 				AD122BDA1B2B5B13007B0872 /* LaunchScreen.xib in Resources */,
-				ADFA99491B59E0CB00F88371 /* GoogleService-Info1.plist in Resources */,
 				AD122BD71B2B5B13007B0872 /* Images.xcassets in Resources */,
+				AD15BAB31B6AD62A00A82397 /* GoogleService-Info1.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

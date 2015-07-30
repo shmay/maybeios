@@ -161,14 +161,14 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   }
   
   func openSMS() {
-//    if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-//      postRequest("gen_invite", ["spotid": spot.id, "token":token], { json in self.handleToken(json)} , { _ in self.handleErr()})
-//      // Obtain a configured MFMessageComposeViewController
-//      
-//      // Present the configured MFMessageComposeViewController instance
-//      // Note that the dismissal of the VC will be handled by the messageComposer instance,
-//      // since it implements the appropriate delegate call-back
-//    }
+    if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+      postRequest("gen_invite", ["spotid": spot.id, "token":token], { json in self.handleToken(json)} , { _ in self.handleErr()})
+      // Obtain a configured MFMessageComposeViewController
+      
+      // Present the configured MFMessageComposeViewController instance
+      // Note that the dismissal of the VC will be handled by the messageComposer instance,
+      // since it implements the appropriate delegate call-back
+    }
     if (messageComposer.canSendText()) {
       if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
         postRequest("gen_invite", ["spotid": spot.id, "token":token], { json in self.handleToken(json)} , { _ in self.handleErr()})

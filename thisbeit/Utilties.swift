@@ -8,8 +8,6 @@
 
 import UIKit
 var currentUser: User?
-//let serverURL = "http://localhost:3000"
-let serverURL = "https://maybeserver.xyz"
 
 func showSimpleAlertWithTitle(title: String!, #message: String, #viewController: UIViewController) {
   let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
@@ -36,7 +34,6 @@ func showAlert(msg: String, forController controller: UIViewController) {
   alertController.addAction(okAction)
 
   controller.presentViewController(alertController, animated: true, completion: nil)
-
 }
 
 func regexMatches(pattern: String, text: String) -> Array<String> {
