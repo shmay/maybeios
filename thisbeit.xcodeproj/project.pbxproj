@@ -29,8 +29,6 @@
 		ADB3006A1B2DE94D006D3B7F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB300691B2DE94D006D3B7F /* MapKit.framework */; };
 		ADFA991E1B599EAE00F88371 /* TwitterAuthHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFA991D1B599EAE00F88371 /* TwitterAuthHelper.m */; };
 		ADFA99201B59A12200F88371 /* OAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA991F1B59A12200F88371 /* OAuthController.swift */; };
-		ADFA99221B59A94E00F88371 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99211B59A94E00F88371 /* FBSDKCoreKit.framework */; };
-		ADFA99241B59AA3800F88371 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADFA99231B59AA3800F88371 /* FBSDKLoginKit.framework */; };
 		ADFA994D1B5EB42100F88371 /* SpotSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA994C1B5EB42100F88371 /* SpotSettings.swift */; };
 		ADFA994F1B5EEE4B00F88371 /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA994E1B5EEE4B00F88371 /* UserController.swift */; };
 		ADFA99511B60FC8300F88371 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA99501B60FC8300F88371 /* ProfileView.swift */; };
@@ -77,8 +75,6 @@
 		ADFA991C1B599E8100F88371 /* TwitterAuthHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TwitterAuthHelper.h; sourceTree = "<group>"; };
 		ADFA991D1B599EAE00F88371 /* TwitterAuthHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterAuthHelper.m; sourceTree = "<group>"; };
 		ADFA991F1B59A12200F88371 /* OAuthController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthController.swift; sourceTree = "<group>"; };
-		ADFA99211B59A94E00F88371 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../Documents/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
-		ADFA99231B59AA3800F88371 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../Documents/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		ADFA994C1B5EB42100F88371 /* SpotSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotSettings.swift; sourceTree = "<group>"; };
 		ADFA994E1B5EEE4B00F88371 /* UserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
 		ADFA99501B60FC8300F88371 /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -90,8 +86,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADB3006A1B2DE94D006D3B7F /* MapKit.framework in Frameworks */,
-				ADFA99221B59A94E00F88371 /* FBSDKCoreKit.framework in Frameworks */,
-				ADFA99241B59AA3800F88371 /* FBSDKLoginKit.framework in Frameworks */,
 				840A8644A5911FD12B9D060C /* libPods-thisbeit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -109,8 +103,6 @@
 		109402BBD962FF5BAE2F4488 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				ADFA99231B59AA3800F88371 /* FBSDKLoginKit.framework */,
-				ADFA99211B59A94E00F88371 /* FBSDKCoreKit.framework */,
 				ADB300691B2DE94D006D3B7F /* MapKit.framework */,
 				04C427526CDB58F79FB775EA /* libPods-thisbeit.a */,
 			);

@@ -4,6 +4,21 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Pods-thisbeit-Bolts.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-thisbeit-FBSDKCoreKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-thisbeit-FBSDKLoginKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-thisbeit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -12,7 +27,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>39ED743D1BD02B1EB08A8727</key>
+		<key>02104458502B09DD4735DC8E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BFBD80CCD79D250640A76EC8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CD36C92C527D9526AAE6E456</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E162FDC1C5178A392BC1D78D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
