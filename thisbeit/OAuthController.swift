@@ -27,19 +27,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
     signIn.clientID = "32887541704-4eoj50cbpgvg7rgkhvh5084usp5pq1ur.apps.googleusercontent.com"
     signIn.scopes = []
     signIn.delegate = self
-    
-    var str:String? = UIPasteboard.generalPasteboard().string
-    println("STR: \(str)")
-    if let s = str {
-      if count(s) == 10 {
-        let matches = regexMatches("(^X\\w+)", s)
-        
-        if count(matches) > 0 {
-          appDelegate.joinWithPin(matches[0])
-          UIPasteboard.generalPasteboard().string = ""
-        }
-      }
-    }
+
   }
   
   func spin() {
@@ -245,7 +233,6 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   
   func authUser(token:String) {
     ref.authWithCustomToken(token, withCompletionBlock: {error, authData in
-      println("wtf")
       self.stopSpin()
       
       if let err = error {

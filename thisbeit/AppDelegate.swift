@@ -47,10 +47,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     return true
   }
   
-  func joinWithPin(pin: String) {
+  func joinWithPin(pin: String, controller: UIViewController?) {
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
       let dict = ["token": token, "pin":pin]
-      postRequest("join_w_pin", dict, {json in self.handleResp(json)}, {self.handleErr()})
+      postRequest("join_w_pin", dict, {json in self.handleResp(json, controller:controller)}, {self.handleErr()})
     }
   }
   
@@ -62,7 +62,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     if count(matches) > 0 {
       let pin = matches[0]
       
-      joinWithPin(pin)
+      if let u = currentUser {
+        joinWithPin(pin, controller: nil)
+      } else {
+        println("stash pin: \(pin)")
+        NSUserDefaults.standardUserDefaults().setValue(pin, forKey: "pin")
+      }
     }
     
     FBSDKApplicationDelegate.sharedInstance()
@@ -80,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     self.stopMonitoringForID(spotid)
   }
   
-  func handleResp(json: NSDictionary?) {
+  func handleResp(json: NSDictionary?, controller: UIViewController?) {
     if let parseJSON = json {
       println("json: \(json)")
       var success = parseJSON["success"] as? Int
@@ -97,13 +102,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
           vc.spot = spot
 
           println("rootview")
+          
           if let rootViewController = self.window!.rootViewController {
             println("rootViewCtrl")
-            if let presentedViewController = rootViewController.presentedViewController {
-              dispatch_async(dispatch_get_main_queue(), {
+            dispatch_async(dispatch_get_main_queue(), {
+              if let presentedViewController = rootViewController.presentedViewController {
                 presentedViewController.presentViewController(vc, animated: true, completion: nil)
-              })
-            }
+              }
+            })
           }
         }
         // transition

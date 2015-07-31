@@ -116,6 +116,28 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         }
       })
     }
+    
+    var str:String? = UIPasteboard.generalPasteboard().string
+    println("STRT: \(str)")
+    if let s = str {
+      if count(s) == 10 {
+        let matches = regexMatches("(^X\\w+)", s)
+        
+        if count(matches) > 0 {
+          delay(0.2) {
+            self.appDelegate.joinWithPin(matches[0], controller: self)
+            UIPasteboard.generalPasteboard().string = ""
+          }
+        }
+      }
+    }
+    
+    println("check for pin")
+    if let pin = NSUserDefaults.standardUserDefaults().stringForKey("pin") {
+      println("pin: \(pin)")
+      appDelegate.joinWithPin(pin, controller: self)
+      NSUserDefaults.standardUserDefaults().setValue(nil, forKey: "pin")
+    }
   }
   
   func unwindToMainMenu() {}
@@ -143,6 +165,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
       (UIApplication.sharedApplication().delegate as! AppDelegate).justLoggedOut = true
 
       self.spotsRef.unauth()
+      currentUser = nil
 
       self.performSegueWithIdentifier("GoHome", sender: self)
     })
