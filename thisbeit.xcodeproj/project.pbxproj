@@ -16,6 +16,8 @@
 		AD122BE61B2B5B13007B0872 /* thisbeitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD122BE51B2B5B13007B0872 /* thisbeitTests.swift */; };
 		AD122BF01B2B5C56007B0872 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD122BEF1B2B5C56007B0872 /* LoginController.swift */; };
 		AD15BAB31B6AD62A00A82397 /* GoogleService-Info1.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD15BAB21B6AD62A00A82397 /* GoogleService-Info1.plist */; };
+		AD15BAB61B6C790D00A82397 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD15BAB41B6C790D00A82397 /* FBSDKLoginKit.framework */; };
+		AD15BAB71B6C790D00A82397 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD15BAB51B6C790D00A82397 /* FBSDKCoreKit.framework */; };
 		AD3F2E831B3474200071D2B4 /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F2E821B3474200071D2B4 /* Spot.swift */; };
 		AD3F2E851B34742D0071D2B4 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F2E841B34742D0071D2B4 /* User.swift */; };
 		AD3F2E871B34E0750071D2B4 /* Utilties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F2E861B34E0750071D2B4 /* Utilties.swift */; };
@@ -48,7 +50,7 @@
 		04C427526CDB58F79FB775EA /* libPods-thisbeit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-thisbeit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E78DA8EF784F53FA5625DFC /* Pods-thisbeit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-thisbeit.release.xcconfig"; path = "Pods/Target Support Files/Pods-thisbeit/Pods-thisbeit.release.xcconfig"; sourceTree = "<group>"; };
 		5D41F68F63EF4D4A3492A921 /* Pods-thisbeit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-thisbeit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-thisbeit/Pods-thisbeit.debug.xcconfig"; sourceTree = "<group>"; };
-		AD122BCA1B2B5B13007B0872 /* thisbeit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = thisbeit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD122BCA1B2B5B13007B0872 /* Maybe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Maybe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD122BCE1B2B5B13007B0872 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD122BCF1B2B5B13007B0872 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AD122BD11B2B5B13007B0872 /* AddSpotController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSpotController.swift; sourceTree = "<group>"; };
@@ -60,6 +62,8 @@
 		AD122BE51B2B5B13007B0872 /* thisbeitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = thisbeitTests.swift; sourceTree = "<group>"; };
 		AD122BEF1B2B5C56007B0872 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		AD15BAB21B6AD62A00A82397 /* GoogleService-Info1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info1.plist"; sourceTree = "<group>"; };
+		AD15BAB41B6C790D00A82397 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		AD15BAB51B6C790D00A82397 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		AD3F2E821B3474200071D2B4 /* Spot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
 		AD3F2E841B34742D0071D2B4 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		AD3F2E861B34E0750071D2B4 /* Utilties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilties.swift; sourceTree = "<group>"; };
@@ -86,7 +90,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADB3006A1B2DE94D006D3B7F /* MapKit.framework in Frameworks */,
+				AD15BAB71B6C790D00A82397 /* FBSDKCoreKit.framework in Frameworks */,
 				840A8644A5911FD12B9D060C /* libPods-thisbeit.a in Frameworks */,
+				AD15BAB61B6C790D00A82397 /* FBSDKLoginKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +109,8 @@
 		109402BBD962FF5BAE2F4488 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AD15BAB41B6C790D00A82397 /* FBSDKLoginKit.framework */,
+				AD15BAB51B6C790D00A82397 /* FBSDKCoreKit.framework */,
 				ADB300691B2DE94D006D3B7F /* MapKit.framework */,
 				04C427526CDB58F79FB775EA /* libPods-thisbeit.a */,
 			);
@@ -123,7 +131,7 @@
 		AD122BCB1B2B5B13007B0872 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AD122BCA1B2B5B13007B0872 /* thisbeit.app */,
+				AD122BCA1B2B5B13007B0872 /* Maybe.app */,
 				AD122BDF1B2B5B13007B0872 /* thisbeitTests.xctest */,
 			);
 			name = Products;
@@ -214,7 +222,7 @@
 			);
 			name = thisbeit;
 			productName = thisbeit;
-			productReference = AD122BCA1B2B5B13007B0872 /* thisbeit.app */;
+			productReference = AD122BCA1B2B5B13007B0872 /* Maybe.app */;
 			productType = "com.apple.product-type.application";
 		};
 		AD122BDE1B2B5B13007B0872 /* thisbeitTests */ = {
@@ -247,6 +255,7 @@
 				TargetAttributes = {
 					AD122BC91B2B5B13007B0872 = {
 						CreatedOnToolsVersion = 6.3.2;
+						DevelopmentTeam = 5YW22MKNYB;
 					};
 					AD122BDE1B2B5B13007B0872 = {
 						CreatedOnToolsVersion = 6.3.2;
@@ -427,7 +436,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -469,7 +478,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",
@@ -486,14 +495,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/kmurph/Documents/FacebookSDK,
 					"/Users/kmurph/code/google-plus-ios-sdk-1.7.1",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = thisbeit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Maybe;
 				SWIFT_OBJC_BRIDGING_HEADER = "thisbeit/thisbeit-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -505,14 +517,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/kmurph/Documents/FacebookSDK,
 					"/Users/kmurph/code/google-plus-ios-sdk-1.7.1",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = thisbeit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Maybe;
 				SWIFT_OBJC_BRIDGING_HEADER = "thisbeit/thisbeit-Bridging-Header.h";
 			};
 			name = Release;

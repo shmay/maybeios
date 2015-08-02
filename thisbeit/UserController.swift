@@ -41,9 +41,6 @@ class UserController: UITableViewController {
     super.viewDidLoad()
     
     self.title = user.name
-    
   }
   
-  
-
 }

@@ -18,6 +18,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
   var spotCnt: UInt = 0
   var cnt: UInt = 0
+  weak var spotCtrl: SpotViewController?
   
   func shouldUpdate() {
     println("shouldUPdate: cnt: \(cnt) spotCnt: \(spotCnt)")
@@ -29,16 +30,15 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   }
   
   func loadChild(key:String, admin:Int) {
+    println("load child")
     spotsRef.childByAppendingPath(key).observeEventType(.Value,  withBlock: {child in
-      println("child val: \(child.value)")
-      println("child val type: \(child.value.dynamicType)")
+//      println("child val: \(child.value)")
+//      println("child val type: \(child.value.dynamicType)")
       
       // check for existence of spot... not the greatest way
       if let name = child.childSnapshotForPath("name").value as? String {
+        println("change spot: \(name)")
         self.cnt += 1
-        var yes = 0
-        var no = 0
-        var maybe = 0
 
         let lat = (child.childSnapshotForPath("lat").value).doubleValue
         let lng = (child.childSnapshotForPath("lat").value).doubleValue
@@ -54,6 +54,10 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         } else {
           spot!.name = name
         }
+        
+        spot!.yes = [User]()
+        spot!.no = [User]()
+        spot!.maybe = [User]()
         
         if admin == 1 {
           spot!.admin = true
@@ -73,21 +77,33 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         let users = child.childSnapshotForPath("users").children
 
         while let userSnap = users.nextObject() as? FDataSnapshot {
+          let key = userSnap.key
+          
           let user = userSnap.value
+          
+          let name = user["name"] as! String
+          let isAdmin = user["admin"] as! Bool
+          
           let isThere = IsThere(rawValue: user["isthere"] as! Int)
-
+          
+          let u = User(name: name, id: userSnap.key!, isThere: isThere!)
+          u.admin = isAdmin
+          
           if isThere == .Yes {
-            yes += 1
+            spot!.yes.append(u)
           } else if isThere == .No {
-            no += 1
+            spot!.no.append(u)
           } else if isThere == .Maybe {
-            maybe += 1
+            spot!.maybe.append(u)
           }
         }
         
-        spot!.yes = yes
-        spot!.no = no
-        spot!.maybe = maybe
+        if let sptc = self.spotCtrl {
+          if sptc.spot.id == spot!.id {
+            sptc.spot = spot
+            sptc.tableView.reloadData()
+          }
+        }
         
         self.shouldUpdate()
       }
@@ -98,6 +114,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    println("viewdidload")
     
     if let uid = currentUser?.id {
       ref.childByAppendingPath("users/\(uid)/spots").observeEventType(.Value, withBlock: {snapshot in
@@ -160,14 +177,28 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
     alertController.addAction(aboutAction)
     
     let logoutAction = UIAlertAction(title: "Logout", style: .Destructive, handler: { action in
-      NSUserDefaults.standardUserDefaults().removeObjectForKey("uid")
-      NSUserDefaults.standardUserDefaults().removeObjectForKey("token")
-      (UIApplication.sharedApplication().delegate as! AppDelegate).justLoggedOut = true
-
-      self.spotsRef.unauth()
-      currentUser = nil
-
-      self.performSegueWithIdentifier("GoHome", sender: self)
+      if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+        let values = ["token": "\(token)"]
+        postRequest("logout", values, {json in
+          NSUserDefaults.standardUserDefaults().removeObjectForKey("uid")
+          NSUserDefaults.standardUserDefaults().removeObjectForKey("token")
+          NSUserDefaults.standardUserDefaults().removeObjectForKey("name")
+          
+          (UIApplication.sharedApplication().delegate as! AppDelegate).justLoggedOut = true
+          
+          if currentUser!.provider == "facebook" {
+            println("FBLOGOUT")
+            let facebookLogin = FBSDKLoginManager()
+            facebookLogin.logOut()
+          }
+          
+          self.ref.unauth()
+          currentUser = nil
+          
+          self.performSegueWithIdentifier("GoHome", sender: self)
+        }, {error in })
+      }
+      
     })
     
     alertController.addAction(logoutAction)
@@ -205,13 +236,13 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
     label.text = spot.name
     
     let yes = cell.viewWithTag(1001) as! UILabel
-    yes.text = "\(spot.yes)"
+    yes.text = "\(count(spot.yes))"
     
     let no = cell.viewWithTag(1002) as! UILabel
-    no.text = "\(spot.no)"
+    no.text = "\(count(spot.no))"
     
     let maybe = cell.viewWithTag(1003) as! UILabel
-    maybe.text = "\(spot.maybe)"
+    maybe.text = "\(count(spot.maybe))"
     
     let img = cell.viewWithTag(1004) as! UIImageView
     
@@ -262,6 +293,12 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
     controller.dismissViewControllerAnimated(true,completion:nil)
   }
   
+  override func viewDidAppear(animated: Bool) {
+    super.viewDidAppear(animated)
+    
+    spotCtrl = nil
+  }
+  
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     if segue.identifier == "AddSpot" {
       let navigationController = segue.destinationViewController as! UINavigationController
@@ -269,6 +306,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
       vc.delegate = self
     } else if segue.identifier == "ShowSpot" {
       let ctrl = segue.destinationViewController as! SpotViewController
+      spotCtrl = ctrl
       ctrl.locationsController = self
       ctrl.spot = sender as! Spot
     }

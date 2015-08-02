@@ -8,18 +8,23 @@
 
 import UIKit
 import CoreLocation
+import FBSDKCoreKit
+import FBSDKLoginKit
 
-//let fbaseURL = "https://maybeso.firebaseio.com"
-//let twitterAPIKey = "LHOdkJjlt1SyDBxsrUpEirAGl"
-//let serverURL = "https://maybeserver.xyz"
+let fbaseURL = "https://maybeso.firebaseio.com"
+let twitterAPIKey = "LHOdkJjlt1SyDBxsrUpEirAGl"
+let serverURL = "https://maybeserver.xyz"
 
-let fbaseURL = "https://androidkye.firebaseio.com"
-let twitterAPIKey = "EPOngDM26zvGi5sHuDpYXsAiM"
-let serverURL = "http://localhost:3000"
+//let fbaseURL = "https://androidkye.firebaseio.com"
+//let twitterAPIKey = "EPOngDM26zvGi5sHuDpYXsAiM"
+//let serverURL = "http://localhost:3000"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
   var justLoggedOut = false
+  var fbAuthing = false
+  
+  var oauthCtrl: OAuthController?
   
   let ref = Firebase(url: fbaseURL)
   var pin: String?
@@ -33,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     println("options: \(launchOptions)")
   
-    NSUserDefaults.standardUserDefaults().removeObjectForKey("name")
+//    NSUserDefaults.standardUserDefaults().removeObjectForKey("name")
     
     return FBSDKApplicationDelegate.sharedInstance()
       .application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -56,9 +61,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   
   func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
     println("url: \(url.absoluteString!)")
+    println("sa: \(sourceApplication)")
+
     let matches = regexMatches("pin\\=(X\\w{9})", url.absoluteString!)
     
     println("cnt:\(count(matches))")
+    
+    let tokenMatches = regexMatches("access_token=(\\w+)", url.absoluteString!)
+    println("tokenMatches: \(tokenMatches)")
+    if count(tokenMatches) > 0 {
+
+      if let root = self.window!.rootViewController as? OAuthController {
+        println("YUP")
+        self.ref.authWithOAuthProvider("facebook", token: tokenMatches[0],
+          withCompletionBlock: { error, authData in
+            if error != nil {
+              println("Login failed. \(error)")
+            } else {
+              println("Logged in! \(authData)")
+              root.handleAuthData(authData)
+            }
+            root.stopSpin()
+        })
+      }
+    }
+      
+//      FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url,
+//          sourceApplication: sourceApplication, annotation: annotation)
+    
+    GPPURLHandler.handleURL(url,
+      sourceApplication:sourceApplication,
+      annotation:annotation)
+    
     if count(matches) > 0 {
       let pin = matches[0]
       
@@ -69,14 +103,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         NSUserDefaults.standardUserDefaults().setValue(pin, forKey: "pin")
       }
     }
-    
-    FBSDKApplicationDelegate.sharedInstance()
-      .application(application, openURL: url,
-        sourceApplication: sourceApplication, annotation: annotation)
-    
-    GPPURLHandler.handleURL(url,
-      sourceApplication:sourceApplication,
-      annotation:annotation)
     
     return true
   }

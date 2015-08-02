@@ -8,7 +8,7 @@
         <!--Auth Controller-->
         <scene sceneID="ZdV-9V-Wtv">
             <objects>
-                <viewController id="Qv5-67-oSb" customClass="OAuthController" customModule="thisbeit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Qv5-67-oSb" customClass="OAuthController" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gGx-vL-b8s"/>
                         <viewControllerLayoutGuide type="bottom" id="V2U-hv-enK"/>
@@ -17,23 +17,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LaJ-kO-hee" customClass="FBSDKLoginButton">
-                                <rect key="frame" x="223" y="50" width="153" height="30"/>
-                                <state key="normal" title="Sign In with Facebook">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="authWithFacebook:" destination="Qv5-67-oSb" eventType="touchUpInside" id="cPf-Wd-f7n"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hnc-5q-0lX" customClass="GPPSignInButton">
-                                <rect key="frame" x="223" y="217" width="160" height="34"/>
+                                <rect key="frame" x="223" y="302" width="160" height="34"/>
                                 <connections>
                                     <action selector="authWitGoog:" destination="Qv5-67-oSb" eventType="touchUpInside" id="FHq-h9-CNF"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6MD-Rc-9HU">
-                                <rect key="frame" x="207" y="111" width="187" height="37"/>
+                                <rect key="frame" x="207" y="195" width="187" height="37"/>
                                 <color key="backgroundColor" red="0.42352941176470588" green="0.67843137254901964" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                 <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="5" maxY="0.0"/>
@@ -46,18 +37,35 @@
                                 </connections>
                             </button>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="l3G-1a-TKk">
-                                <rect key="frame" x="289" y="295" width="20" height="20"/>
+                                <rect key="frame" x="295" y="380" width="20" height="20"/>
                             </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Sign in to Maybe" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Wg-oE-VYN">
+                                <rect key="frame" x="278" y="34" width="130" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LaJ-kO-hee" customClass="FBSDKLoginButton">
+                                <rect key="frame" x="223" y="97" width="153" height="30"/>
+                                <state key="normal" title="Sign In with Facebook">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="authWithFacebook:" destination="Qv5-67-oSb" eventType="touchUpInside" id="cPf-Wd-f7n"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.19607843137254902" green="0.19607843137254902" blue="0.19607843137254902" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="LaJ-kO-hee" firstAttribute="top" secondItem="gGx-vL-b8s" secondAttribute="bottom" constant="30" id="48f-aj-43l"/>
+                            <constraint firstItem="4Wg-oE-VYN" firstAttribute="top" secondItem="gGx-vL-b8s" secondAttribute="bottom" constant="14" id="7ll-XS-MMJ"/>
                             <constraint firstAttribute="centerX" secondItem="Hnc-5q-0lX" secondAttribute="centerX" id="M4U-ni-UJn"/>
                             <constraint firstAttribute="centerX" secondItem="6MD-Rc-9HU" secondAttribute="centerX" id="O2m-gV-JU9"/>
                             <constraint firstItem="Hnc-5q-0lX" firstAttribute="top" secondItem="6MD-Rc-9HU" secondAttribute="bottom" constant="50" id="ToR-IY-WHU"/>
+                            <constraint firstAttribute="centerX" secondItem="4Wg-oE-VYN" secondAttribute="centerX" id="V0k-Xc-yrm"/>
                             <constraint firstItem="6MD-Rc-9HU" firstAttribute="top" secondItem="LaJ-kO-hee" secondAttribute="bottom" constant="50" id="aiU-Le-wwK"/>
                             <constraint firstItem="l3G-1a-TKk" firstAttribute="top" secondItem="Hnc-5q-0lX" secondAttribute="bottom" constant="30" id="ilr-6i-oll"/>
                             <constraint firstAttribute="centerX" secondItem="l3G-1a-TKk" secondAttribute="centerX" id="kae-bo-xi8"/>
+                            <constraint firstItem="LaJ-kO-hee" firstAttribute="top" secondItem="4Wg-oE-VYN" secondAttribute="bottom" constant="45" id="lWe-px-BdG"/>
                             <constraint firstAttribute="centerX" secondItem="LaJ-kO-hee" secondAttribute="centerX" id="nPR-TP-0TJ"/>
                         </constraints>
                     </view>
@@ -78,7 +86,7 @@
         <!--Login Controller-->
         <scene sceneID="5iO-0l-X9O">
             <objects>
-                <viewController id="ecY-le-3RL" customClass="LoginController" customModule="thisbeit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ecY-le-3RL" customClass="LoginController" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="WQl-aR-Jof"/>
                         <viewControllerLayoutGuide type="bottom" id="ZgX-9R-uR4"/>
@@ -205,7 +213,7 @@
         <!--Sign Up-->
         <scene sceneID="NqU-lL-QrF">
             <objects>
-                <viewController title="Sign Up" id="Brg-qo-gBW" customClass="SignUpController" customModule="thisbeit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Sign Up" id="Brg-qo-gBW" customClass="SignUpController" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Esh-nu-pzV"/>
                         <viewControllerLayoutGuide type="bottom" id="SEf-O2-0pK"/>
@@ -318,7 +326,7 @@
         <!--Spots-->
         <scene sceneID="ysv-gE-CJf">
             <objects>
-                <tableViewController id="RdX-My-7hF" customClass="LocationsViewController" customModule="thisbeit" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="RdX-My-7hF" customClass="LocationsViewController" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="OEq-rA-wiG">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -422,7 +430,7 @@
         <!--Profile View-->
         <scene sceneID="H5k-Oe-c6K">
             <objects>
-                <viewController title="Profile View" id="GlO-Y6-YwB" customClass="ProfileView" customModule="thisbeit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Profile View" id="GlO-Y6-YwB" customClass="ProfileView" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="z2X-Wb-WOT"/>
                         <viewControllerLayoutGuide type="bottom" id="UBj-yU-15d"/>
@@ -488,7 +496,7 @@
         <!--Spot-->
         <scene sceneID="EBe-qV-ddW">
             <objects>
-                <tableViewController id="arP-dQ-xqP" customClass="SpotViewController" customModule="thisbeit" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="arP-dQ-xqP" customClass="SpotViewController" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="ZRb-vB-02Q">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -548,7 +556,7 @@
         <!--Add Spot-->
         <scene sceneID="bm2-C8-PVu">
             <objects>
-                <viewController title="Add Spot" id="pjy-nv-fVU" customClass="AddSpotController" customModule="thisbeit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Add Spot" id="pjy-nv-fVU" customClass="AddSpotController" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YdF-N0-QNF"/>
                         <viewControllerLayoutGuide type="bottom" id="RZY-B3-wOc"/>
@@ -666,7 +674,7 @@
         <!--JoinViewController-->
         <scene sceneID="NGb-WM-5SX">
             <objects>
-                <viewController storyboardIdentifier="JoinController" title="JoinViewController" id="aCB-xE-pPF" customClass="JoinController" customModule="thisbeit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JoinController" title="JoinViewController" id="aCB-xE-pPF" customClass="JoinController" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="W3B-fY-Wyb"/>
                         <viewControllerLayoutGuide type="bottom" id="Ajs-CR-xVe"/>
@@ -760,7 +768,7 @@
         <!--Edit Spot-->
         <scene sceneID="0hZ-bj-gtN">
             <objects>
-                <viewController title="Edit Spot" id="AOD-fr-qt0" customClass="EditSpotController" customModule="thisbeit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Edit Spot" id="AOD-fr-qt0" customClass="EditSpotController" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gd8-Tt-Ocz"/>
                         <viewControllerLayoutGuide type="bottom" id="aID-Gy-pqc"/>
@@ -822,7 +830,7 @@
         <!--Settings-->
         <scene sceneID="oug-ac-fSQ">
             <objects>
-                <tableViewController title="Settings" id="6j3-OE-rka" customClass="SpotSettingsController" customModule="thisbeit" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Settings" id="6j3-OE-rka" customClass="SpotSettingsController" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="knd-vX-LzW">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -947,7 +955,7 @@
         <!--User-->
         <scene sceneID="C9E-Fq-fnG">
             <objects>
-                <tableViewController id="c6M-u8-Oq2" customClass="UserController" customModule="thisbeit" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="c6M-u8-Oq2" customClass="UserController" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="center" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="L3v-uW-gvU">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1075,7 +1083,7 @@ In conclusion, emojis are fun  🇮🇪🔔⌚️🍣
         <!--Username-->
         <scene sceneID="2W8-1y-g2n">
             <objects>
-                <viewController title="Username" id="N8S-7l-5K2" customClass="UsernameController" customModule="thisbeit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Username" id="N8S-7l-5K2" customClass="UsernameController" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NIx-ko-fto"/>
                         <viewControllerLayoutGuide type="bottom" id="agJ-bg-hkE"/>

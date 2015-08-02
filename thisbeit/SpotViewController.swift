@@ -18,10 +18,6 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
   
   var spot: Spot!
-  
-  var yes = [User]()
-  var no = [User]()
-  var maybe = [User]()
     
   let ref = Firebase(url: "\(fbaseURL)/spots/")
   
@@ -35,46 +31,12 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
     title = spot.name
     
     let id = NSUserDefaults.standardUserDefaults().valueForKey("uid") as! String
-
-    ref.childByAppendingPath("\(spot.id)/users").observeEventType(.Value, withBlock: { snapshot in
-      self.yes = [User]()
-      self.no = [User]()
-      self.maybe = [User]()
-      
-      let users = snapshot.children
-      
-      while let userSnap = users.nextObject() as? FDataSnapshot {
-        let key = userSnap.key
-
-        let user = userSnap.value
-        
-        let name = user["name"] as! String
-        let isAdmin = user["admin"] as! Bool
-        
-        let isThere = IsThere(rawValue: user["isthere"] as! Int)
-        
-        let u = User(name: name, id: userSnap.key!, isThere: isThere!)
-        u.admin = isAdmin
-        
-        if isThere == .Yes {
-          self.yes.append(u)
-        } else if isThere == .No {
-          self.no.append(u)
-        } else if isThere == .Maybe {
-          self.maybe.append(u)
-        }
-      }
-
-      if self.spot!.admin {
-        self.navigationItem.rightBarButtonItems = [self.inviteBtn, self.editBtn, self.actionItem]
-      } else {
-        self.navigationItem.rightBarButtonItems = [self.actionItem]
-      }
-      
-      dispatch_async(dispatch_get_main_queue(), { () -> Void in
-        self.tableView.reloadData()
-      })
-    })
+ 
+    if spot.admin {
+      self.navigationItem.rightBarButtonItems = [self.inviteBtn, self.editBtn, self.actionItem]
+    } else {
+      self.navigationItem.rightBarButtonItems = [self.actionItem]
+    }
     
   }
   
@@ -135,11 +97,11 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   
   func getUser(section: Int, row: Int) -> User? {
     if section == 0 {
-      return self.yes[row]
+      return spot.yes[row]
     } else if section == 1 {
-      return self.no[row]
+      return spot.no[row]
     } else if section == 2 {
-      return self.maybe[row]
+      return spot.maybe[row]
     } else {
       return nil
     }
@@ -186,10 +148,16 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   }
   
   func handleToken(json: NSDictionary?) {
-    println("respjson: \(json)")
-    if let pjson = json {
-//      let messageComposeVC = messageComposer.configuredMessageComposeViewController()
-//      presentViewController(messageComposeVC, animated: true, completion: nil)
+    if (messageComposer.canSendText()) {
+      println("respjson: \(json)")
+      if let pjson = json {
+        let messageComposeVC = messageComposer.configuredMessageComposeViewController()
+        if let pin = pjson["pin"] as? String {
+          let m = "You've been invited to join a spot on Maybe.  Go to http://shmay.github.io/mayweb?pin=\(pin) to join the spot."
+          messageComposeVC.body = m
+          presentViewController(messageComposeVC, animated: true, completion: nil)
+        }
+      }
     }
   }
   
@@ -198,20 +166,42 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   }
 
   func openEmail() {
-    showAlert("an error occurred while trying to perform this action")
+    if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+      postRequest("gen_invite", ["spotid": spot.id, "token":token], { json in
+        if let j = json {
+          if let pin = j["pin"] as? String {
+            let m = "You've been invited to join a spot on Maybe.  Go to http://shmay.github.io/mayweb/?pin=\(pin) to join the spot."
+            var emailTitle = "You've been invited to join a Spot on Maybe"
+            var messageBody = m
+            var mc: MFMailComposeViewController = MFMailComposeViewController()
+            //    mc.mailComposeDelegate = self
+            mc.setSubject(emailTitle)
+            mc.setMessageBody(messageBody, isHTML: false)
+            self.presentViewController(mc, animated: true, completion: nil)
+          }
+        }
+      } , { _ in self.handleErr()})
+      // Obtain a configured MFMessageComposeViewController
+      
+      // Present the configured MFMessageComposeViewController instance
+      // Note that the dismissal of the VC will be handled by the messageComposer instance,
+      // since it implements the appropriate delegate call-back
+    }
+
+
   }
   
   override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCellWithIdentifier("UserCell") as! UITableViewCell
     
     if indexPath.section == 0 {
-      let u = self.yes[indexPath.row]
+      let u = spot.yes[indexPath.row]
       cell.textLabel!.text = u.name
     } else if indexPath.section == 1 {
-      let u = self.no[indexPath.row]
+      let u = spot.no[indexPath.row]
       cell.textLabel!.text = u.name
     } else if indexPath.section == 2 {
-      let u = self.maybe[indexPath.row]
+      let u = spot.maybe[indexPath.row]
       cell.textLabel!.text = u.name
     }
     
@@ -220,11 +210,11 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   
   override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     if section == 0 {
-      return self.yes.count
+      return spot.yes.count
     } else if section == 1 {
-      return self.no.count
+      return spot.no.count
     } else if section == 2 {
-      return self.maybe.count
+      return spot.maybe.count
     } else {
       return 0
     }
@@ -249,11 +239,11 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
     var str = "?"
     
     if section == 0 {
-      str = "Yes (\(self.yes.count))"
+      str = "Yes (\(spot.yes.count))"
     } else if section == 1 {
-      str = "No (\(self.no.count))"
+      str = "No (\(spot.no.count))"
     } else if section == 2 {
-      str = "Maybe (\(self.maybe.count))"
+      str = "Maybe (\(spot.maybe.count))"
     }
     
     return str
@@ -263,7 +253,6 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
     controller.dismissViewControllerAnimated(true, completion: nil)
  
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-      println("wtf")
       postRequest("remove_user", ["token": token, "uid": user.id, "spotid":spot.id], {json in }, {_ in })
     }
   }
@@ -280,6 +269,7 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   
   func editSpotControllerRemoveSpot(controller: EditSpotController) {
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+      self.locationsController.spotCtrl = nil
       postRequest("remove_spot", ["token": token, "spotid":spot.id], { json in
         controller.dismissViewControllerAnimated(true, completion: { action in
           self.locationsController.navigationController?.popViewControllerAnimated(true)

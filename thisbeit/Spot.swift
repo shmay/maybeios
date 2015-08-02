@@ -16,11 +16,11 @@ class Spot: NSObject {
   var radius: CLLocationDistance?
   var tracking: Bool = false
   
-  var admin = false
+  var yes = [User]()
+  var no = [User]()
+  var maybe = [User]()
   
-  var yes = 0
-  var no = 0
-  var maybe = 0
+  var admin = false
     
   init(name: String, id: String) {
     self.name = name

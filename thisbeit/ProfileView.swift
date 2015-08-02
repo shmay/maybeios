@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ProfileView: UIViewController {
+class ProfileView: UIViewController, UITextFieldDelegate {
   var working = false
   
   @IBOutlet weak var textField: UITextField!
@@ -42,5 +42,18 @@ class ProfileView: UIViewController {
     super.viewDidLoad()
     
     textField.text = currentUser?.name
+    
+    textField.delegate = self
+  }
+
+
+  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    textField.resignFirstResponder()
+  }
+
+  func textFieldShouldReturn(userText: UITextField) -> Bool {
+    userText.resignFirstResponder()
+    
+    return true;
   }
 }

@@ -77,6 +77,8 @@ class SpotSettingsController: UITableViewController {
           if success < 0 {
             self.leaveErr()
           } else {
+            self.spotView.locationsController.spotCtrl = nil
+            self.spotView.locationsController.shouldUpdate()
             self.spotView.dismissViewControllerAnimated(true, completion: nil)
           }
         } else {

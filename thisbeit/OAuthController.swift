@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 class OAuthController: UIViewController, GPPSignInDelegate {
   @IBOutlet weak var goog: GPPSignInButton!
@@ -43,10 +45,12 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   }
   
   @IBAction func authWithFacebook(sender: AnyObject) {
+    println("authWithFB")
+    
     if !spinning {
       spin()
       let facebookLogin = FBSDKLoginManager()
-      
+
       facebookLogin.logInWithReadPermissions(["email"], handler: {
         (facebookResult, facebookError) -> Void in
         
@@ -66,6 +70,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
           println("Facebook login was cancelled.")
         } else {
           let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+          println("accessToken: \(accessToken)")
           
           self.ref.authWithOAuthProvider("facebook", token: accessToken,
             withCompletionBlock: { error, authData in
@@ -200,12 +205,15 @@ class OAuthController: UIViewController, GPPSignInDelegate {
 //    NSUserDefaults.standardUserDefaults().setValue(authData.providerData["email"], forKey: "email")
     
     createUser(uid)
+    currentUser!.provider = authData.provider
     currentUser!.token = authData.token
   }
   
   func createUser(uid: String) {
+    println("createUser")
     currentUser = User(name: "", id: uid, isThere: .No)
     if let name = NSUserDefaults.standardUserDefaults().valueForKey("name") as? String {
+      println("name: \(name)")
       if count(name) > 0 {
         currentUser!.name = name
         println("defaults has name: \(name)")
@@ -259,6 +267,26 @@ class OAuthController: UIViewController, GPPSignInDelegate {
     } else {
       stopSpin()
     }
+    
+//    if let vers = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as? NSString {
+//      let v = vers.doubleValue
+//      let minVer = 1.0
+//      
+//      if v < minVer {
+//        let alertController = UIAlertController(title: nil, message: "Hey, you're behind.  Upgrade the app at the app store to continue using it.", preferredStyle: .Alert)
+//        self.presentViewController(alertController, animated: true, completion: nil)
+//        
+//        let okAction = UIAlertAction(title: "Take me to the App Store", style: .Default,handler: { action in
+//          var url  = NSURL(string: "itms-apps://itunes.apple.com/app/calorie-counter-diet-tracker/id341232718")
+//          if UIApplication.sharedApplication().canOpenURL(url!) == true  {
+//            UIApplication.sharedApplication().openURL(url!)
+//          }
+//          
+//        })
+//        alertController.addAction(okAction)
+//      }
+//      println("version:\(v)")
+//    }
     
 //    dispatch_async(dispatch_get_main_queue(), {
 //      self.stopSpin()

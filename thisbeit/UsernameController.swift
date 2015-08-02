@@ -19,6 +19,12 @@ class UsernameController: UIViewController, UITextFieldDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    textField.delegate = self
+  }
+  
+  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    textField.resignFirstResponder()
   }
   
   func textFieldShouldReturn(userText: UITextField) -> Bool {
@@ -43,7 +49,7 @@ class UsernameController: UIViewController, UITextFieldDelegate {
       errorMsg.hidden = false
     } else {
       spinner.startAnimating()
-
+      
       if let uid = NSUserDefaults.standardUserDefaults().valueForKey("uid") as? String {
         ref.childByAppendingPath("\(uid)/name").setValue(name)
         NSUserDefaults.standardUserDefaults().setValue(name, forKey: "name")
