@@ -11,7 +11,6 @@ import UIKit
 import MessageUI
 
 class SpotViewController: UITableViewController, EditSpotControllerDelegate,UserControllerDelegate {
-  
   let messageComposer = MessageComposer()
   
   var locationsController: LocationsViewController!

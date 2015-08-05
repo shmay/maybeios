@@ -48,7 +48,7 @@ class SignUpController: UIViewController, UITextFieldDelegate {
           }
         } else {
           let uid = result["uid"] as! String
-          currentUser = User(name: "", id: uid, isThere: .No)
+          currentUser = User(name: "", id: uid, state: .Unknown)
           println("Successfully created user account with uid: \(uid)")
         }
     })

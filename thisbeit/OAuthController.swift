@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 import FBSDKCoreKit
 import FBSDKLoginKit
 
@@ -21,6 +22,10 @@ class OAuthController: UIViewController, GPPSignInDelegate {
 
   @IBOutlet weak var spinner: UIActivityIndicatorView!
   override func viewDidLoad() {
+    println("unknown: \(CLRegionState.Unknown.rawValue)")
+    println("outside: \(CLRegionState.Outside.rawValue)")
+    println("inside: \(CLRegionState.Inside.rawValue)")
+    
     super.viewDidLoad()
     spin()
 
@@ -211,7 +216,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   
   func createUser(uid: String) {
     println("createUser")
-    currentUser = User(name: "", id: uid, isThere: .No)
+    currentUser = User(name: "", id: uid, state: .Unknown)
     if let name = NSUserDefaults.standardUserDefaults().valueForKey("name") as? String {
       println("name: \(name)")
       if count(name) > 0 {

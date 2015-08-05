@@ -41,8 +41,8 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         self.cnt += 1
 
         let lat = (child.childSnapshotForPath("lat").value).doubleValue
-        let lng = (child.childSnapshotForPath("lat").value).doubleValue
-        let radius = (child.childSnapshotForPath("lat").value).doubleValue
+        let lng = (child.childSnapshotForPath("lng").value).doubleValue
+        let radius = (child.childSnapshotForPath("radius").value).doubleValue
         
         var spot = self.spots.filter{ $0.id == child.key! }.first
         
@@ -84,17 +84,21 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
           let name = user["name"] as! String
           let isAdmin = user["admin"] as! Bool
           
-          let isThere = IsThere(rawValue: user["isthere"] as! Int)
+          let state = CLRegionState(rawValue: user["state"] as! Int)
           
-          let u = User(name: name, id: userSnap.key!, isThere: isThere!)
+          let u = User(name: name, id: userSnap.key!, state: state!)
           u.admin = isAdmin
           
-          if isThere == .Yes {
+          if state == .Inside {
             spot!.yes.append(u)
-          } else if isThere == .No {
+          } else if state == .Outside {
             spot!.no.append(u)
-          } else if isThere == .Maybe {
+          } else if state == .Unknown {
             spot!.maybe.append(u)
+          }
+          
+          if u.id == currentUser!.id {
+            NSUserDefaults.standardUserDefaults().setInteger(state!.rawValue, forKey: "\(spot!.id)-server")
           }
         }
         
@@ -282,7 +286,10 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
           let coords = CLLocationCoordinate2D(latitude: lat, longitude: lng)
           spot.coordinate = coords
 
-          appDelegate.startMonitoringGeotification(spot,ctrl:self)
+          if let reg = appDelegate.startMonitoringGeotification(spot,ctrl:self) {
+            appDelegate.withinRegion(spot.id)
+          }
+
         }
 
       }

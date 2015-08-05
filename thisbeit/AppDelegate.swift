@@ -18,6 +18,7 @@ let serverURL = "https://maybeserver.xyz"
 //let fbaseURL = "https://androidkye.firebaseio.com"
 //let twitterAPIKey = "EPOngDM26zvGi5sHuDpYXsAiM"
 //let serverURL = "http://localhost:3000"
+//let serverURL = "http://192.168.1.108:3000"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
@@ -49,6 +50,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     locationManager.delegate = self
     locationManager.requestAlwaysAuthorization()
     
+//    stopMonitoringSpots()
+    
+    allSpots()
     return true
   }
   
@@ -69,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     let tokenMatches = regexMatches("access_token=(\\w+)", url.absoluteString!)
     println("tokenMatches: \(tokenMatches)")
+    
     if count(tokenMatches) > 0 {
 
       if let root = self.window!.rootViewController as? OAuthController {
@@ -105,6 +110,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     return true
+  }
+  
+  func withinRegion(id: String) {
+    delay(0.5) {
+      if let reg = self.getRegionByID(id) {
+        println("withinRegion: \(id)")
+        self.locationManager.requestStateForRegion(reg)
+      }
+    }
   }
   
   func removeGeofence(spotid: String) {
@@ -147,28 +161,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
   }
   
-  func startMonitoringGeotification(spot: Spot, ctrl: UIViewController) -> Bool {
+  func startMonitoringGeotification(spot: Spot, ctrl: UIViewController) -> CLCircularRegion? {
     if !CLLocationManager.isMonitoringAvailableForClass(CLCircularRegion) {
       showSimpleAlertWithTitle("Error", message: "Geofencing is not supported on this device!", viewController: ctrl)
-      return false
+      return nil
     }
     if CLLocationManager.authorizationStatus() != .AuthorizedAlways {
       showSimpleAlertWithTitle("Warning", message: "Your geotification is saved but will only be activated once you grant Geotify permission to access the device location.", viewController: ctrl)
-      return false
+      return nil
     }
     
     let reg = getRegionByID(spot.id)
     
     if reg == nil {
       if let region = regionWithSpot(spot) {
+        println("star moni: \(region.center.latitude),\(region.center.longitude); \(region.radius)")
+        NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "\(region.identifier)-local")
         locationManager.startMonitoringForRegion(region)
-        return true
+        return region
       } else {
         showSimpleAlertWithTitle("Error", message: "Geofence not created due to an error", viewController: ctrl)
       }
     }
     
-    return false
+    return nil
+  }
+  
+  func allSpots() {
+    for region in locationManager.monitoredRegions {
+      if let cr = region as? CLCircularRegion {
+        println("region: \(cr.center.latitude),\(cr.center.longitude); \(cr.radius)")
+      }
+    }
   }
   
   func stopMonitoringSpots() {
@@ -224,27 +248,73 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   func locStatusChanged(region: CLRegion, status: Int) {
     println("locStatusChanged: \(status)")
     if region is CLCircularRegion {
+      NSUserDefaults.standardUserDefaults().setInteger(status, forKey: "\(region.identifier)-local")
       if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
         postRequest("spot_status_changed", ["token": token, "spotid": region.identifier, "status": "\(status)"], {json in
           if let p = json {
             if let s = p["success"] as? Int {
-              if s < 0 {
+              if s == 1 {
+                if let j = p["status"] as? Int {
+                  println("setServer")
+                  NSUserDefaults.standardUserDefaults().setInteger(j, forKey: "\(region.identifier)-server")
+                }
+                self.checkSpotsExceptFor(region)
+              } else if s < 0 {
                 self.locationManager.stopMonitoringForRegion(region)
               }
             }
           }
         }, {_ in })
+        
       }
     }
     
   }
   
+  func checkSpotsExceptFor(r: CLRegion) {
+    for region in locationManager.monitoredRegions {
+      if let reg = region as? CLCircularRegion {
+        if r.identifier != reg.identifier {
+          self.locationManager.requestStateForRegion(reg)
+        }
+      }
+    }
+  }
+  
+  func checkStatusForSpot(spot: Spot) {
+    println("spotid: \(spot.id)")
+    if let reg = getRegionByID(spot.id) {
+      println("check status for: \(spot.name)")
+      delay(0.5) {
+        self.locationManager.requestStateForRegion(reg)
+      }
+    }
+  }
+  
   func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
-    locStatusChanged(region, status: IsThere.Yes.rawValue)
+    println("didEnter: \(CLRegionState.Inside.rawValue)")
+    locStatusChanged(region, status: CLRegionState.Inside.rawValue)
   }
   
   func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
-    locStatusChanged(region, status: IsThere.No.rawValue)
+    println("didExit: \(CLRegionState.Outside.rawValue)")
+    locStatusChanged(region, status: CLRegionState.Outside.rawValue)
+  }
+  
+  func locationManager(manager: CLLocationManager, didDetermineState state: CLRegionState, forRegion region: CLRegion) {
+    println("didDetermnine: \(state.rawValue)")
+    if let serverVal = NSUserDefaults.standardUserDefaults().valueForKey("\(region.identifier)-server") as? Int {
+      if state.rawValue != serverVal {
+        println("state: \(state.rawValue)")
+        println("serverVal: \(serverVal)")
+        locStatusChanged(region, status: state.rawValue)
+      }
+    } else {
+      // if no server value, then default state is maybe
+      locStatusChanged(region, status: state.rawValue)
+    }
+
+    let val = state.rawValue
   }
   
   func regionWithSpot(spot: Spot) -> CLCircularRegion? {

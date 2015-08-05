@@ -35,7 +35,13 @@ class JoinController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     if let pson = json {
       if let success = pson["success"] as? Int {
         if success == 1 {
-          appDelegate.startMonitoringGeotification(spot, ctrl: self)
+          if let region = appDelegate.startMonitoringGeotification(spot, ctrl: self) {
+            appDelegate.withinRegion(spot.id)
+          } else {
+
+          }
+//          let region = appDelegate.getRegionByID(spot.id)
+//          NSUserDefaults.standardUserDefaults().setValue(<#value: AnyObject?#>, forKey: <#String#>)
           dismissJoin()
         } else {
           showAlert("Sorry, but you could not be added to this spot", forController:self)

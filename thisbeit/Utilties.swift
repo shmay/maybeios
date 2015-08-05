@@ -66,7 +66,7 @@ func postRequest(path: String, params: Dictionary<String, String>, success: (res
   request.HTTPMethod = "POST"
 
   var err: NSError?
-  println("params: \(params)")
+  println("url: \(url?.absoluteString)")
   request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
   request.addValue("application/json", forHTTPHeaderField: "Content-Type")
   request.addValue("application/json", forHTTPHeaderField: "Accept")

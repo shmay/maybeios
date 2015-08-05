@@ -7,38 +7,20 @@
 //
 
 import Foundation
-
-enum IsThere: Int {
-  case No = 0
-  case Yes
-  case Maybe
-  
-  var desc : String {
-    get {
-      switch(self) {
-      case No:
-        return "No"
-      case Yes:
-        return "Yes"
-      case Maybe:
-        return "Maybe"
-      }
-    }
-  }
-}
+import CoreLocation
 
 class User: NSObject {
   var name = ""
   var id: String
-  var isThere: IsThere
+  var state: CLRegionState
   var token: String?
   var provider: String?
   var admin = false
 
-  init(name: String, id: String, isThere: IsThere) {
+  init(name: String, id: String, state: CLRegionState) {
     self.name = name
     self.id = id
-    self.isThere = isThere
+    self.state = state
     
     super.init()
   }

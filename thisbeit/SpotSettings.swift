@@ -15,6 +15,11 @@ class SpotSettingsController: UITableViewController {
   var spotView: SpotViewController!
   var spinning = false
   
+  @IBAction func checkStatus(sender: AnyObject) {
+    println("checkerino")
+    appDelegate.checkStatusForSpot(spot)
+  }
+  
   @IBOutlet weak var spinner: UIActivityIndicatorView!
   @IBOutlet weak var trackingLabel: UILabel!
   @IBOutlet weak var flag: UISwitch!
@@ -24,7 +29,8 @@ class SpotSettingsController: UITableViewController {
       trackingLabel.text = "tracking"
       spot.tracking = true
       let result = appDelegate.startMonitoringGeotification(spot, ctrl: self)
-      if !result {
+      
+      if result == nil {
         flag.on = false
         trackingLabel.text = "not tracking"
       }

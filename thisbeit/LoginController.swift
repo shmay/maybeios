@@ -51,7 +51,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
         }
       } else {
         let uid: String = authData.uid!
-        currentUser = User(name: "", id: uid, isThere: .No)
+        currentUser = User(name: "", id: uid, state: .Unknown)
         NSUserDefaults.standardUserDefaults().setValue(uid, forKey: "uid")
         NSUserDefaults.standardUserDefaults().setValue(authData.token, forKey: "token")
         NSUserDefaults.standardUserDefaults().setValue(authData.provider, forKey: "provider")
