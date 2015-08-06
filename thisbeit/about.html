@@ -27,6 +27,25 @@ b { font-size:18px;font-weight:bolder; }
   color:rgb(240,240,240);
   text-decoration: none;
 }
+h3 {
+  margin-top:30px;
+  text-align:center;
+}
+
+.question {
+  font-size: 15px;
+  font-weight: 700;
+  padding: 10px 0;
+}
+
+a {
+  color: white;
+  text-decoration: underline;
+}
+
+.answer {
+  padding: 5px 0 30px;
+}
 
 </style>
 </head>
@@ -36,7 +55,29 @@ b { font-size:18px;font-weight:bolder; }
 
 <p>Maybe allows you to see who of your friends & family are currently at your favorite spots.</p>
 
+<p>Are they there?  Yes / No / Maybe</p>
+
 <p><b>Pro Tip:</b> Turn Wi-Fi <b>ON</b> in your iOS settings for good location tracking.</p>
+
+<h3>FAQ</h3>
+
+<div class="question"> Who can invite people to spots? </div>
+<div class="answer"> Only the creator of the spot. </div>
+
+<div class="question">How does Maybe work?</div>
+<div class="answer"> When you join or create a spot, Maybe creates a <a href="https://en.wikipedia.org/wiki/Geo-fence">Geo-fence</a> on your phone at that spot. When you enter or leave that Geo-fence, Maybe transmits the YES/NO binary data to our server. </div>
+
+<div class="question"> Is Maybe secure? </div>
+<div class="answer"> Yes. All data is sent through SSL, and we've gone to extra measures to keep your location status safe from any would-be hackers. </div>
+
+<div class="question"> Does Maybe track my location? </div>
+<div class="answer"> Sort of. It only knows if you've entered or left a Geo-fence. You can disable/enable these Geo-fences at anytime. </div>
+
+<div class="question"> Does Maybe keep a history of my location? </div>
+<div class="answer"> No. We only store the absolutely necessary information - whether you are currently within a Geofence or not (if we even know that) </div>
+
+<div class="question"> How did Maybe come to be? </div>
+<div class="answer"> Maybe was conceived by Andrew Graunke and built by Kyle Murphy, using Swift, Firebase, Node.js, and elbow grease </div>
 
 </body>
 </html>
