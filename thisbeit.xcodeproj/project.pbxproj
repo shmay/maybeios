@@ -29,6 +29,8 @@
 		ADB3005F1B2BE398006D3B7F /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3005E1B2BE398006D3B7F /* SignUpController.swift */; };
 		ADB300661B2C99DA006D3B7F /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB300651B2C99DA006D3B7F /* LocationsViewController.swift */; };
 		ADB3006A1B2DE94D006D3B7F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB300691B2DE94D006D3B7F /* MapKit.framework */; };
+		ADD3F8DA1B7280EF0038724A /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = ADD3F8D91B7280EF0038724A /* about.html */; };
+		ADD3F8DC1B72872D0038724A /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD3F8DB1B72872D0038724A /* AboutViewController.swift */; };
 		ADFA991E1B599EAE00F88371 /* TwitterAuthHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFA991D1B599EAE00F88371 /* TwitterAuthHelper.m */; };
 		ADFA99201B59A12200F88371 /* OAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA991F1B59A12200F88371 /* OAuthController.swift */; };
 		ADFA994D1B5EB42100F88371 /* SpotSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA994C1B5EB42100F88371 /* SpotSettings.swift */; };
@@ -76,6 +78,8 @@
 		ADB300601B2BF76D006D3B7F /* thisbeit-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "thisbeit-Bridging-Header.h"; sourceTree = "<group>"; };
 		ADB300651B2C99DA006D3B7F /* LocationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsViewController.swift; sourceTree = "<group>"; };
 		ADB300691B2DE94D006D3B7F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		ADD3F8D91B7280EF0038724A /* about.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = about.html; sourceTree = "<group>"; };
+		ADD3F8DB1B72872D0038724A /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		ADFA991C1B599E8100F88371 /* TwitterAuthHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TwitterAuthHelper.h; sourceTree = "<group>"; };
 		ADFA991D1B599EAE00F88371 /* TwitterAuthHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterAuthHelper.m; sourceTree = "<group>"; };
 		ADFA991F1B59A12200F88371 /* OAuthController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthController.swift; sourceTree = "<group>"; };
@@ -164,6 +168,8 @@
 				ADFA994C1B5EB42100F88371 /* SpotSettings.swift */,
 				ADFA994E1B5EEE4B00F88371 /* UserController.swift */,
 				ADFA99501B60FC8300F88371 /* ProfileView.swift */,
+				ADD3F8D91B7280EF0038724A /* about.html */,
+				ADD3F8DB1B72872D0038724A /* AboutViewController.swift */,
 			);
 			path = thisbeit;
 			sourceTree = "<group>";
@@ -290,6 +296,7 @@
 				AD122BD51B2B5B13007B0872 /* Main.storyboard in Resources */,
 				AD122BDA1B2B5B13007B0872 /* LaunchScreen.xib in Resources */,
 				AD122BD71B2B5B13007B0872 /* Images.xcassets in Resources */,
+				ADD3F8DA1B7280EF0038724A /* about.html in Resources */,
 				AD15BAB31B6AD62A00A82397 /* GoogleService-Info1.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -350,6 +357,7 @@
 				ADFA994F1B5EEE4B00F88371 /* UserController.swift in Sources */,
 				ADB019041B38F67800C1C21F /* EditSpotController.swift in Sources */,
 				AD122BD01B2B5B13007B0872 /* AppDelegate.swift in Sources */,
+				ADD3F8DC1B72872D0038724A /* AboutViewController.swift in Sources */,
 				AD3F2E871B34E0750071D2B4 /* Utilties.swift in Sources */,
 				ADFA99511B60FC8300F88371 /* ProfileView.swift in Sources */,
 				ADB3005F1B2BE398006D3B7F /* SignUpController.swift in Sources */,

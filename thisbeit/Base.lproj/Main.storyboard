@@ -403,7 +403,7 @@
                         <segue destination="arP-dQ-xqP" kind="show" identifier="ShowSpot" id="nnI-bl-RPp"/>
                         <segue destination="wB6-uG-eHa" kind="unwind" identifier="GoHome" unwindAction="unwindToMainMenu:" id="bo5-CZ-dvn"/>
                         <segue destination="Fee-vN-Zfb" kind="showDetail" identifier="Profile" id="Ha7-59-Vc0"/>
-                        <segue destination="t4U-8x-rpL" kind="show" identifier="AboutUs" id="8mr-eq-fDR"/>
+                        <segue destination="t4U-8x-rpL" kind="presentation" identifier="AboutUs" id="8mr-eq-fDR"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Iv0-HR-NTo" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1037,7 +1037,7 @@
         <!--About-->
         <scene sceneID="J22-9P-EmJ">
             <objects>
-                <viewController title="About" id="t4U-8x-rpL" sceneMemberID="viewController">
+                <viewController title="About" id="t4U-8x-rpL" customClass="AboutViewController" customModule="Maybe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="kjK-y2-tLv"/>
                         <viewControllerLayoutGuide type="bottom" id="tUt-lx-yWa"/>
@@ -1046,45 +1046,39 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j9w-Kq-GrB">
-                                <rect key="frame" x="16" y="25" width="568" height="400"/>
+                            <webView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2OO-aN-5r5">
+                                <rect key="frame" x="-16" y="-63" width="616" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </webView>
+                            <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VtK-rG-VYW">
+                                <rect key="frame" x="16" y="12" width="51" height="34"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="400" id="inu-PI-xm5"/>
+                                    <constraint firstAttribute="height" constant="41" id="P2L-BQ-gBk"/>
+                                    <constraint firstAttribute="width" constant="47" id="suh-zm-6O7"/>
                                 </constraints>
-                                <string key="text">MaybeSo is a social geofencing app... in other words it allows you to see if you friends are currently at your favorite spots (if they want you to 🌝).  We've gone to extra measures to keep your location secure.
-
-Read more on our website: 
-http://maybeso.io/#about
-
-In conclusion, emojis are fun  🇮🇪🔔⌚️🍣
-
-
-
-</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                <dataDetectorType key="dataDetectorTypes" link="YES"/>
-                            </textView>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal">
+                                    <color key="titleColor" red="0.91415995473420852" green="0.92598472573947366" blue="0.95072299893684198" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="tapClose:" destination="t4U-8x-rpL" eventType="touchUpInside" id="dgP-rV-XI1"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="j9w-Kq-GrB" firstAttribute="leading" secondItem="o8O-e7-uGZ" secondAttribute="leadingMargin" id="1wg-bT-kNO"/>
-                            <constraint firstItem="j9w-Kq-GrB" firstAttribute="top" secondItem="o8O-e7-uGZ" secondAttribute="topMargin" constant="25" id="Lpw-rG-UvA"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="j9w-Kq-GrB" secondAttribute="trailing" id="RQ1-R8-Rgh"/>
-                            <constraint firstAttribute="centerX" secondItem="j9w-Kq-GrB" secondAttribute="centerX" id="V9i-VO-Yag"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="j9w-Kq-GrB" secondAttribute="trailing" id="hpl-Ig-eEK"/>
-                            <constraint firstItem="j9w-Kq-GrB" firstAttribute="leading" secondItem="o8O-e7-uGZ" secondAttribute="leadingMargin" id="pwE-Vb-u95"/>
+                            <constraint firstItem="tUt-lx-yWa" firstAttribute="top" secondItem="2OO-aN-5r5" secondAttribute="bottom" id="77K-gU-iQg"/>
+                            <constraint firstItem="2OO-aN-5r5" firstAttribute="top" secondItem="o8O-e7-uGZ" secondAttribute="top" id="Aal-NK-QS7"/>
+                            <constraint firstItem="VtK-rG-VYW" firstAttribute="leading" secondItem="o8O-e7-uGZ" secondAttribute="leading" constant="18" id="Bso-xV-xGU"/>
+                            <constraint firstItem="VtK-rG-VYW" firstAttribute="top" secondItem="o8O-e7-uGZ" secondAttribute="top" constant="16" id="EWr-bK-Ny2"/>
+                            <constraint firstAttribute="trailing" secondItem="2OO-aN-5r5" secondAttribute="trailing" id="SZC-Ub-Fb5"/>
+                            <constraint firstItem="2OO-aN-5r5" firstAttribute="leading" secondItem="o8O-e7-uGZ" secondAttribute="leading" id="vPS-wz-jN4"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="V9i-VO-Yag"/>
-                                <exclude reference="hpl-Ig-eEK"/>
-                                <exclude reference="pwE-Vb-u95"/>
-                            </mask>
-                        </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="About" id="pG3-3g-WeZ"/>
+                    <connections>
+                        <outlet property="webV" destination="2OO-aN-5r5" id="fEH-7g-S6W"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uzW-y7-Bpv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

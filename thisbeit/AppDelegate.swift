@@ -11,14 +11,14 @@ import CoreLocation
 import FBSDKCoreKit
 import FBSDKLoginKit
 
-let fbaseURL = "https://maybeso.firebaseio.com"
-let twitterAPIKey = "LHOdkJjlt1SyDBxsrUpEirAGl"
-let serverURL = "https://maybeserver.xyz"
+//let fbaseURL = "https://maybeso.firebaseio.com"
+//let twitterAPIKey = "LHOdkJjlt1SyDBxsrUpEirAGl"
+//let serverURL = "https://maybeserver.xyz"
 
-//let fbaseURL = "https://androidkye.firebaseio.com"
-//let twitterAPIKey = "EPOngDM26zvGi5sHuDpYXsAiM"
+let fbaseURL = "https://androidkye.firebaseio.com"
+let twitterAPIKey = "EPOngDM26zvGi5sHuDpYXsAiM"
 //let serverURL = "http://localhost:3000"
-//let serverURL = "http://192.168.1.108:3000"
+let serverURL = "http://192.168.1.108:3000"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
@@ -49,6 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     println("options: \(launchOptions)")
     locationManager.delegate = self
     locationManager.requestAlwaysAuthorization()
+
+    locationManager.startMonitoringSignificantLocationChanges()
     
 //    stopMonitoringSpots()
     
@@ -258,7 +260,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                   println("setServer")
                   NSUserDefaults.standardUserDefaults().setInteger(j, forKey: "\(region.identifier)-server")
                 }
-                self.checkSpotsExceptFor(region)
+//                self.checkSpotsExceptFor(region)
               } else if s < 0 {
                 self.locationManager.stopMonitoringForRegion(region)
               }
@@ -269,6 +271,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
       }
     }
     
+  }
+  
+  func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+    println("didUpdateLocations")
+    checkSpots()
+  }
+  
+  func checkSpots() {
+    for region in locationManager.monitoredRegions {
+      if let reg = region as? CLCircularRegion {
+        self.locationManager.requestStateForRegion(reg)
+      }
+    }
   }
   
   func checkSpotsExceptFor(r: CLRegion) {
