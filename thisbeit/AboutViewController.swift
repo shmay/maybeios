@@ -13,6 +13,7 @@ class AboutViewController: UIViewController, UIWebViewDelegate {
   @IBAction func tapClose(sender: AnyObject) {
     self.dismissViewControllerAnimated(true, completion: nil)
   }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     

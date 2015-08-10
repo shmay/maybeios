@@ -18,14 +18,26 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
   var spotCnt: UInt = 0
   var cnt: UInt = 0
+  var addingSpot = false
+  var firstSpotsLoad = false
+
   weak var spotCtrl: SpotViewController?
   
   func shouldUpdate() {
     println("shouldUPdate: cnt: \(cnt) spotCnt: \(spotCnt)")
     if cnt >= spotCnt {
+      println("firstSpotsLoad: \(firstSpotsLoad)")
+      if firstSpotsLoad {
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "firstSpotsLoad")
+        firstSpotsLoad = false
+        appDelegate.startMonitoringSpots(spots, ctrl:self)
+        appDelegate.checkSpots()
+      }
+      
       dispatch_async(dispatch_get_main_queue(), { () -> Void in
         self.tableView.reloadData()
       })
+
     }
   }
   
@@ -89,16 +101,19 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
           let u = User(name: name, id: userSnap.key!, state: state!)
           u.admin = isAdmin
           
+          if let cu = currentUser {
+            if cu.id == u.id {
+              spot!.state = u.state
+              NSUserDefaults.standardUserDefaults().setInteger(u.state.rawValue, forKey: "\(spot!.id)-server")
+            }
+          }
+
           if state == .Inside {
             spot!.yes.append(u)
           } else if state == .Outside {
             spot!.no.append(u)
           } else if state == .Unknown {
             spot!.maybe.append(u)
-          }
-          
-          if u.id == currentUser!.id {
-            NSUserDefaults.standardUserDefaults().setInteger(state!.rawValue, forKey: "\(spot!.id)-server")
           }
         }
         
@@ -119,6 +134,10 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   override func viewDidLoad() {
     super.viewDidLoad()
     println("viewdidload")
+    
+    if let fs = NSUserDefaults.standardUserDefaults().valueForKey("firstSpotsLoad") as? Bool {
+      firstSpotsLoad = fs
+    }
     
     if let uid = currentUser?.id {
       ref.childByAppendingPath("users/\(uid)/spots").observeEventType(.Value, withBlock: {snapshot in
@@ -187,11 +206,11 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
           NSUserDefaults.standardUserDefaults().removeObjectForKey("uid")
           NSUserDefaults.standardUserDefaults().removeObjectForKey("token")
           NSUserDefaults.standardUserDefaults().removeObjectForKey("name")
+          self.appDelegate.stopMonitoringSpots()
           
-          (UIApplication.sharedApplication().delegate as! AppDelegate).justLoggedOut = true
+          NSUserDefaults.standardUserDefaults().setBool(true, forKey: "firstSpotsLoad")
           
           if currentUser!.provider == "facebook" {
-            println("FBLOGOUT")
             let facebookLogin = FBSDKLoginManager()
             facebookLogin.logOut()
           }
@@ -262,16 +281,19 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   }
   
   func addSpotController(controller: AddSpotController, didAddCoordinate coordinate: CLLocationCoordinate2D, radius: Double, name: String) {
-    if let uid = currentUser?.id, username = currentUser?.name {
-      if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-        let values = ["name": name, "lat": "\(coordinate.latitude)", "lng": "\(coordinate.longitude)", "radius": "\(radius)",
-          "token": "\(token)", "uid": "\(uid)", "username": username]
-        postRequest("new_spot", values, {json in self.handleResp(json,controller:controller)}, {self.handleErr(controller)})
+    if !addingSpot {
+      if let uid = currentUser?.id, username = currentUser?.name {
+        if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+          let values = ["name": name, "lat": "\(coordinate.latitude)", "lng": "\(coordinate.longitude)", "radius": "\(radius)",
+            "token": "\(token)", "uid": "\(uid)", "username": username]
+          postRequest("new_spot", values, {json in self.handleResp(json,controller:controller)}, {self.handleErr(controller)})
+        }
       }
     }
   }
   
   func handleResp(json: NSDictionary?, controller: AddSpotController) {
+    addingSpot = false
     controller.dismissViewControllerAnimated(true,completion:nil)
 
     if let parseJSON = json {
@@ -297,6 +319,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   }
   
   func handleErr(controller: AddSpotController) {
+    addingSpot = false
     controller.dismissViewControllerAnimated(true,completion:nil)
   }
   

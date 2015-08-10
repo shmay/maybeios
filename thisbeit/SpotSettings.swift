@@ -16,7 +16,6 @@ class SpotSettingsController: UITableViewController {
   var spinning = false
   
   @IBAction func checkStatus(sender: AnyObject) {
-    println("checkerino")
     appDelegate.checkStatusForSpot(spot)
   }
   
@@ -30,7 +29,9 @@ class SpotSettingsController: UITableViewController {
       spot.tracking = true
       let result = appDelegate.startMonitoringGeotification(spot, ctrl: self)
       
-      if result == nil {
+      if result != nil {
+        appDelegate.checkStatusForSpot(spot)
+      } else {
         flag.on = false
         trackingLabel.text = "not tracking"
       }
@@ -38,7 +39,22 @@ class SpotSettingsController: UITableViewController {
       spot.tracking = false
       trackingLabel.text = "not tracking"
       let result = appDelegate.stopMonitoringSpot(spot, ctrl: self)
-      if !result {
+      if result {
+        if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+          let d = ["token": token, "spotid": spot.id, "status": "0"]
+          postRequest("spot_status_changed", d, {json in
+            if let j = json {
+              let s = j["success"] as? Int
+              if s == 1 {
+                self.spot.state = .Unknown
+              } else if self.spot.state != .Unknown {
+                
+              }
+            }
+          }, {err in
+            })
+        }
+      } else {
         flag.on = true
         trackingLabel.text = "tracking"
       }

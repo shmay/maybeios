@@ -355,10 +355,6 @@
                                             <color key="textColor" red="0.36078431372549019" green="0.72156862745098038" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" tag="1004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="globe" translatesAutoresizingMaskIntoConstraints="NO" id="Mpk-jd-FIs">
-                                            <rect key="frame" x="367" y="12" width="20" height="20"/>
-                                            <color key="tintColor" red="0.058823533356189728" green="0.14117647707462311" blue="0.9803922176361084" alpha="1" colorSpace="deviceRGB"/>
-                                        </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jc9-3P-jWv">
                                             <rect key="frame" x="18" y="11" width="250" height="20.5"/>
                                             <constraints>
@@ -368,6 +364,10 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" tag="1004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="CurrentLocation" translatesAutoresizingMaskIntoConstraints="NO" id="Mpk-jd-FIs">
+                                            <rect key="frame" x="367" y="14" width="15" height="15"/>
+                                            <color key="tintColor" red="0.058823533356189728" green="0.14117647707462311" blue="0.9803922176361084" alpha="1" colorSpace="deviceRGB"/>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="0kn-eD-08e" secondAttribute="trailing" constant="5" id="26Z-QJ-Fcd"/>
@@ -843,33 +843,37 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AJT-QM-S6T" id="2bt-10-j9i">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Geofence Status" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uCW-Hl-Jaz">
-                                                    <rect key="frame" x="48" y="11" width="129" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iTP-Ho-5la">
-                                                    <rect key="frame" x="458" y="6" width="51" height="31"/>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iTP-Ho-5la">
+                                                    <rect key="frame" x="192" y="6" width="51" height="31"/>
                                                     <connections>
                                                         <action selector="flagTurned:" destination="6j3-OE-rka" eventType="valueChanged" id="uCS-6Q-tjw"/>
                                                     </connections>
                                                 </switch>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="tracking" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4wl-TE-qD3">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="tracking" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4wl-TE-qD3">
                                                     <rect key="frame" x="524" y="11" width="62" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="8CR-SH-8Ik">
-                                                    <rect key="frame" x="290" y="12" width="20" height="20"/>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="8CR-SH-8Ik">
+                                                    <rect key="frame" x="290" y="7" width="20" height="20"/>
                                                 </activityIndicatorView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Geofence Status" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uCW-Hl-Jaz">
+                                                    <rect key="frame" x="17" y="11" width="128.5" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="iTP-Ho-5la" firstAttribute="leading" secondItem="uCW-Hl-Jaz" secondAttribute="trailing" constant="20" id="36J-m8-NVN"/>
+                                                <constraint firstAttribute="centerY" secondItem="uCW-Hl-Jaz" secondAttribute="centerY" id="8Mb-mP-qvQ"/>
+                                                <constraint firstAttribute="centerY" secondItem="iTP-Ho-5la" secondAttribute="centerY" id="Guf-pw-Y1e"/>
                                                 <constraint firstAttribute="centerX" secondItem="8CR-SH-8Ik" secondAttribute="centerX" id="Llp-bt-raC"/>
                                                 <constraint firstItem="uCW-Hl-Jaz" firstAttribute="leading" secondItem="2bt-10-j9i" secondAttribute="leading" constant="15" id="Z7E-RE-VBK"/>
                                                 <constraint firstAttribute="trailing" secondItem="4wl-TE-qD3" secondAttribute="trailing" constant="10" id="bw7-4H-xHb"/>
-                                                <constraint firstItem="4wl-TE-qD3" firstAttribute="leading" secondItem="iTP-Ho-5la" secondAttribute="trailing" constant="10" id="pNw-e1-OjW"/>
+                                                <constraint firstAttribute="centerY" secondItem="4wl-TE-qD3" secondAttribute="centerY" id="tth-Qu-Mtw"/>
+                                                <constraint firstAttribute="centerY" secondItem="8CR-SH-8Ik" secondAttribute="centerY" id="vhq-Lc-Vej"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -882,9 +886,12 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8JI-eh-qZQ" id="UO4-iR-F4z">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tl2-kS-aJw">
-                                                    <rect key="frame" x="187" y="7" width="187" height="30"/>
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tl2-kS-aJw">
+                                                    <rect key="frame" x="190" y="7" width="187" height="30"/>
                                                     <color key="backgroundColor" red="0.80784313725490198" green="0.28235294117647058" blue="0.26666666666666666" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="187" id="gGP-5h-m3h"/>
+                                                    </constraints>
                                                     <state key="normal" title="Leave this Spot">
                                                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -896,6 +903,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="centerX" secondItem="tl2-kS-aJw" secondAttribute="centerX" id="8il-kA-hfG"/>
+                                                <constraint firstAttribute="centerY" secondItem="tl2-kS-aJw" secondAttribute="centerY" id="xO6-DE-aM9"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -1190,7 +1198,6 @@
     <resources>
         <image name="AddPin" width="75" height="75"/>
         <image name="CurrentLocation" width="15" height="15"/>
-        <image name="globe" width="20" height="20"/>
         <image name="settings" width="20" height="20"/>
         <image name="twater" width="35" height="37"/>
     </resources>

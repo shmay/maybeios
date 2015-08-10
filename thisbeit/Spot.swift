@@ -15,6 +15,7 @@ class Spot: NSObject {
   var coordinate: CLLocationCoordinate2D?
   var radius: CLLocationDistance?
   var tracking: Bool = false
+  var state: CLRegionState = .Unknown
   
   var yes = [User]()
   var no = [User]()

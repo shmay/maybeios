@@ -10,15 +10,15 @@ import UIKit
 import CoreLocation
 import FBSDKCoreKit
 import FBSDKLoginKit
-
+//
 //let fbaseURL = "https://maybeso.firebaseio.com"
 //let twitterAPIKey = "LHOdkJjlt1SyDBxsrUpEirAGl"
 //let serverURL = "https://maybeserver.xyz"
 
 let fbaseURL = "https://androidkye.firebaseio.com"
 let twitterAPIKey = "EPOngDM26zvGi5sHuDpYXsAiM"
-//let serverURL = "http://localhost:3000"
-let serverURL = "http://192.168.1.108:3000"
+let serverURL = "http://localhost:3000"
+//let serverURL = "http://192.168.1.108:3000"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
@@ -41,6 +41,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   
 //    NSUserDefaults.standardUserDefaults().removeObjectForKey("name")
     
+    let fs = NSUserDefaults.standardUserDefaults().valueForKey("firstSpotsLoad") as? Bool
+    
+    if fs == nil {
+      NSUserDefaults.standardUserDefaults().setBool(true, forKey: "firstSpotsLoad")
+    }
+
     return FBSDKApplicationDelegate.sharedInstance()
       .application(application, didFinishLaunchingWithOptions: launchOptions)
   }
@@ -146,7 +152,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
           println("rootview")
           
           if let rootViewController = self.window!.rootViewController {
-            println("rootViewCtrl")
             dispatch_async(dispatch_get_main_queue(), {
               if let presentedViewController = rootViewController.presentedViewController {
                 presentedViewController.presentViewController(vc, animated: true, completion: nil)
@@ -178,7 +183,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     if reg == nil {
       if let region = regionWithSpot(spot) {
         println("star moni: \(region.center.latitude),\(region.center.longitude); \(region.radius)")
-        NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "\(region.identifier)-local")
         locationManager.startMonitoringForRegion(region)
         return region
       } else {
@@ -187,6 +191,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     return nil
+  }
+  
+  func startMonitoringSpots(spots: [Spot], ctrl: UIViewController) {
+    for spot in spots {
+      if spot.state != .Unknown {
+        let reg = getRegionByID(spot.id)
+        
+        if reg == nil {
+          if let r = startMonitoringGeotification(spot, ctrl: ctrl) {
+            spot.tracking = true
+          }
+        }
+      }
+    }
   }
   
   func allSpots() {
@@ -201,9 +219,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     for region in locationManager.monitoredRegions {
       if let circularRegion = region as? CLCircularRegion {
         locationManager.stopMonitoringForRegion(circularRegion)
+        NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "\(circularRegion.identifier)-server")
       }
     }
   }
+  
   func stopMonitoringForID(id: String) {
     if let reg = getRegionByID(id) {
       locationManager.stopMonitoringForRegion(reg)
@@ -220,8 +240,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         }, {_ in})
     }
-
   }
+  
   func stopMonitoringSpot(spot: Spot, ctrl: UIViewController) -> Bool {
     println("stopMonitor")
     if let reg = getRegionByID(spot.id) {
@@ -250,7 +270,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   func locStatusChanged(region: CLRegion, status: Int) {
     println("locStatusChanged: \(status)")
     if region is CLCircularRegion {
-      NSUserDefaults.standardUserDefaults().setInteger(status, forKey: "\(region.identifier)-local")
       if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
         postRequest("spot_status_changed", ["token": token, "spotid": region.identifier, "status": "\(status)"], {json in
           if let p = json {

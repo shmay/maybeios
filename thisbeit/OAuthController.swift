@@ -22,10 +22,6 @@ class OAuthController: UIViewController, GPPSignInDelegate {
 
   @IBOutlet weak var spinner: UIActivityIndicatorView!
   override func viewDidLoad() {
-    println("unknown: \(CLRegionState.Unknown.rawValue)")
-    println("outside: \(CLRegionState.Outside.rawValue)")
-    println("inside: \(CLRegionState.Inside.rawValue)")
-    
     super.viewDidLoad()
     spin()
 
@@ -52,45 +48,43 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   @IBAction func authWithFacebook(sender: AnyObject) {
     println("authWithFB")
     
-    if !spinning {
-      spin()
-      let facebookLogin = FBSDKLoginManager()
+    spin()
+    let facebookLogin = FBSDKLoginManager()
 
-      facebookLogin.logInWithReadPermissions(["email"], handler: {
-        (facebookResult, facebookError) -> Void in
+    facebookLogin.logInWithReadPermissions(["email"], handler: {
+      (facebookResult, facebookError) -> Void in
+      
+      if facebookError != nil {
+        println("Facebook login failed. Error \(facebookError)")
+        self.stopSpin()
         
-        if facebookError != nil {
-          println("Facebook login failed. Error \(facebookError)")
-          self.stopSpin()
-          
-          if facebookError.code == -1 {
-            let msg = "Please go to your iOS Settings -> Facebook and fill in your login information so you can authenticate with Twitter.  Also make sure MaybeSo is allowed to use your Facebook account if that option exists"
-            let alertController = UIAlertController(title: nil, message: msg, preferredStyle: .Alert)
-            let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)
-            alertController.addAction(okAction)
-            self.presentViewController(alertController, animated: true, completion: nil)
-          }
-        } else if facebookResult.isCancelled {
-          self.stopSpin()
-          println("Facebook login was cancelled.")
-        } else {
-          let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
-          println("accessToken: \(accessToken)")
-          
-          self.ref.authWithOAuthProvider("facebook", token: accessToken,
-            withCompletionBlock: { error, authData in
-              if error != nil {
-                println("Login failed. \(error)")
-              } else {
-                println("Logged in! \(authData)")
-                self.handleAuthData(authData)
-              }
-              
-              self.stopSpin()
-          })
+        if facebookError.code == -1 {
+          let msg = "Please go to your iOS Settings -> Facebook and fill in your login information so you can authenticate with Twitter.  Also make sure MaybeSo is allowed to use your Facebook account if that option exists"
+          let alertController = UIAlertController(title: nil, message: msg, preferredStyle: .Alert)
+          let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)
+          alertController.addAction(okAction)
+          self.presentViewController(alertController, animated: true, completion: nil)
         }
-      })
-    }
+      } else if facebookResult.isCancelled {
+        self.stopSpin()
+        println("Facebook login was cancelled.")
+      } else {
+        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+        println("accessToken: \(accessToken)")
+        
+        self.ref.authWithOAuthProvider("facebook", token: accessToken,
+          withCompletionBlock: { error, authData in
+            if error != nil {
+              println("Login failed. \(error)")
+            } else {
+              println("Logged in! \(authData)")
+              self.handleAuthData(authData)
+            }
+            
+            self.stopSpin()
+        })
+      }
+    })
   }
   
   @IBAction func authWithPW(sender: AnyObject) {
@@ -98,9 +92,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   }
   
   @IBAction func authWitGoog(sender: AnyObject) {
-    if !spinning {
-      spin()
-    }
+    spin()
   }
   
   func authenticateWithGoogle() {
@@ -138,66 +130,64 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   @IBAction func unwindToMainMenu(sender: UIStoryboardSegue) {}
   
   @IBAction func authWithTwitter(sender: AnyObject) {
-    if !spinning {
-      spin()
-      let twitterAuthHelper = TwitterAuthHelper(firebaseRef: ref, apiKey:twitterAPIKey)
-      twitterAuthHelper.selectTwitterAccountWithCallback { error, accounts in
-        println("a f resp")
-        println("error: \(error)")
-        println("accounts: \(accounts)")
+    spin()
+    let twitterAuthHelper = TwitterAuthHelper(firebaseRef: ref, apiKey:twitterAPIKey)
+    twitterAuthHelper.selectTwitterAccountWithCallback { error, accounts in
+      println("a f resp")
+      println("error: \(error)")
+      println("accounts: \(accounts)")
+      
+      if error != nil {
+        println("err")
         
-        if error != nil {
-          println("err")
-          
-          println("code:\(error.code)")
-          println("domain:\(error.domain)")
-          println("desc:\(error.description)")
+        println("code:\(error.code)")
+        println("domain:\(error.domain)")
+        println("desc:\(error.description)")
+        self.stopSpin()
+
+        if error.code == -1 {
+          let msg = "Please go to your iOS Settings -> Twitter and fill in your login information so you can authenticate via Twitter.  Also make sure MaybeSo is allowed to use your Twitter account if that option exists"
+          let alertController = UIAlertController(title: nil, message: msg, preferredStyle: .Alert)
+          let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)
+          alertController.addAction(okAction)
+          self.presentViewController(alertController, animated: true, completion: nil)
+        }
+        
+        // Error retrieving Twitter accounts
+      } else if accounts.count > 1 {
+        // Select an account. Here we pick the first one for simplicity
+        let account = accounts[0] as? ACAccount
+        twitterAuthHelper.authenticateAccount(account, withCallback: { error, authData in
+          println("authDate: \(authData)")
           self.stopSpin()
 
-          if error.code == -1 {
-            let msg = "Please go to your iOS Settings -> Twitter and fill in your login information so you can authenticate via Twitter.  Also make sure MaybeSo is allowed to use your Twitter account if that option exists"
-            let alertController = UIAlertController(title: nil, message: msg, preferredStyle: .Alert)
-            let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)
-            alertController.addAction(okAction)
-            self.presentViewController(alertController, animated: true, completion: nil)
+          if error == nil {
+            println("error:")
+            // Error authenticating account
+          } else {
+            println("authData: \(authData)")
+            // User logged in!
           }
-          
-          // Error retrieving Twitter accounts
-        } else if accounts.count > 1 {
-          // Select an account. Here we pick the first one for simplicity
-          let account = accounts[0] as? ACAccount
-          twitterAuthHelper.authenticateAccount(account, withCallback: { error, authData in
-            println("authDate: \(authData)")
-            self.stopSpin()
-
-            if error == nil {
-              println("error:")
-              // Error authenticating account
-            } else {
-              println("authData: \(authData)")
-              // User logged in!
-            }
-          })
-        } else {
-          println("acts: \(accounts)")
-          let account = accounts[0] as? ACAccount
-          println("desc: \(account?.accountDescription)")
-          println("cred: \(account?.credential)")
-          println("id: \(account?.identifier)")
-          println("type: \(account?.accountType)")
-          twitterAuthHelper.authenticateAccount(account, withCallback: { error, authData in
-            println("authDater: \(authData)")
-            self.stopSpin()
-            if error != nil {
-              println("error: \(error)")
-              // Error authenticating account
-            } else {
-              self.handleAuthData(authData)
-              println("uid: \(authData.uid)")
-              // User logged in!
-            }
-          })
-        }
+        })
+      } else {
+        println("acts: \(accounts)")
+        let account = accounts[0] as? ACAccount
+        println("desc: \(account?.accountDescription)")
+        println("cred: \(account?.credential)")
+        println("id: \(account?.identifier)")
+        println("type: \(account?.accountType)")
+        twitterAuthHelper.authenticateAccount(account, withCallback: { error, authData in
+          println("authDater: \(authData)")
+          self.stopSpin()
+          if error != nil {
+            println("error: \(error)")
+            // Error authenticating account
+          } else {
+            self.handleAuthData(authData)
+            println("uid: \(authData.uid)")
+            // User logged in!
+          }
+        })
       }
     }
   }

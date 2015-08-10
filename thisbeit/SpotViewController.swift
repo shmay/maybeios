@@ -15,7 +15,7 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   
   var locationsController: LocationsViewController!
   let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-  
+    
   var spot: Spot!
     
   let ref = Firebase(url: "\(fbaseURL)/spots/")
