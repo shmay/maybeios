@@ -11,13 +11,12 @@ import CoreLocation
 import FBSDKCoreKit
 import FBSDKLoginKit
 //
-//let fbaseURL = "https://maybeso.firebaseio.com"
-//let twitterAPIKey = "LHOdkJjlt1SyDBxsrUpEirAGl"
-//let serverURL = "https://maybeserver.xyz"
-
-let fbaseURL = "https://androidkye.firebaseio.com"
-let twitterAPIKey = "EPOngDM26zvGi5sHuDpYXsAiM"
-let serverURL = "http://localhost:3000"
+let fbaseURL = "https://maybeso.firebaseio.com"
+let twitterAPIKey = "LHOdkJjlt1SyDBxsrUpEirAGl"
+let serverURL = "https://maybeserver.xyz"
+//let fbaseURL = "https://androidkye.firebaseio.com"
+//let twitterAPIKey = "EPOngDM26zvGi5sHuDpYXsAiM"
+//let serverURL = "http://localhost:3000"
 //let serverURL = "http://192.168.1.108:3000"
 
 @UIApplicationMain
@@ -52,11 +51,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   }
 
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    if let onrr = NSUserDefaults.standardUserDefaults().valueForKey("onrr") as? Bool {
+      println("onrr: \(onrr)")
+    }
     println("options: \(launchOptions)")
     locationManager.delegate = self
     locationManager.requestAlwaysAuthorization()
 
     locationManager.startMonitoringSignificantLocationChanges()
+    
+    if let URL = launchOptions?[UIApplicationLaunchOptionsURLKey] as? NSURL {
+      let matches = regexMatches("pin\\=(X\\w{9})", URL.absoluteString!)
+      
+      if count(matches) > 0 {
+        let pin = matches[0]
+        
+        if let u = currentUser {
+          joinWithPin(pin, controller: nil)
+        } else {
+          println("stash pin: \(pin)")
+          NSUserDefaults.standardUserDefaults().setValue(pin, forKey: "pin")
+        }
+      }
+      
+      // If we get here, we know launchOptions is not nil, we know
+      // UIApplicationLaunchOptionsURLKey was in the launchOptions
+      // dictionary, and we know that the type of the launchOptions
+      // was correctly identified as NSURL.  At this point, URL has
+      // the type NSURL and is ready to use.
+    }
     
     allSpots()
     return true
@@ -80,11 +103,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
     println("url: \(url.absoluteString!)")
     println("sa: \(sourceApplication)")
-
-    let matches = regexMatches("pin\\=(X\\w{9})", url.absoluteString!)
     
-    println("cnt:\(count(matches))")
-    
+    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "onrr")
+        
     let tokenMatches = regexMatches("access_token=(\\w+)", url.absoluteString!)
     println("tokenMatches: \(tokenMatches)")
     
@@ -112,6 +133,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
       sourceApplication:sourceApplication,
       annotation:annotation)
     
+    let matches = regexMatches("pin\\=(X\\w{9})", url.absoluteString!)
+
     if count(matches) > 0 {
       let pin = matches[0]
       

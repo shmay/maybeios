@@ -167,7 +167,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         let matches = regexMatches("(^X\\w+)", s)
         
         if count(matches) > 0 {
-          delay(0.2) {
+          delay(0.5) {
             self.appDelegate.joinWithPin(matches[0], controller: self)
             UIPasteboard.generalPasteboard().string = ""
           }
@@ -178,7 +178,9 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
     println("check for pin")
     if let pin = NSUserDefaults.standardUserDefaults().stringForKey("pin") {
       println("pin: \(pin)")
-      appDelegate.joinWithPin(pin, controller: self)
+      delay(0.5) {
+        self.appDelegate.joinWithPin(pin, controller: self)
+      }
       NSUserDefaults.standardUserDefaults().setValue(nil, forKey: "pin")
     }
   }
