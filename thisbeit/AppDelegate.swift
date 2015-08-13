@@ -58,10 +58,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
     locationManager.startMonitoringSignificantLocationChanges()
     
-//    stopMonitoringSpots()
-    
     allSpots()
     return true
+  }
+  
+  func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    if status != .AuthorizedAlways {
+      if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+        postRequest("reset", ["token": token], {json in }, {err in })
+      }
+    }
   }
   
   func joinWithPin(pin: String, controller: UIViewController?) {
@@ -267,29 +273,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     return nil
   }
   
-  func locStatusChanged(region: CLRegion, status: Int) {
+  func locStatusChanged(spotid: String, status: Int) {
     println("locStatusChanged: \(status)")
-    if region is CLCircularRegion {
-      if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-        postRequest("spot_status_changed", ["token": token, "spotid": region.identifier, "status": "\(status)"], {json in
-          if let p = json {
-            if let s = p["success"] as? Int {
-              if s == 1 {
-                if let j = p["status"] as? Int {
-                  println("setServer")
-                  NSUserDefaults.standardUserDefaults().setInteger(j, forKey: "\(region.identifier)-server")
-                }
-//                self.checkSpotsExceptFor(region)
-              } else if s < 0 {
-                self.locationManager.stopMonitoringForRegion(region)
+    if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
+      postRequest("spot_status_changed", ["token": token, "spotid": spotid, "status": "\(status)"], {json in
+        if let p = json {
+          if let s = p["success"] as? Int {
+            if s == 1 {
+              if let j = p["status"] as? Int {
+                println("setServer")
+                NSUserDefaults.standardUserDefaults().setInteger(j, forKey: "\(spotid)-server")
+              }
+            } else if s < 0 {
+              if let reg = self.getRegionByID(spotid) {
+                self.locationManager.stopMonitoringForRegion(reg)
               }
             }
           }
-        }, {_ in })
-        
-      }
+        }
+      }, {_ in })
     }
-    
   }
   
   func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
@@ -327,12 +330,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   
   func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
     println("didEnter: \(CLRegionState.Inside.rawValue)")
-    locStatusChanged(region, status: CLRegionState.Inside.rawValue)
+    locStatusChanged(region.identifier, status: CLRegionState.Inside.rawValue)
   }
   
   func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
     println("didExit: \(CLRegionState.Outside.rawValue)")
-    locStatusChanged(region, status: CLRegionState.Outside.rawValue)
+    locStatusChanged(region.identifier, status: CLRegionState.Outside.rawValue)
   }
   
   func locationManager(manager: CLLocationManager, didDetermineState state: CLRegionState, forRegion region: CLRegion) {
@@ -341,11 +344,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
       if state.rawValue != serverVal {
         println("state: \(state.rawValue)")
         println("serverVal: \(serverVal)")
-        locStatusChanged(region, status: state.rawValue)
+        locStatusChanged(region.identifier, status: state.rawValue)
       }
     } else {
       // if no server value, then default state is maybe
-      locStatusChanged(region, status: state.rawValue)
+      locStatusChanged(region.identifier, status: state.rawValue)
     }
 
     let val = state.rawValue

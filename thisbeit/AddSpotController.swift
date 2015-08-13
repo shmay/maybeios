@@ -26,6 +26,7 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
   @IBOutlet weak var spinner: UIActivityIndicatorView!
   @IBOutlet weak var radiusLabel: UILabel!
   @IBOutlet weak var slider: UISlider!
+  
   @IBOutlet var addButton: UIBarButtonItem!
   @IBOutlet var zoomButton: UIBarButtonItem!
   @IBOutlet weak var nameTextField: UITextField!

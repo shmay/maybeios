@@ -98,13 +98,16 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
           
           let state = CLRegionState(rawValue: user["state"] as! Int)
           
-          let u = User(name: name, id: userSnap.key!, state: state!)
+          let u = User(name:name, id:userSnap.key!, state:state!)
           u.admin = isAdmin
           
           if let cu = currentUser {
             if cu.id == u.id {
               spot!.state = u.state
-              NSUserDefaults.standardUserDefaults().setInteger(u.state.rawValue, forKey: "\(spot!.id)-server")
+              if !spot!.tracking && u.state != .Unknown {
+                self.appDelegate.locStatusChanged(spot!.id, status:0)
+              }
+              NSUserDefaults.standardUserDefaults().setInteger(u.state.rawValue, forKey:"\(spot!.id)-server")
             }
           }
 
