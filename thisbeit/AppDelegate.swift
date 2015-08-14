@@ -279,7 +279,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
       spot.tracking = false
       return true
     } else {
-      showSimpleAlertWithTitle("Error", message: "Geofence not created due to an error", viewController: ctrl)
+//      showSimpleAlertWithTitle("Error", message: "Geofence not destroyed due to an error", viewController: ctrl)
       return false
     }
   }
