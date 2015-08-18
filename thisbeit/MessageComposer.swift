@@ -21,7 +21,7 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
   func configuredMessageComposeViewController() -> MFMessageComposeViewController {
     let messageComposeVC = MFMessageComposeViewController()
     messageComposeVC.messageComposeDelegate = self  //  Make sure to set this property to self, so that the controller can be dismissed!
-    messageComposeVC.body = "You've been invited to join a Maybe spot.  Head to http://shmay.github.io/mayweb/?pin=8CDFJUH to join up."
+    messageComposeVC.body = "You've been invited to join a Maybe spot.  Head to http://invite.textmaybe.com/?pin=8CDFJUH to join up."
     return messageComposeVC
   }
   

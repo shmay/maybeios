@@ -104,7 +104,8 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
           if let cu = currentUser {
             if cu.id == u.id {
               spot!.state = u.state
-              if !spot!.tracking && u.state != .Unknown {
+              if !spot!.tracking && u.state != .Unknown && !self.firstSpotsLoad {
+                println("not tracking, unknown")
                 self.appDelegate.locStatusChanged(spot!.id, status:0)
               }
               NSUserDefaults.standardUserDefaults().setInteger(u.state.rawValue, forKey:"\(spot!.id)-server")
@@ -321,6 +322,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
 
       }
     }
+
   }
   
   func handleErr(controller: AddSpotController) {

@@ -139,9 +139,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
       let pin = matches[0]
       
       if let u = currentUser {
-        joinWithPin(pin, controller: nil)
+        println("u.name: \(u.name)")
+        if count(u.name) > 0 {
+          joinWithPin(pin, controller: nil)
+        } else {
+          NSUserDefaults.standardUserDefaults().setValue(pin, forKey: "pin")
+        }
       } else {
-        println("stash pin: \(pin)")
         NSUserDefaults.standardUserDefaults().setValue(pin, forKey: "pin")
       }
     }
@@ -177,16 +181,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
           spot.coordinate = coords
           vc.pin = pin
           vc.spot = spot
-
-          println("rootview")
           
-          if let rootViewController = self.window!.rootViewController {
-            dispatch_async(dispatch_get_main_queue(), {
-              if let presentedViewController = rootViewController.presentedViewController {
-                presentedViewController.presentViewController(vc, animated: true, completion: nil)
-              }
-            })
+          if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
+            while let presentedViewController = topController.presentedViewController {
+              topController = presentedViewController
+            }
+            
+            delay(0.3) {
+              topController.presentViewController(vc, animated: true, completion: nil)
+            }
           }
+          
+
         }
         // transition
       } else if success == -1 {
@@ -203,7 +209,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
       return nil
     }
     if CLLocationManager.authorizationStatus() != .AuthorizedAlways {
-      showSimpleAlertWithTitle("Warning", message: "Your geotification is saved but will only be activated once you grant Geotify permission to access the device location.", viewController: ctrl)
+      showSimpleAlertWithTitle("Warning", message: "Please authorize Always location access to save this Geo-fence.", viewController: ctrl)
       return nil
     }
     
@@ -215,7 +221,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         locationManager.startMonitoringForRegion(region)
         return region
       } else {
-        showSimpleAlertWithTitle("Error", message: "Geofence not created due to an error", viewController: ctrl)
+        showSimpleAlertWithTitle("Error", message: "Geofence already exists", viewController: ctrl)
       }
     }
     
@@ -320,7 +326,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   
   func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
     println("didUpdateLocations")
-    checkSpots()
+    if let fs = NSUserDefaults.standardUserDefaults().valueForKey("firstSpotsLoad") as? Bool {
+      if fs != true {
+        checkSpots()
+      }
+    }
   }
   
   func checkSpots() {

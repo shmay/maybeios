@@ -45,7 +45,6 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     nameTextField.delegate = self
   }
-//  35.268788, -120.647849
   
   @IBAction func textFieldEditingChanged(sender: UITextField) {
     addButton.enabled = !nameTextField.text.isEmpty
@@ -59,7 +58,7 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     nameTextField.resignFirstResponder()
   }
   
-  func textFieldShouldReturn(textField: UITextField!) -> Bool // called when 'return' key pressed. return NO to ignore.
+  func textFieldShouldReturn(textField: UITextField) -> Bool // called when 'return' key pressed. return NO to ignore.
   {
     textField.resignFirstResponder()
     return true;
@@ -115,7 +114,7 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     // store it in the currentValue variable.
     radius = Double(lroundf(slider.value))
     
-    radiusLabel.text = "\(radius)m"
+    radiusLabel.text = "\(Int(radius))m"
     
     mapView.removeOverlay(circle)
    
@@ -151,7 +150,7 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
   
   func zoomToUserLocationInMapView(mapView: MKMapView) {
     if let coordinate = mapView.userLocation.location?.coordinate {
-      let region = MKCoordinateRegionMakeWithDistance(coordinate, 10000, 10000)
+      let region = MKCoordinateRegionMakeWithDistance(coordinate, 15000, 15000)
       mapView.setRegion(region, animated: true)
     }
   }

@@ -16,13 +16,48 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   @IBOutlet weak var goog: GPPSignInButton!
   
   var spinning = true
-  
+  var inReview = false
   let ref = Firebase(url: fbaseURL)
+  
+  @IBOutlet weak var reviewButton: UIButton!
+  
+  @IBAction func tapReview(sender: AnyObject) {
+    println("inReview: \(inReview)")
+    if inReview {
+      spin()
+      ref.authUser("s@g.com", password: "11",
+        withCompletionBlock: { error, authData in
+          if error != nil {
+            showSimpleAlertWithTitle("error", message: "err when authenticating demo acct", viewController: self)
+            // There was an error logging in to this account
+          } else {
+            self.handleAuthData(authData)
+            
+            // We are now logged in
+          }
+          
+          self.stopSpin()
+      })
+    }
+  }
+  
   let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
   @IBOutlet weak var spinner: UIActivityIndicatorView!
   override func viewDidLoad() {
     super.viewDidLoad()
+    ref.childByAppendingPath("stuff").observeSingleEventOfType(.Value, withBlock: { snapshot in
+      
+      if let build = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as? NSString {
+        if let review = snapshot.value["inreview"] as? Double {
+          if review == build.doubleValue {
+            self.inReview = true
+          }
+        }
+      }
+
+    })
+    
     spin()
 
     let signIn = GPPSignIn.sharedInstance()
@@ -48,6 +83,8 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   @IBAction func authWithFacebook(sender: AnyObject) {
     println("authWithFB")
     
+    resetData()
+
     spin()
     let facebookLogin = FBSDKLoginManager()
 
@@ -92,6 +129,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   }
   
   @IBAction func authWitGoog(sender: AnyObject) {
+    resetData()
     spin()
   }
   
@@ -130,6 +168,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
   @IBAction func unwindToMainMenu(sender: UIStoryboardSegue) {}
   
   @IBAction func authWithTwitter(sender: AnyObject) {
+    resetData()
     spin()
     let twitterAuthHelper = TwitterAuthHelper(firebaseRef: ref, apiKey:twitterAPIKey)
     twitterAuthHelper.selectTwitterAccountWithCallback { error, accounts in
@@ -202,6 +241,12 @@ class OAuthController: UIViewController, GPPSignInDelegate {
     createUser(uid)
     currentUser!.provider = authData.provider
     currentUser!.token = authData.token
+  }
+  
+  func resetData() {
+    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "firstSpotsLoad")
+    NSUserDefaults.standardUserDefaults().removeObjectForKey("name")
+    NSUserDefaults.standardUserDefaults().removeObjectForKey("token")
   }
   
   func createUser(uid: String) {

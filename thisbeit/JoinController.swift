@@ -14,6 +14,7 @@ class JoinController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
   var spot: Spot!
   var pin: String?
   
+  @IBOutlet weak var spotnameLabel: UILabel!
   let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
   @IBOutlet weak var mapView: MKMapView!
@@ -64,6 +65,8 @@ class JoinController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
       let circle = MKCircle(centerCoordinate: mapView.centerCoordinate, radius: spot.radius!)
       mapView.addOverlay(circle)
     }
+    
+    spotnameLabel.text = spot.name
   }
   
   func mapView(mapView: MKMapView!, rendererForOverlay overlay: MKOverlay!) -> MKOverlayRenderer! {

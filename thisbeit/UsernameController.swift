@@ -52,6 +52,7 @@ class UsernameController: UIViewController, UITextFieldDelegate {
       
       if let uid = NSUserDefaults.standardUserDefaults().valueForKey("uid") as? String {
         ref.childByAppendingPath("\(uid)/name").setValue(name)
+        currentUser?.name = name
         NSUserDefaults.standardUserDefaults().setValue(name, forKey: "name")
         performSegueWithIdentifier("usergo", sender: self)
       }

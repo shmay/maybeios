@@ -511,7 +511,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = thisbeit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = Maybe;
 				SWIFT_OBJC_BRIDGING_HEADER = "thisbeit/thisbeit-Bridging-Header.h";
@@ -533,7 +533,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = thisbeit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = Maybe;
 				SWIFT_OBJC_BRIDGING_HEADER = "thisbeit/thisbeit-Bridging-Header.h";

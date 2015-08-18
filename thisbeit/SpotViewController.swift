@@ -152,7 +152,7 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
       if let pjson = json {
         let messageComposeVC = messageComposer.configuredMessageComposeViewController()
         if let pin = pjson["token"] as? String {
-          let m = "You've been invited to join a spot on Maybe.  Go to http://shmay.github.io/mayweb?pin=\(pin) to join the spot."
+          let m = "You've been invited to join a spot on Maybe.  Go to http://invite.textmaybe.com/?pin=\(pin) to join the spot."
           messageComposeVC.body = m
           presentViewController(messageComposeVC, animated: true, completion: nil)
         }
@@ -169,7 +169,7 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
       postRequest("gen_invite", ["spotid": spot.id, "token":token], { json in
         if let j = json {
           if let pin = j["pin"] as? String {
-            let m = "You've been invited to join a spot on Maybe.  Go to http://shmay.github.io/mayweb/?pin=\(pin) to join the spot."
+            let m = "You've been invited to join a spot on Maybe.  Go to http://invite.textmaybe.com/?pin=\(pin) to join the spot."
             var emailTitle = "You've been invited to join a Spot on Maybe"
             var messageBody = m
             var mc: MFMailComposeViewController = MFMailComposeViewController()
