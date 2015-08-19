@@ -49,6 +49,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
     ref.childByAppendingPath("stuff").observeSingleEventOfType(.Value, withBlock: { snapshot in
       
       if let build = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as? NSString {
+        println("build: \(build)")
         if let review = snapshot.value["inreview"] as? Double {
           if review == build.doubleValue {
             self.inReview = true

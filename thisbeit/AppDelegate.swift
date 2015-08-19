@@ -37,8 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   
   func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     println("options: \(launchOptions)")
-  
-//    NSUserDefaults.standardUserDefaults().removeObjectForKey("name")
     
     let fs = NSUserDefaults.standardUserDefaults().valueForKey("firstSpotsLoad") as? Bool
     
