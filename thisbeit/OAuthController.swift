@@ -52,6 +52,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
         println("build: \(build)")
         if let review = snapshot.value["inreview"] as? Double {
           if review == build.doubleValue {
+            self.reviewButton.hidden = false
             self.inReview = true
           }
         }

@@ -10,6 +10,10 @@ import UIKit
 
 class LoginController: UIViewController, UITextFieldDelegate {
   var ref = Firebase(url:fbaseURL)
+  let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+  var signupCtrl: SignUpController?
+
+  var spinning = true
   
   @IBOutlet weak var email: UITextField!
   @IBOutlet weak var password: UITextField!
@@ -23,14 +27,10 @@ class LoginController: UIViewController, UITextFieldDelegate {
   }
   
   @IBAction func signin() {
-    if !spinner.hidden {
-      return
-    }
     
-    spinner.hidden = false
-    spinner.startAnimating()
+    self.spin()
     
-    ref.authUser("kmurph73@gmail.com", password:"pass1212") {
+    ref.authUser(email.text, password:password.text) {
       error, authData in
       if error != nil {
         // an error occured while attempting login
@@ -50,40 +50,11 @@ class LoginController: UIViewController, UITextFieldDelegate {
           }
         }
       } else {
-        let uid: String = authData.uid!
-        currentUser = User(name: "", id: uid, state: .Unknown)
-        NSUserDefaults.standardUserDefaults().setValue(uid, forKey: "uid")
-        NSUserDefaults.standardUserDefaults().setValue(authData.token, forKey: "token")
-        NSUserDefaults.standardUserDefaults().setValue(authData.provider, forKey: "provider")
-        NSUserDefaults.standardUserDefaults().setValue(authData.providerData["email"], forKey: "provider")
-        
-        if let name = NSUserDefaults.standardUserDefaults().valueForKey("name") as? String {
-          if count(name) > 0 {
-            println("defaults has name: \(name)")
-            self.performSegueWithIdentifier("gogo", sender:self)
-          } else {
-            self.checkForUsername(uid)
-          }
-        } else {
-          self.checkForUsername(uid)
-        }
+        self.handleAuthData(authData)
 
         // user is logged in, check authData for data
       }
     }
-  }
-  
-  func checkForUsername(uid: String) {
-    println("checkForUsername: \(uid)")
-    self.ref.childByAppendingPath("users/\(uid)/name").observeEventType(.Value, withBlock: { snapshot in
-      if let name = snapshot.value as? String {
-        println("fbname found: \(name)")
-        NSUserDefaults.standardUserDefaults().setValue(name, forKey: "name")
-        self.performSegueWithIdentifier("gogo", sender:self)
-      } else {
-        self.performSegueWithIdentifier("username", sender:self)
-      }
-    })
   }
   
   override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -101,9 +72,22 @@ class LoginController: UIViewController, UITextFieldDelegate {
     }
   }
   
+  func resetForm() {
+    stopSpin()
+    self.email.text = ""
+    self.password.text = ""
+    
+    self.invalidPw.hidden = true
+    self.invalidEmail.hidden = true
+    self.invalidUser.hidden = true
+    
+    appDelegate.justLoggedOut = false
+  }
+  
   @IBAction func unwindToMainMenu(sender: UIStoryboardSegue)
   {
     if let sourceViewController = sender.sourceViewController as? SignUpController {
+      self.signupCtrl = sourceViewController
       email.text = sourceViewController.email!.text
       password.text = sourceViewController.password!.text
     } else if let sourceViewController = sender.sourceViewController as? LocationsViewController {
@@ -123,32 +107,114 @@ class LoginController: UIViewController, UITextFieldDelegate {
     return true
   }
   
-  override func viewDidAppear(animated: Bool) {
-    super.viewDidAppear(animated)
-    
-    println("viewdidappear")
-    
-    let uid = NSUserDefaults.standardUserDefaults().stringForKey("uid")
-
-    if uid != nil {
-      performSegueWithIdentifier("gogo", sender:self)
-    }
-
+  func spin() {
+    spinning = true
+    spinner.hidden = false
+    spinner.startAnimating()
   }
   
-  override func viewWillAppear(animated: Bool) {
-    println("viewWillAppear")
-  }
-  
-  override func viewDidLoad() {
-    (UIApplication.sharedApplication().delegate as! AppDelegate).justLoggedOut = false
-
-    println("viewDidLoad")
-    super.viewDidLoad()
-    
+  func stopSpin() {
+    spinning = false
     spinner.hidden = true
-    
-    // Do any additional setup after loading the view, typically from a nib.
+    spinner.stopAnimating()
   }
+  
+//  override func viewDidAppear(animated: Bool) {
+//    super.viewDidAppear(animated)
+//    
+//    println("viewdidappear")
+//    
+//    let uid = NSUserDefaults.standardUserDefaults().stringForKey("uid")
+//    
+//    if let token = NSUserDefaults.standardUserDefaults().stringForKey("token") {
+//      authUser(token)
+//    } else {
+//      stopSpin()
+//    }
+//
+//  }
+  
+  func handleAuthData(authData: FAuthData) {
+    let uid: String = authData.uid!
+    NSUserDefaults.standardUserDefaults().setValue(uid, forKey: "uid")
+    NSUserDefaults.standardUserDefaults().setValue(authData.token, forKey: "token")
+    //    NSUserDefaults.standardUserDefaults().setValue(authData.provider, forKey: "provider")
+    //    NSUserDefaults.standardUserDefaults().setValue(authData.providerData["email"], forKey: "email")
+    
+    createUser(uid)
+    currentUser!.provider = authData.provider
+    currentUser!.token = authData.token
+  }
+  
+  func createUser(uid: String) {
+    currentUser = User(name: "", id: uid, state: .Unknown)
+    if let name = NSUserDefaults.standardUserDefaults().valueForKey("name") as? String {
+      println("name: \(name)")
+      if count(name) > 0 {
+        currentUser!.name = name
+        println("defaults has name: \(name)")
+        self.performSegueWithIdentifier("gogo", sender:self)
+      } else {
+        self.checkForUsername(uid)
+      }
+    } else {
+      self.checkForUsername(uid)
+    }
+  }
+  
+  func checkForUsername(uid: String) {
+    self.ref.childByAppendingPath("users/\(uid)/name").observeSingleEventOfType(.Value, withBlock: { snapshot in
+      if let name = snapshot.value as? String {
+        println("fbname found: \(name)")
+        currentUser!.name = name
+        NSUserDefaults.standardUserDefaults().setValue(name, forKey: "name")
+        self.performSegueWithIdentifier("gogo", sender:self)
+      } else {
+        self.performSegueWithIdentifier("username", sender:self)
+      }
+    })
+  }
+  
+  func authUser(token:String) {
+    ref.authWithCustomToken(token, withCompletionBlock: {error, authData in
+      self.stopSpin()
+      
+      if let err = error {
+        println("authError: \(err)")
+        if err.code == 9999 {
+          NSUserDefaults.standardUserDefaults().setValue(nil, forKey: "token")
+        }
+      } else {
+        self.handleAuthData(authData)
+      }
+    })
+  }
+//  
+//  override func viewWillAppear(animated: Bool) {
+//    println("viewWillAppear signin")
+//
+//    self.stopSpin()
+//
+//    if appDelegate.justLoggedOut {
+////      delay(0.2) {
+////        self.resetForm()
+////        self.signupCtrl?.resetForm()
+////      }
+//      
+//      appDelegate.justLoggedOut = false
+//    }
+//    println("viewWillAppear")
+//  }
+//  
+//  override func viewDidLoad() {
+//    (UIApplication.sharedApplication().delegate as! AppDelegate).justLoggedOut = false
+//
+//    println("viewDidLoad")
+//    super.viewDidLoad()
+//    
+//    spinner.hidden = true
+//    
+//    // Do any additional setup after loading the view, typically from a nib.
+//  }
 
 }

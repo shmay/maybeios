@@ -213,6 +213,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
           NSUserDefaults.standardUserDefaults().removeObjectForKey("token")
           NSUserDefaults.standardUserDefaults().removeObjectForKey("name")
           self.appDelegate.stopMonitoringSpots()
+          self.appDelegate.justLoggedOut = true
           
           NSUserDefaults.standardUserDefaults().setBool(true, forKey: "firstSpotsLoad")
           
@@ -224,7 +225,9 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
           self.ref.unauth()
           currentUser = nil
           
-          self.performSegueWithIdentifier("GoHome", sender: self)
+          delay(0.1) {
+            self.performSegueWithIdentifier("GoHome", sender: self)
+          }
         }, {error in })
       }
       

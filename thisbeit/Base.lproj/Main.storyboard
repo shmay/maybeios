@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Qv5-67-oSb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ecY-le-3RL">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -54,25 +54,22 @@
                                     <action selector="authWithFacebook:" destination="Qv5-67-oSb" eventType="touchUpInside" id="cPf-Wd-f7n"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WuL-dh-41I">
-                                <rect key="frame" x="0.0" y="456" width="100" height="100"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="Spf-uq-EvT"/>
-                                    <constraint firstAttribute="width" constant="100" id="btV-vz-0hD"/>
-                                </constraints>
-                                <state key="normal">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OIN-gV-hHJ">
+                                <rect key="frame" x="39" y="485" width="151" height="30"/>
+                                <state key="normal" title="Sign In As Demo User">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="tapReview:" destination="Qv5-67-oSb" eventType="touchUpInside" id="PdC-N9-WsR"/>
+                                    <action selector="tapReview:" destination="Qv5-67-oSb" eventType="touchUpInside" id="3LM-bB-VGD"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.19607843137254902" green="0.19607843137254902" blue="0.19607843137254902" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="OIN-gV-hHJ" firstAttribute="leading" secondItem="z68-1A-LyN" secondAttribute="leadingMargin" constant="20" id="67i-oU-9eS"/>
                             <constraint firstItem="4Wg-oE-VYN" firstAttribute="top" secondItem="gGx-vL-b8s" secondAttribute="bottom" constant="14" id="7ll-XS-MMJ"/>
+                            <constraint firstItem="V2U-hv-enK" firstAttribute="top" secondItem="OIN-gV-hHJ" secondAttribute="bottom" constant="20" id="GNL-ck-l86"/>
                             <constraint firstAttribute="centerX" secondItem="Hnc-5q-0lX" secondAttribute="centerX" id="M4U-ni-UJn"/>
-                            <constraint firstItem="V2U-hv-enK" firstAttribute="top" secondItem="WuL-dh-41I" secondAttribute="bottom" id="NcX-Su-8dk"/>
                             <constraint firstAttribute="centerX" secondItem="6MD-Rc-9HU" secondAttribute="centerX" id="O2m-gV-JU9"/>
                             <constraint firstItem="Hnc-5q-0lX" firstAttribute="top" secondItem="6MD-Rc-9HU" secondAttribute="bottom" constant="50" id="ToR-IY-WHU"/>
                             <constraint firstAttribute="centerX" secondItem="4Wg-oE-VYN" secondAttribute="centerX" id="V0k-Xc-yrm"/>
@@ -81,7 +78,6 @@
                             <constraint firstAttribute="centerX" secondItem="l3G-1a-TKk" secondAttribute="centerX" id="kae-bo-xi8"/>
                             <constraint firstItem="LaJ-kO-hee" firstAttribute="top" secondItem="4Wg-oE-VYN" secondAttribute="bottom" constant="45" id="lWe-px-BdG"/>
                             <constraint firstAttribute="centerX" secondItem="LaJ-kO-hee" secondAttribute="centerX" id="nPR-TP-0TJ"/>
-                            <constraint firstItem="WuL-dh-41I" firstAttribute="leading" secondItem="z68-1A-LyN" secondAttribute="leading" id="zOu-sS-kKo"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -89,9 +85,8 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="goog" destination="Hnc-5q-0lX" id="oGU-nQ-AMh"/>
-                        <outlet property="reviewButton" destination="WuL-dh-41I" id="stN-Tw-H5x"/>
+                        <outlet property="reviewButton" destination="OIN-gV-hHJ" id="d9s-v1-6GW"/>
                         <outlet property="spinner" destination="l3G-1a-TKk" id="G7z-ME-M6a"/>
-                        <segue destination="ecY-le-3RL" kind="presentation" identifier="showSignin" id="ean-ko-xyw"/>
                         <segue destination="fut-Cf-3Ws" kind="showDetail" identifier="gogo" id="pxe-I4-5Kk"/>
                         <segue destination="N8S-7l-5K2" kind="showDetail" identifier="username" id="Vhf-sw-St0"/>
                     </connections>
@@ -171,20 +166,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="User Does Not Exist" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fda-Aa-6ii">
-                                <rect key="frame" x="264" y="93" width="81" height="21"/>
+                                <rect key="frame" x="226" y="93" width="207" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="1" green="0.16078431372549021" blue="0.11372549019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uXy-x2-Nod">
-                                <rect key="frame" x="223" y="447" width="154" height="30"/>
-                                <state key="normal" title="Sign in with a Provider">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="XMB-K2-05A" kind="unwind" unwindAction="unwindToMainMenu:" id="HYC-PS-P8W"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qkT-Lx-J63">
                                 <rect key="frame" x="187" y="369" width="227" height="30"/>
                                 <state key="normal" title="Don't have an account? Sign Up.">
@@ -202,7 +188,6 @@
                             <constraint firstAttribute="centerX" secondItem="Ihs-TK-q5f" secondAttribute="centerX" id="FGf-kz-B9q"/>
                             <constraint firstAttribute="centerX" secondItem="xg0-gl-A6a" secondAttribute="centerX" id="Iu8-aX-EPG"/>
                             <constraint firstAttribute="centerX" secondItem="W4s-se-Zub" secondAttribute="centerX" id="T8Y-jy-MCb"/>
-                            <constraint firstAttribute="centerX" secondItem="uXy-x2-Nod" secondAttribute="centerX" id="TEY-Lr-EdI"/>
                             <constraint firstAttribute="centerX" secondItem="gme-lR-j8K" secondAttribute="centerX" id="TKQ-UT-CeP"/>
                             <constraint firstAttribute="centerX" secondItem="fda-Aa-6ii" secondAttribute="centerX" id="URw-Iw-8up"/>
                             <constraint firstAttribute="centerX" secondItem="Wih-I0-2KF" secondAttribute="centerX" id="iGH-MQ-ur0"/>
@@ -223,7 +208,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vfi-42-e4S" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="XMB-K2-05A" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="245" y="2537"/>
         </scene>
@@ -333,6 +317,8 @@
                         <outlet property="invalidUser" destination="1vj-fy-4V4" id="6FU-U1-1L4"/>
                         <outlet property="password" destination="OWq-rV-OLd" id="o38-pf-aIJ"/>
                         <outlet property="spinner" destination="laS-nh-HKe" id="xZY-kk-Os3"/>
+                        <segue destination="N8S-7l-5K2" kind="show" identifier="username" id="qiX-ck-tcr"/>
+                        <segue destination="fut-Cf-3Ws" kind="showDetail" identifier="gogo" id="yIY-zI-6vF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Vj-BM-B9R" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1241,7 +1227,7 @@
         <image name="twater" width="35" height="37"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="pxe-I4-5Kk"/>
-        <segue reference="Vhf-sw-St0"/>
+        <segue reference="yIY-zI-6vF"/>
+        <segue reference="qiX-ck-tcr"/>
     </inferredMetricsTieBreakers>
 </document>
