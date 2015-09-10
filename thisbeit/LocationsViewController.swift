@@ -351,4 +351,5 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
       ctrl.spot = sender as! Spot
     }
   }
+  
 }

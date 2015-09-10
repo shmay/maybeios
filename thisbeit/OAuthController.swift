@@ -28,7 +28,7 @@ class OAuthController: UIViewController, GPPSignInDelegate {
       ref.authUser("s@g.com", password: "11",
         withCompletionBlock: { error, authData in
           if error != nil {
-            showSimpleAlertWithTitle("error", message: "err when authenticating demo acct", viewController: self)
+            showSimpleAlertWithTitle("error", message: "err when authenticating demo acct", viewController: self, onok:nil)
             // There was an error logging in to this account
           } else {
             self.handleAuthData(authData)

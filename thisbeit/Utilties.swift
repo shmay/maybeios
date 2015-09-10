@@ -9,23 +9,15 @@
 import UIKit
 var currentUser: User?
 
-func showSimpleAlertWithTitle(title: String!, #message: String, #viewController: UIViewController) {
+func showSimpleAlertWithTitle(title: String!, #message: String, #viewController: UIViewController, #onok: (() -> Void)?) {
   let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-  let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+  let action = UIAlertAction(title: "OK", style: .Cancel, handler: { action in
+    if let ok = onok {
+      ok()
+    }
+  })
   alert.addAction(action)
   viewController.presentViewController(alert, animated: true, completion: nil)
-}
-
-func showAlert(msg: String) {
-  let alertController = UIAlertController(title: nil, message: msg, preferredStyle: .Alert)
-  let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)
-  alertController.addAction(okAction)
-  let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-  if let rootViewController = appDelegate.window!.rootViewController {
-    if let presentedViewController = rootViewController.presentedViewController {
-      presentedViewController.presentViewController(alertController, animated: true, completion: nil)
-    }
-  }
 }
 
 func delay(delay:Double, closure:()->()) {

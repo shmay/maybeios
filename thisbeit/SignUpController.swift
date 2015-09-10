@@ -50,6 +50,10 @@ class SignUpController: UIViewController, UITextFieldDelegate {
   }
   
   @IBAction func signup() {
+    if (!validate()) {
+      return
+    }
+    
     spinner.hidden = false
     spinner.startAnimating()
     
@@ -58,16 +62,20 @@ class SignUpController: UIViewController, UITextFieldDelegate {
         if error != nil {
           // There was an error creating the account
           if let errorCode = FAuthenticationError(rawValue: error.code) {
+            self.stopSpin()
             switch (errorCode) {
             case .UserDoesNotExist:
-              self.spinner.hidden = true
               self.invalidUser.hidden = false
             case .InvalidEmail:
-              self.spinner.hidden = true
+              self.invalidEmail.text = "Invalid Email"
               self.invalidEmail.hidden = false
             case .InvalidPassword:
-              self.spinner.hidden = true
+              self.invalidPw.text = "Invalid Password"
               self.invalidPw.hidden = false
+            case .EmailTaken:
+              self.invalidEmail.text = "Email Taken"
+              self.invalidEmail.hidden = false
+              
             default:
               self.spinner.hidden = true
               println("Handle default situation")
@@ -77,7 +85,7 @@ class SignUpController: UIViewController, UITextFieldDelegate {
           self.ref.authUser(self.email.text, password:self.password.text) {
             error, authData in
             if error != nil {
-              showSimpleAlertWithTitle("erorrr!", message: "something went rong!", viewController: self)
+              showSimpleAlertWithTitle("erorrr!", message: "something went rong!", viewController: self, onok: nil)
             } else {
               self.handleAuthData(authData)
             }
@@ -87,6 +95,23 @@ class SignUpController: UIViewController, UITextFieldDelegate {
         }
     })
   }
+  
+  func textFieldShouldReturn(textField: UITextField) -> Bool {
+    signup()
+    textField.resignFirstResponder()
+    return true
+  }
+  
+  func validate() -> Bool {
+    if count(password.text) < 6 {
+      invalidPw.text = "Password must be at least 6 characters"
+      invalidPw.hidden = false
+      return false
+    }
+    
+    return true
+  }
+  
   
   func authUser(token:String) {
     ref.authWithCustomToken(token, withCompletionBlock: {error, authData in
@@ -150,31 +175,31 @@ class SignUpController: UIViewController, UITextFieldDelegate {
     super.touchesBegan(touches , withEvent:event)
   }
   
-//  override func viewWillAppear(animated: Bool) {
-//    println("viewWillAppear signup")
-//
-//    self.stopSpin()
-//    if appDelegate.justLoggedOut {
-//      self.email.text = ""
-//      self.password.text = ""
-//    }
-//  }
-//  
-//  func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-//    let oldText: NSString = textField.text
-//    let newText: NSString = oldText.stringByReplacingCharactersInRange(range, withString: string)
-//    invalidEmail.hidden = true
-//    invalidPw.hidden = true
-//    invalidUser.hidden = true
-//    return true
-//  }
-//  
-//  override func viewDidLoad() {
-//    println("viewDidLoad")
-//    super.viewDidLoad()
-//    email.text = emailHold
-//    password.text = pwHold
-//    
-//    // Do any additional setup after loading the view, typically from a nib.
-//  }
+  override func viewWillAppear(animated: Bool) {
+    println("viewWillAppear signup")
+
+    self.stopSpin()
+    if appDelegate.justLoggedOut {
+      self.email.text = ""
+      self.password.text = ""
+    }
+  }
+  
+  func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    let oldText: NSString = textField.text
+    let newText: NSString = oldText.stringByReplacingCharactersInRange(range, withString: string)
+    invalidEmail.hidden = true
+    invalidPw.hidden = true
+    invalidUser.hidden = true
+    return true
+  }
+  
+  override func viewDidLoad() {
+    println("viewDidLoad")
+    super.viewDidLoad()
+    email.text = emailHold
+    password.text = pwHold
+    
+    // Do any additional setup after loading the view, typically from a nib.
+  }
 }

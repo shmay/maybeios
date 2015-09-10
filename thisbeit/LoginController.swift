@@ -27,23 +27,25 @@ class LoginController: UIViewController, UITextFieldDelegate {
   }
   
   @IBAction func signin() {
+    if (!validate()) {
+      return
+    }
     
     self.spin()
     
     ref.authUser(email.text, password:password.text) {
       error, authData in
       if error != nil {
+        self.stopSpin()
         // an error occured while attempting login
         if let errorCode = FAuthenticationError(rawValue: error.code) {
           switch (errorCode) {
           case .UserDoesNotExist:
-            self.spinner.hidden = true
             self.invalidUser.hidden = false
           case .InvalidEmail:
-            self.spinner.hidden = true
             self.invalidEmail.hidden = false
           case .InvalidPassword:
-            self.spinner.hidden = true
+            self.invalidPw.text = "Invalid Password"
             self.invalidPw.hidden = false
           default:
             println("Handle default situation")
@@ -51,10 +53,15 @@ class LoginController: UIViewController, UITextFieldDelegate {
         }
       } else {
         self.handleAuthData(authData)
-
         // user is logged in, check authData for data
       }
     }
+  }
+  
+  func textFieldShouldReturn(textField: UITextField) -> Bool {
+    signin()
+    textField.resignFirstResponder()
+    return true
   }
   
   override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -119,20 +126,20 @@ class LoginController: UIViewController, UITextFieldDelegate {
     spinner.stopAnimating()
   }
   
-//  override func viewDidAppear(animated: Bool) {
-//    super.viewDidAppear(animated)
-//    
-//    println("viewdidappear")
-//    
-//    let uid = NSUserDefaults.standardUserDefaults().stringForKey("uid")
-//    
-//    if let token = NSUserDefaults.standardUserDefaults().stringForKey("token") {
-//      authUser(token)
-//    } else {
-//      stopSpin()
-//    }
-//
-//  }
+  override func viewDidAppear(animated: Bool) {
+    super.viewDidAppear(animated)
+    
+    println("viewdidappear")
+    spin()
+    let uid = NSUserDefaults.standardUserDefaults().stringForKey("uid")
+
+    if let token = NSUserDefaults.standardUserDefaults().stringForKey("token") {
+      authUser(token)
+    } else {
+      stopSpin()
+    }
+
+  }
   
   func handleAuthData(authData: FAuthData) {
     let uid: String = authData.uid!
@@ -144,6 +151,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
     createUser(uid)
     currentUser!.provider = authData.provider
     currentUser!.token = authData.token
+    currentUser!.email = authData.providerData["email"] as? String
   }
   
   func createUser(uid: String) {
@@ -175,6 +183,39 @@ class LoginController: UIViewController, UITextFieldDelegate {
     })
   }
   
+  func validate() -> Bool {
+    if count(password.text) < 6 {
+      invalidPw.text = "Password must be at least 6 characters"
+      invalidPw.hidden = false
+      return false
+    }
+    
+    return true
+  }
+  
+  @IBAction func tapForgotPw(sender: AnyObject) {
+    self.performSegueWithIdentifier("forgot", sender: self)
+  }
+  
+  func forgotSheet() {
+    var alert = UIAlertController(title: "Forgot Password?", message: "Send a new one?", preferredStyle: UIAlertControllerStyle.Alert)
+    
+    alert.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
+    
+    alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { action in
+      self.ref.resetPasswordForUser("bobtony@example.com", withCompletionBlock: { error in
+        if error != nil {
+          // There was an error processing the request
+        } else {
+          // Password reset sent successfully
+        }
+      })
+    }))
+    
+    self.presentViewController(alert, animated: true, completion: nil)
+    
+  }
+  
   func authUser(token:String) {
     ref.authWithCustomToken(token, withCompletionBlock: {error, authData in
       self.stopSpin()
@@ -190,31 +231,31 @@ class LoginController: UIViewController, UITextFieldDelegate {
     })
   }
 //  
-//  override func viewWillAppear(animated: Bool) {
-//    println("viewWillAppear signin")
-//
-//    self.stopSpin()
-//
-//    if appDelegate.justLoggedOut {
-////      delay(0.2) {
-////        self.resetForm()
-////        self.signupCtrl?.resetForm()
-////      }
-//      
-//      appDelegate.justLoggedOut = false
-//    }
-//    println("viewWillAppear")
-//  }
-//  
-//  override func viewDidLoad() {
-//    (UIApplication.sharedApplication().delegate as! AppDelegate).justLoggedOut = false
-//
-//    println("viewDidLoad")
-//    super.viewDidLoad()
-//    
-//    spinner.hidden = true
-//    
-//    // Do any additional setup after loading the view, typically from a nib.
-//  }
+  override func viewWillAppear(animated: Bool) {
+    println("viewWillAppear signin")
+
+    self.stopSpin()
+
+    if appDelegate.justLoggedOut {
+      delay(0.2) {
+        self.resetForm()
+        self.signupCtrl?.resetForm()
+      }
+      
+      appDelegate.justLoggedOut = false
+    }
+    println("viewWillAppear")
+  }
+  
+  override func viewDidLoad() {
+    (UIApplication.sharedApplication().delegate as! AppDelegate).justLoggedOut = false
+
+    println("viewDidLoad")
+    super.viewDidLoad()
+    
+    spinner.hidden = true
+    
+    // Do any additional setup after loading the view, typically from a nib.
+  }
 
 }

@@ -114,7 +114,7 @@ class SpotSettingsController: UITableViewController {
   }
   
   func leaveErr() {
-    showSimpleAlertWithTitle("Error!", message: "an error occurred while trying to leave this spot", viewController: self)
+    showSimpleAlertWithTitle("Error!", message: "an error occurred while trying to leave this spot", viewController: self, onok:nil)
   }
   
   override func viewDidLoad() {

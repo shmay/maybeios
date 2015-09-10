@@ -15,6 +15,7 @@ class User: NSObject {
   var state: CLRegionState
   var token: String?
   var provider: String?
+  var email: String?
   var admin = false
 
   init(name: String, id: String, state: CLRegionState) {

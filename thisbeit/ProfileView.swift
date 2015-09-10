@@ -46,6 +46,9 @@ class ProfileView: UIViewController, UITextFieldDelegate {
     textField.delegate = self
   }
 
+  @IBAction func changePw(sender: AnyObject) {
+    self.performSegueWithIdentifier("changepw", sender: self)
+  }
 
   override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
     textField.resignFirstResponder()
