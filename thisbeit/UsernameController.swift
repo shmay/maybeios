@@ -41,8 +41,8 @@ class UsernameController: UIViewController, UITextFieldDelegate {
   func submit() {
     let name = textField.text
     
-    if count(name) < 4 {
-      errorMsg.text = "Username must be longer than 3 characters!"
+    if count(name) < 2 {
+      errorMsg.text = "Username must be longer than 1 character!"
       errorMsg.hidden = false
     } else if count(name) > 30 {
       errorMsg.text = "Username must be less than 30 characters!"

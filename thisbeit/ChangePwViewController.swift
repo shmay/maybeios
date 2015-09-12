@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ChangePwViewController: UIViewController {
+class ChangePwViewController: UIViewController, UITextFieldDelegate {
   var ref = Firebase(url:fbaseURL)
   var spinning = false
   
@@ -17,26 +17,86 @@ class ChangePwViewController: UIViewController {
   }
   @IBOutlet weak var oldPw: UITextField!
   @IBOutlet weak var newPw: UITextField!
+  @IBOutlet weak var spinner: UIActivityIndicatorView!
   
-  @IBAction func tapChange(sender: AnyObject) {
+  @IBOutlet weak var switcher: UISwitch!
+  func spin() {
+    spinning = true
+    spinner.hidden = false
+    spinner.startAnimating()
+  }
+  
+  func stopSpin() {
+    spinning = false
+    spinner.hidden = true
+    spinner.stopAnimating()
+  }
+  
+  func textFieldShouldReturn(textField: UITextField) -> Bool {
+    println("textf should ret")
+    if textField == newPw {
+      println("new pw")
+      changePw()
+    } else if textField == oldPw {
+      newPw.becomeFirstResponder()
+    }
+    textField.resignFirstResponder()
+    return true
+  }
+  
+  @IBAction func tapSwitch(sender: AnyObject) {
+    if switcher.on {
+      oldPw.secureTextEntry = false
+      newPw.secureTextEntry = false
+    } else {
+      oldPw.secureTextEntry = true
+      newPw.secureTextEntry = true
+    }
+  }
+  
+  func changePw() {
+    spin()
     if let e = currentUser!.email {
       ref.changePasswordForUser(e, fromOld: oldPw.text,
         toNew: newPw.text, withCompletionBlock: { error in
           if error != nil {
-            showSimpleAlertWithTitle("Error!", message: "An error occurred while trying to change your password", viewController: self, onok: nil)
+            println("error: \(error)")
+            
+            var msg = "An error occurred while trying to change your password"
+            
+            if let errorCode = FAuthenticationError(rawValue: error.code) {
+              switch (errorCode) {
+              case .UserDoesNotExist:
+                msg = "User does exist"
+              case .InvalidPassword:
+                msg = "Invalid Password"
+              default:
+                println("Handle default situation")
+              }
+            }
+            
+            showSimpleAlertWithTitle("Error!", message: msg, viewController: self, onok: nil)
+            self.stopSpin()
             // There was an error processing the request
           } else {
-            showSimpleAlertWithTitle("Success!", message: "Successfully changed your password", viewController: self, onok: nil)
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.stopSpin()
+            showSimpleAlertWithTitle("Success!", message: "Successfully changed your password", viewController: self, onok: {_ in
+              self.dismissViewControllerAnimated(true, completion: nil)
+            })
             // Password changed successfully
           }
       })
     }
   }
   
+  @IBAction func tapChange(sender: AnyObject) {
+    changePw()
+  }
+  
   override func viewWillAppear(animated: Bool) {
     println("viewWillAppear signin")
     
+    stopSpin()
     oldPw.text = ""
     newPw.text = ""
     println("viewWillAppear")

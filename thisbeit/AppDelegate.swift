@@ -203,11 +203,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   
   func startMonitoringGeotification(spot: Spot, ctrl: UIViewController) -> CLCircularRegion? {
     if !CLLocationManager.isMonitoringAvailableForClass(CLCircularRegion) {
-      showSimpleAlertWithTitle("Error", message: "Geofencing is not supported on this device!", viewController: ctrl)
+      showSimpleAlertWithTitle("Error", message: "Geofencing is not supported on this device!", viewController: ctrl, onok: nil)
       return nil
     }
     if CLLocationManager.authorizationStatus() != .AuthorizedAlways {
-      showSimpleAlertWithTitle("Warning", message: "Please authorize Always location access to save this Geo-fence.", viewController: ctrl)
+      showSimpleAlertWithTitle("Warning", message: "Please authorize Always location access to save this Geo-fence.", viewController: ctrl, onok: nil)
       return nil
     }
     
@@ -219,7 +219,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         locationManager.startMonitoringForRegion(region)
         return region
       } else {
-        showSimpleAlertWithTitle("Error", message: "Geofence already exists", viewController: ctrl)
+        showSimpleAlertWithTitle("Error", message: "Geofence already exists", viewController: ctrl, onok: nil)
       }
     }
     

@@ -29,6 +29,22 @@ func delay(delay:Double, closure:()->()) {
     dispatch_get_main_queue(), closure)
 }
 
+func showAlert(msg: String) {
+  let alertController = UIAlertController(title: nil, message: msg, preferredStyle: .Alert)
+  let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)
+  alertController.addAction(okAction)
+  
+  
+  if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
+    while let presentedViewController = topController.presentedViewController {
+      topController = presentedViewController
+    }
+    
+    topController.presentViewController(alertController, animated: true, completion: nil)
+  }
+  
+}
+
 func showAlert(msg: String, forController controller: UIViewController) {
   let alertController = UIAlertController(title: nil, message: msg, preferredStyle: .Alert)
   let okAction = UIAlertAction(title: "OK", style: .Default,handler: nil)

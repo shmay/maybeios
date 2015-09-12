@@ -59,8 +59,13 @@ class LoginController: UIViewController, UITextFieldDelegate {
   }
   
   func textFieldShouldReturn(textField: UITextField) -> Bool {
-    signin()
-    textField.resignFirstResponder()
+    if textField == password {
+      textField.resignFirstResponder()
+      signin()
+    } else if textField == email {
+      password.becomeFirstResponder()
+    }
+    
     return true
   }
   
@@ -151,7 +156,13 @@ class LoginController: UIViewController, UITextFieldDelegate {
     createUser(uid)
     currentUser!.provider = authData.provider
     currentUser!.token = authData.token
-    currentUser!.email = authData.providerData["email"] as? String
+    if let e = authData.providerData["email"] as? String {
+      println("set email")
+      NSUserDefaults.standardUserDefaults().setValue(e, forKey: "email")
+      currentUser!.email = e
+    } else if let e = NSUserDefaults.standardUserDefaults().valueForKey("email") as? String {
+      currentUser!.email = e
+    }
   }
   
   func createUser(uid: String) {
@@ -195,25 +206,6 @@ class LoginController: UIViewController, UITextFieldDelegate {
   
   @IBAction func tapForgotPw(sender: AnyObject) {
     self.performSegueWithIdentifier("forgot", sender: self)
-  }
-  
-  func forgotSheet() {
-    var alert = UIAlertController(title: "Forgot Password?", message: "Send a new one?", preferredStyle: UIAlertControllerStyle.Alert)
-    
-    alert.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
-    
-    alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { action in
-      self.ref.resetPasswordForUser("bobtony@example.com", withCompletionBlock: { error in
-        if error != nil {
-          // There was an error processing the request
-        } else {
-          // Password reset sent successfully
-        }
-      })
-    }))
-    
-    self.presentViewController(alert, animated: true, completion: nil)
-    
   }
   
   func authUser(token:String) {
