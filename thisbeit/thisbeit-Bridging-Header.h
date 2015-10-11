@@ -3,9 +3,3 @@
 //
 
 #import <Firebase/Firebase.h>
-#import "TwitterAuthHelper.h"
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
-#import <GooglePlus/GooglePlus.h>
-#import <GoogleOpenSource/GoogleOpenSource.h>
-#import <Google/SignIn.h>

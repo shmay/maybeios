@@ -48,7 +48,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
             self.invalidPw.text = "Invalid Password"
             self.invalidPw.hidden = false
           default:
-            println("Handle default situation")
+            print("Handle default situation")
           }
         }
       } else {
@@ -69,8 +69,8 @@ class LoginController: UIViewController, UITextFieldDelegate {
     return true
   }
   
-  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-    if let touch = touches.first as? UITouch {
+  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    if let _ = touches.first {
       self.view.endEditing(true)
     }
     super.touchesBegan(touches , withEvent:event)
@@ -79,8 +79,8 @@ class LoginController: UIViewController, UITextFieldDelegate {
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     if segue.identifier == "SignUp" {
       let controller = segue.destinationViewController as! SignUpController
-      controller.emailHold = email.text
-      controller.pwHold = password.text
+      controller.emailHold = email.text!
+      controller.pwHold = password.text!
     }
   }
   
@@ -102,7 +102,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
       self.signupCtrl = sourceViewController
       email.text = sourceViewController.email!.text
       password.text = sourceViewController.password!.text
-    } else if let sourceViewController = sender.sourceViewController as? LocationsViewController {
+    } else if let _ = sender.sourceViewController as? LocationsViewController {
       email.text = ""
       password.text = ""
       spinner.stopAnimating()
@@ -111,8 +111,6 @@ class LoginController: UIViewController, UITextFieldDelegate {
   }
   
   func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-    let oldText: NSString = textField.text
-    let newText: NSString = oldText.stringByReplacingCharactersInRange(range, withString: string)
     invalidEmail.hidden = true
     invalidPw.hidden = true
     invalidUser.hidden = true
@@ -134,10 +132,9 @@ class LoginController: UIViewController, UITextFieldDelegate {
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
     
-    println("viewdidappear")
+    print("viewdidappear")
     spin()
-    let uid = NSUserDefaults.standardUserDefaults().stringForKey("uid")
-
+    
     if let token = NSUserDefaults.standardUserDefaults().stringForKey("token") {
       authUser(token)
     } else {
@@ -157,7 +154,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
     currentUser!.provider = authData.provider
     currentUser!.token = authData.token
     if let e = authData.providerData["email"] as? String {
-      println("set email")
+      print("set email")
       NSUserDefaults.standardUserDefaults().setValue(e, forKey: "email")
       currentUser!.email = e
     } else if let e = NSUserDefaults.standardUserDefaults().valueForKey("email") as? String {
@@ -168,10 +165,10 @@ class LoginController: UIViewController, UITextFieldDelegate {
   func createUser(uid: String) {
     currentUser = User(name: "", id: uid, state: .Unknown)
     if let name = NSUserDefaults.standardUserDefaults().valueForKey("name") as? String {
-      println("name: \(name)")
-      if count(name) > 0 {
+      print("name: \(name)")
+      if name.characters.count > 0 {
         currentUser!.name = name
-        println("defaults has name: \(name)")
+        print("defaults has name: \(name)")
         self.performSegueWithIdentifier("gogo", sender:self)
       } else {
         self.checkForUsername(uid)
@@ -184,7 +181,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
   func checkForUsername(uid: String) {
     self.ref.childByAppendingPath("users/\(uid)/name").observeSingleEventOfType(.Value, withBlock: { snapshot in
       if let name = snapshot.value as? String {
-        println("fbname found: \(name)")
+        print("fbname found: \(name)")
         currentUser!.name = name
         NSUserDefaults.standardUserDefaults().setValue(name, forKey: "name")
         self.performSegueWithIdentifier("gogo", sender:self)
@@ -195,7 +192,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
   }
   
   func validate() -> Bool {
-    if count(password.text) < 6 {
+    if password.text!.characters.count < 6 {
       invalidPw.text = "Password must be at least 6 characters"
       invalidPw.hidden = false
       return false
@@ -213,7 +210,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
       self.stopSpin()
       
       if let err = error {
-        println("authError: \(err)")
+        print("authError: \(err)")
         if err.code == 9999 {
           NSUserDefaults.standardUserDefaults().setValue(nil, forKey: "token")
         }
@@ -224,7 +221,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
   }
 //  
   override func viewWillAppear(animated: Bool) {
-    println("viewWillAppear signin")
+    print("viewWillAppear signin")
 
     self.stopSpin()
 
@@ -236,13 +233,13 @@ class LoginController: UIViewController, UITextFieldDelegate {
       
       appDelegate.justLoggedOut = false
     }
-    println("viewWillAppear")
+    print("viewWillAppear")
   }
   
   override func viewDidLoad() {
     (UIApplication.sharedApplication().delegate as! AppDelegate).justLoggedOut = false
 
-    println("viewDidLoad")
+    print("viewDidLoad")
     super.viewDidLoad()
     
     spinner.hidden = true

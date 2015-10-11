@@ -16,13 +16,13 @@ class ProfileView: UIViewController, UITextFieldDelegate {
   @IBAction func tapButton(sender: AnyObject) {
     if !working {
       working = true
-      let name = textField.text
+      let name = textField.text!
       currentUser!.name = name
       if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-        postRequest("update_name", ["token": token, "newname": name], {json in
+        postRequest("update_name", params: ["token": token, "newname": name], success: {json in
           self.working = false
           self.dismiss()
-        }, { _ in
+        }, errorCb: { _ in
           self.working = false
           self.dismiss()
         })
@@ -50,7 +50,7 @@ class ProfileView: UIViewController, UITextFieldDelegate {
     self.performSegueWithIdentifier("changepw", sender: self)
   }
 
-  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     textField.resignFirstResponder()
   }
 

@@ -28,7 +28,7 @@ class JoinController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
   
   @IBAction func tapJoin(sender: AnyObject) {
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String, p = pin {
-      postRequest("join", ["token": token,"pin": p], { json in self.handleResp(json)}, { _ in self.handleErr()})
+      postRequest("join", params: ["token": token,"pin": p], success: { json in self.handleResp(json)}, errorCb: { _ in self.handleErr()})
     }
   }
   
@@ -36,7 +36,7 @@ class JoinController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     if let pson = json {
       if let success = pson["success"] as? Int {
         if success == 1 {
-          if let region = appDelegate.startMonitoringGeotification(spot, ctrl: self) {
+          if let _ = appDelegate.startMonitoringGeotification(spot, ctrl: self) {
             appDelegate.withinRegion(spot.id)
           } else {
 
@@ -58,8 +58,8 @@ class JoinController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     mapView.delegate = self
 
     if let coord = spot.coordinate {
-      var span = MKCoordinateSpanMake(0.075, 0.075)
-      var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: coord.latitude, longitude: coord.longitude), span: span)
+      let span = MKCoordinateSpanMake(0.075, 0.075)
+      let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: coord.latitude, longitude: coord.longitude), span: span)
       mapView.setRegion(region, animated: false)
       
       let circle = MKCircle(centerCoordinate: mapView.centerCoordinate, radius: spot.radius!)
@@ -69,16 +69,12 @@ class JoinController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     spotnameLabel.text = spot.name
   }
   
-  func mapView(mapView: MKMapView!, rendererForOverlay overlay: MKOverlay!) -> MKOverlayRenderer! {
-    if overlay is MKCircle {
-      var circle = MKCircleRenderer(overlay: overlay)
-      circle.strokeColor = UIColor.redColor()
-      circle.fillColor = UIColor(red: 255, green: 0, blue: 0, alpha: 0.1)
-      circle.lineWidth = 1
-      return circle
-    } else {
-      return nil
-    }
+  func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
+    let circle = MKCircleRenderer(overlay: overlay)
+    circle.strokeColor = UIColor.redColor()
+    circle.fillColor = UIColor(red: 255, green: 0, blue: 0, alpha: 0.1)
+    circle.lineWidth = 1
+    return circle
   }
   
 }

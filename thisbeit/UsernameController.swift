@@ -23,7 +23,7 @@ class UsernameController: UIViewController, UITextFieldDelegate {
     textField.delegate = self
   }
   
-  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     textField.resignFirstResponder()
   }
   
@@ -39,12 +39,12 @@ class UsernameController: UIViewController, UITextFieldDelegate {
   }
   
   func submit() {
-    let name = textField.text
+    let name = textField.text!
     
-    if count(name) < 2 {
+    if name.characters.count < 2 {
       errorMsg.text = "Username must be longer than 1 character!"
       errorMsg.hidden = false
-    } else if count(name) > 30 {
+    } else if name.characters.count > 30 {
       errorMsg.text = "Username must be less than 30 characters!"
       errorMsg.hidden = false
     } else {

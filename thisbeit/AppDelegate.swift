@@ -8,8 +8,6 @@
 
 import UIKit
 import CoreLocation
-import FBSDKCoreKit
-import FBSDKLoginKit
 //
 let fbaseURL = "https://maybeso.firebaseio.com"
 let twitterAPIKey = "LHOdkJjlt1SyDBxsrUpEirAGl"
@@ -24,8 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   var justLoggedOut = false
   var fbAuthing = false
   
-  var oauthCtrl: OAuthController?
-  
   let ref = Firebase(url: fbaseURL)
   var pin: String?
   
@@ -36,38 +32,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   var window: UIWindow?
   
   func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-    println("options: \(launchOptions)")
+    print("options: \(launchOptions)")
     
     let fs = NSUserDefaults.standardUserDefaults().valueForKey("firstSpotsLoad") as? Bool
     
     if fs == nil {
       NSUserDefaults.standardUserDefaults().setBool(true, forKey: "firstSpotsLoad")
     }
-
-    return FBSDKApplicationDelegate.sharedInstance()
-      .application(application, didFinishLaunchingWithOptions: launchOptions)
+    
+    return true
   }
 
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     if let onrr = NSUserDefaults.standardUserDefaults().valueForKey("onrr") as? Bool {
-      println("onrr: \(onrr)")
+      print("onrr: \(onrr)")
     }
-    println("options: \(launchOptions)")
+    print("options: \(launchOptions)")
     locationManager.delegate = self
     locationManager.requestAlwaysAuthorization()
 
     locationManager.startMonitoringSignificantLocationChanges()
     
     if let URL = launchOptions?[UIApplicationLaunchOptionsURLKey] as? NSURL {
-      let matches = regexMatches("pin\\=(X\\w{9})", URL.absoluteString!)
+      let matches = regexMatches("pin\\=(X\\w{9})", text: URL.absoluteString)
       
-      if count(matches) > 0 {
+      if matches.count > 0 {
         let pin = matches[0]
         
-        if let u = currentUser {
-          joinWithPin(pin, controller: nil)
+        if let _ = currentUser {
+          self.joinWithPin(pin, controller: nil)
         } else {
-          println("stash pin: \(pin)")
+          print("stash pin: \(pin)")
           NSUserDefaults.standardUserDefaults().setValue(pin, forKey: "pin")
         }
       }
@@ -83,10 +78,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     return true
   }
   
-  func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+  func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
     if status != .AuthorizedAlways {
       if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-        postRequest("reset", ["token": token], {json in }, {err in })
+        postRequest("reset", params: ["token": token], success: {json in }, errorCb: {err in })
       }
     }
   }
@@ -94,51 +89,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   func joinWithPin(pin: String, controller: UIViewController?) {
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
       let dict = ["token": token, "pin":pin]
-      postRequest("join_w_pin", dict, {json in self.handleResp(json, controller:controller)}, {self.handleErr()})
+      postRequest("join_w_pin", params: dict, success: {json in self.handleResp(json, controller:controller)}, errorCb: {self.handleErr()})
     }
   }
   
-  func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-    println("url: \(url.absoluteString!)")
-    println("sa: \(sourceApplication)")
+  func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+    print("url: \(url.absoluteString)")
+    print("sa: \(sourceApplication)")
     
     NSUserDefaults.standardUserDefaults().setBool(true, forKey: "onrr")
-        
-    let tokenMatches = regexMatches("access_token=(\\w+)", url.absoluteString!)
-    println("tokenMatches: \(tokenMatches)")
     
-    if count(tokenMatches) > 0 {
+    let matches = regexMatches("pin\\=(X\\w{9})", text: url.absoluteString)
 
-      if let root = self.window!.rootViewController as? OAuthController {
-        println("YUP")
-        self.ref.authWithOAuthProvider("facebook", token: tokenMatches[0],
-          withCompletionBlock: { error, authData in
-            if error != nil {
-              println("Login failed. \(error)")
-            } else {
-              println("Logged in! \(authData)")
-              root.handleAuthData(authData)
-            }
-            root.stopSpin()
-        })
-      }
-    }
-      
-//      FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url,
-//          sourceApplication: sourceApplication, annotation: annotation)
-    
-    GPPURLHandler.handleURL(url,
-      sourceApplication:sourceApplication,
-      annotation:annotation)
-    
-    let matches = regexMatches("pin\\=(X\\w{9})", url.absoluteString!)
-
-    if count(matches) > 0 {
+    if matches.count > 0 {
       let pin = matches[0]
       
       if let u = currentUser {
-        println("u.name: \(u.name)")
-        if count(u.name) > 0 {
+        print("u.name: \(u.name)")
+        if u.name.characters.count > 0 {
           joinWithPin(pin, controller: nil)
         } else {
           NSUserDefaults.standardUserDefaults().setValue(pin, forKey: "pin")
@@ -154,7 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   func withinRegion(id: String) {
     delay(0.5) {
       if let reg = self.getRegionByID(id) {
-        println("withinRegion: \(id)")
+        print("withinRegion: \(id)")
         self.locationManager.requestStateForRegion(reg)
       }
     }
@@ -166,8 +134,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   
   func handleResp(json: NSDictionary?, controller: UIViewController?) {
     if let parseJSON = json {
-      println("json: \(json)")
-      var success = parseJSON["success"] as? Int
+      print("json: \(json)")
+      let success = parseJSON["success"] as? Int
       if success == 1 {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         
@@ -215,7 +183,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     if reg == nil {
       if let region = regionWithSpot(spot) {
-        println("star moni: \(region.center.latitude),\(region.center.longitude); \(region.radius)")
+        print("star moni: \(region.center.latitude),\(region.center.longitude); \(region.radius)")
         locationManager.startMonitoringForRegion(region)
         return region
       } else {
@@ -232,7 +200,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         let reg = getRegionByID(spot.id)
         
         if reg == nil {
-          if let r = startMonitoringGeotification(spot, ctrl: ctrl) {
+          if let _ = startMonitoringGeotification(spot, ctrl: ctrl) {
             spot.tracking = true
           }
         }
@@ -243,7 +211,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   func allSpots() {
     for region in locationManager.monitoredRegions {
       if let cr = region as? CLCircularRegion {
-        println("region: \(cr.center.latitude),\(cr.center.longitude); \(cr.radius)")
+        print("region: \(cr.center.latitude),\(cr.center.longitude); \(cr.radius)")
       }
     }
   }
@@ -263,22 +231,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-      postRequest("remove_fence_for_user", ["token":token,"spotid":id], {json in
+      postRequest("remove_fence_for_user", params: ["token":token,"spotid":id], success: {json in
         if let parseJSON = json {
-          println("remove_Fence: \(json)")
-          var success = parseJSON["success"] as? Int
+          print("remove_Fence: \(json)")
+          let success = parseJSON["success"] as? Int
           if success == 1 {
-            println("successery")
+            print("successery")
           }
         }
-        }, {_ in})
+        }, errorCb: {_ in})
     }
   }
   
   func stopMonitoringSpot(spot: Spot, ctrl: UIViewController) -> Bool {
-    println("stopMonitor")
+    print("stopMonitor")
     if let reg = getRegionByID(spot.id) {
-      println("is good")
+      print("is good")
       locationManager.stopMonitoringForRegion(reg)
       spot.tracking = false
       return true
@@ -301,14 +269,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   }
   
   func locStatusChanged(spotid: String, status: Int) {
-    println("locStatusChanged: \(status)")
+    print("locStatusChanged: \(status)")
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-      postRequest("spot_status_changed", ["token": token, "spotid": spotid, "status": "\(status)"], {json in
+      postRequest("spot_status_changed", params: ["token": token, "spotid": spotid, "status": "\(status)"], success: {json in
         if let p = json {
           if let s = p["success"] as? Int {
             if s == 1 {
               if let j = p["status"] as? Int {
-                println("setServer")
+                print("setServer")
                 NSUserDefaults.standardUserDefaults().setInteger(j, forKey: "\(spotid)-server")
               }
             } else if s < 0 {
@@ -318,12 +286,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             }
           }
         }
-      }, {_ in })
+      }, errorCb: {_ in })
     }
   }
   
-  func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-    println("didUpdateLocations")
+  func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    print("didUpdateLocations")
     if let fs = NSUserDefaults.standardUserDefaults().valueForKey("firstSpotsLoad") as? Bool {
       if fs != true {
         checkSpots()
@@ -350,31 +318,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
   }
   
   func checkStatusForSpot(spot: Spot) {
-    println("spotid: \(spot.id)")
+    print("spotid: \(spot.id)")
     if let reg = getRegionByID(spot.id) {
-      println("check status for: \(spot.name)")
+      print("check status for: \(spot.name)")
       delay(0.5) {
         self.locationManager.requestStateForRegion(reg)
       }
     }
   }
   
-  func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
-    println("didEnter: \(CLRegionState.Inside.rawValue)")
+  func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
+    print("didEnter: \(CLRegionState.Inside.rawValue)")
     locStatusChanged(region.identifier, status: CLRegionState.Inside.rawValue)
   }
   
-  func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
-    println("didExit: \(CLRegionState.Outside.rawValue)")
+  func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
+    print("didExit: \(CLRegionState.Outside.rawValue)")
     locStatusChanged(region.identifier, status: CLRegionState.Outside.rawValue)
   }
   
   func locationManager(manager: CLLocationManager, didDetermineState state: CLRegionState, forRegion region: CLRegion) {
-    println("didDetermnine: \(state.rawValue)")
+    print("didDetermnine: \(state.rawValue)")
     if let serverVal = NSUserDefaults.standardUserDefaults().valueForKey("\(region.identifier)-server") as? Int {
       if state.rawValue != serverVal {
-        println("state: \(state.rawValue)")
-        println("serverVal: \(serverVal)")
+        print("state: \(state.rawValue)")
+        print("serverVal: \(serverVal)")
         locStatusChanged(region.identifier, status: state.rawValue)
       }
     } else {
@@ -382,7 +350,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
       locStatusChanged(region.identifier, status: state.rawValue)
     }
 
-    let val = state.rawValue
   }
   
   func regionWithSpot(spot: Spot) -> CLCircularRegion? {
@@ -414,7 +381,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
   func applicationDidBecomeActive(application: UIApplication) {
     
-    FBSDKAppEvents.activateApp()
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
   }
 

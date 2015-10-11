@@ -26,7 +26,7 @@ class UserController: UITableViewController {
   @IBAction func tapRemove(sender: AnyObject) {
     let msg = "User will not be able to rejoin this spot without receiving an invitation"
     
-    var alert = UIAlertController(title: "Are you sure?", message: msg, preferredStyle: UIAlertControllerStyle.Alert)
+    let alert = UIAlertController(title: "Are you sure?", message: msg, preferredStyle: UIAlertControllerStyle.Alert)
     
     alert.addAction(UIAlertAction(title: "I'm sure", style: .Destructive, handler: { action in
       self.delegate.userController(self, removedUser: self.user)

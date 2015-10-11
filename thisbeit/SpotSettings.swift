@@ -23,6 +23,9 @@ class SpotSettingsController: UITableViewController {
   @IBOutlet weak var trackingLabel: UILabel!
   @IBOutlet weak var flag: UISwitch!
   
+  @IBAction func tapCancel(sender: AnyObject) {
+    self.dismissViewControllerAnimated(true, completion: nil)
+  }
   @IBAction func flagTurned(sender: AnyObject) {
     if flag.on {
       trackingLabel.text = "tracking"
@@ -42,7 +45,7 @@ class SpotSettingsController: UITableViewController {
       if result {
         if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
           let d = ["token": token, "spotid": spot.id, "status": "0"]
-          postRequest("spot_status_changed", d, {json in
+          postRequest("spot_status_changed", params: d, success: {json in
             if let j = json {
               let s = j["success"] as? Int
               if s == 1 {
@@ -51,7 +54,7 @@ class SpotSettingsController: UITableViewController {
                 
               }
             }
-          }, {err in
+          }, errorCb: {err in
             })
         }
       } else {
@@ -70,7 +73,7 @@ class SpotSettingsController: UITableViewController {
   }
   
   func leaveSheet() {
-    var alert = UIAlertController(title: "Are you sure?", message: "You will not be able to rejoin the spot without receiving a new invitation", preferredStyle: UIAlertControllerStyle.Alert)
+    let alert = UIAlertController(title: "Are you sure?", message: "You will not be able to rejoin the spot without receiving a new invitation", preferredStyle: UIAlertControllerStyle.Alert)
     
     alert.addAction(UIAlertAction(title: "I'm sure", style: .Destructive, handler: { action in self.leaveSpot() }))
     
@@ -93,7 +96,7 @@ class SpotSettingsController: UITableViewController {
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
       self.spin()
 
-      postRequest("leave_spot", ["token":token, "spotid":spot.id], {json in
+      postRequest("leave_spot", params: ["token":token, "spotid":spot.id], success: {json in
         self.stopSpin()
         if let success = json!["success"] as? Int {
           if success < 0 {
@@ -101,12 +104,14 @@ class SpotSettingsController: UITableViewController {
           } else {
             self.spotView.locationsController.spotCtrl = nil
             self.spotView.locationsController.shouldUpdate()
-            self.spotView.dismissViewControllerAnimated(true, completion: nil)
+            self.spotView.dismissViewControllerAnimated(true, completion: {_ in
+              self.spotView.dismissViewControllerAnimated(true, completion: nil)
+            })
           }
         } else {
           self.leaveErr()
         }
-      }, {_ in
+      }, errorCb: {_ in
         self.stopSpin()
         self.leaveErr()
       })
@@ -122,7 +127,7 @@ class SpotSettingsController: UITableViewController {
     
     spinner.hidden = true
     
-    println("tracking: \(spot.tracking)")
+    print("tracking: \(spot.tracking)")
     flag.on = spot.tracking
     let text = spot.tracking ? "tracking" : "not tracking"
     trackingLabel.text = text

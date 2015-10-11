@@ -24,9 +24,9 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   weak var spotCtrl: SpotViewController?
   
   func shouldUpdate() {
-    println("shouldUPdate: cnt: \(cnt) spotCnt: \(spotCnt)")
+    print("shouldUPdate: cnt: \(cnt) spotCnt: \(spotCnt)")
     if cnt >= spotCnt {
-      println("firstSpotsLoad: \(firstSpotsLoad)")
+      print("firstSpotsLoad: \(firstSpotsLoad)")
       if firstSpotsLoad {
         NSUserDefaults.standardUserDefaults().setBool(false, forKey: "firstSpotsLoad")
         firstSpotsLoad = false
@@ -42,14 +42,14 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   }
   
   func loadChild(key:String, admin:Int) {
-    println("load child")
+    print("load child")
     spotsRef.childByAppendingPath(key).observeEventType(.Value,  withBlock: {child in
 //      println("child val: \(child.value)")
 //      println("child val type: \(child.value.dynamicType)")
       
       // check for existence of spot... not the greatest way
       if let name = child.childSnapshotForPath("name").value as? String {
-        println("change spot: \(name)")
+        print("change spot: \(name)")
         self.cnt += 1
 
         let lat = (child.childSnapshotForPath("lat").value).doubleValue
@@ -80,7 +80,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         spot!.coordinate = coords
         spot!.radius = radius
         
-        if let region = self.appDelegate.getRegionByID(spot!.id) {
+        if let _ = self.appDelegate.getRegionByID(spot!.id) {
           spot!.tracking = true
         } else {
           spot!.tracking = false
@@ -89,8 +89,6 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         let users = child.childSnapshotForPath("users").children
 
         while let userSnap = users.nextObject() as? FDataSnapshot {
-          let key = userSnap.key
-          
           let user = userSnap.value
           
           let name = user["name"] as! String
@@ -105,7 +103,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
             if cu.id == u.id {
               spot!.state = u.state
               if !spot!.tracking && u.state != .Unknown && !self.firstSpotsLoad {
-                println("not tracking, unknown")
+                print("not tracking, unknown")
                 self.appDelegate.locStatusChanged(spot!.id, status:0)
               }
               NSUserDefaults.standardUserDefaults().setInteger(u.state.rawValue, forKey:"\(spot!.id)-server")
@@ -137,7 +135,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    println("viewdidload")
+    print("viewdidload")
     
     if let fs = NSUserDefaults.standardUserDefaults().valueForKey("firstSpotsLoad") as? Bool {
       firstSpotsLoad = fs
@@ -148,7 +146,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         let children = snapshot.children
         self.spotCnt = snapshot.childrenCount
         self.spots = [Spot]()
-        println("reset cnt")
+        print("reset cnt")
         self.cnt = 0
         while let child = children.nextObject() as? FDataSnapshot {
           if child.value as! Int == -1 {
@@ -161,13 +159,13 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
       })
     }
     
-    var str:String? = UIPasteboard.generalPasteboard().string
-    println("STRT: \(str)")
+    let str:String? = UIPasteboard.generalPasteboard().string
+    print("STRT: \(str)")
     if let s = str {
-      if count(s) == 10 {
-        let matches = regexMatches("(^X\\w+)", s)
+      if s.characters.count == 10 {
+        let matches = regexMatches("(^X\\w+)", text: s)
         
-        if count(matches) > 0 {
+        if matches.count > 0 {
           delay(0.5) {
             self.appDelegate.joinWithPin(matches[0], controller: self)
             UIPasteboard.generalPasteboard().string = ""
@@ -176,9 +174,9 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
       }
     }
     
-    println("check for pin")
+    print("check for pin")
     if let pin = NSUserDefaults.standardUserDefaults().stringForKey("pin") {
-      println("pin: \(pin)")
+      print("pin: \(pin)")
       delay(0.5) {
         self.appDelegate.joinWithPin(pin, controller: self)
       }
@@ -208,7 +206,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
     let logoutAction = UIAlertAction(title: "Logout", style: .Destructive, handler: { action in
       if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
         let values = ["token": "\(token)"]
-        postRequest("logout", values, {json in
+        postRequest("logout", params: values, success: {json in
           NSUserDefaults.standardUserDefaults().removeObjectForKey("uid")
           NSUserDefaults.standardUserDefaults().removeObjectForKey("token")
           NSUserDefaults.standardUserDefaults().removeObjectForKey("name")
@@ -217,18 +215,13 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
           
           NSUserDefaults.standardUserDefaults().setBool(true, forKey: "firstSpotsLoad")
           
-          if currentUser!.provider == "facebook" {
-            let facebookLogin = FBSDKLoginManager()
-            facebookLogin.logOut()
-          }
-          
           self.ref.unauth()
           currentUser = nil
           
           delay(0.1) {
             self.performSegueWithIdentifier("GoHome", sender: self)
           }
-        }, {error in })
+        }, errorCb: {error in })
       }
       
     })
@@ -254,13 +247,13 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
     UIGraphicsBeginImageContextWithOptions(size, false, 0)
     color.setFill()
     UIRectFill(CGRectMake(0, 0, 100, 100))
-    var image = UIGraphicsGetImageFromCurrentImageContext()
+    let image = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
     return image
   }
   
   override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCellWithIdentifier("SpotCell") as! UITableViewCell
+    let cell = tableView.dequeueReusableCellWithIdentifier("SpotCell")!
     
     let spot = spots[indexPath.row]
     
@@ -268,13 +261,13 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
     label.text = spot.name
     
     let yes = cell.viewWithTag(1001) as! UILabel
-    yes.text = "\(count(spot.yes))"
+    yes.text = "\(spot.yes.count)"
     
     let no = cell.viewWithTag(1002) as! UILabel
-    no.text = "\(count(spot.no))"
+    no.text = "\(spot.no.count)"
     
     let maybe = cell.viewWithTag(1003) as! UILabel
-    maybe.text = "\(count(spot.maybe))"
+    maybe.text = "\(spot.maybe.count)"
     
     let img = cell.viewWithTag(1004) as! UIImageView
     
@@ -295,7 +288,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
         if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
           let values = ["name": name, "lat": "\(coordinate.latitude)", "lng": "\(coordinate.longitude)", "radius": "\(radius)",
             "token": "\(token)", "uid": "\(uid)", "username": username]
-          postRequest("new_spot", values, {json in self.handleResp(json,controller:controller)}, {self.handleErr(controller)})
+          postRequest("new_spot", params: values, success: {json in self.handleResp(json,controller:controller)}, errorCb: {self.handleErr(controller)})
         }
       }
     }
@@ -306,10 +299,10 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
     controller.dismissViewControllerAnimated(true,completion:nil)
 
     if let parseJSON = json {
-      var success = parseJSON["success"] as? Int
-      println("json: \(parseJSON)")
+      let success = parseJSON["success"] as? Int
+      print("json: \(parseJSON)")
       if success == 1 {
-        println("parseJson: \(parseJSON)")
+        print("parseJson: \(parseJSON)")
         if let lat = parseJSON["lat"] as? Double, lng = parseJSON["lng"] as? Double, radius = parseJSON["radius"] as? Double, name = parseJSON["name"] as? String, id = parseJSON["id"] as? String  {
           
           let spot = Spot(name: name, id: id)
@@ -317,7 +310,7 @@ class LocationsViewController: UITableViewController, AddSpotControllerDelegate 
           let coords = CLLocationCoordinate2D(latitude: lat, longitude: lng)
           spot.coordinate = coords
 
-          if let reg = appDelegate.startMonitoringGeotification(spot,ctrl:self) {
+          if let _ = appDelegate.startMonitoringGeotification(spot,ctrl:self) {
             appDelegate.withinRegion(spot.id)
           }
 

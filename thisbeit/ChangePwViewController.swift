@@ -15,6 +15,7 @@ class ChangePwViewController: UIViewController, UITextFieldDelegate {
   @IBAction func tapCancel(sender: AnyObject) {
     self.dismissViewControllerAnimated(true, completion: nil)
   }
+  
   @IBOutlet weak var oldPw: UITextField!
   @IBOutlet weak var newPw: UITextField!
   @IBOutlet weak var spinner: UIActivityIndicatorView!
@@ -26,6 +27,11 @@ class ChangePwViewController: UIViewController, UITextFieldDelegate {
     spinner.startAnimating()
   }
   
+  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    oldPw.resignFirstResponder()
+    newPw.resignFirstResponder()
+  }
+  
   func stopSpin() {
     spinning = false
     spinner.hidden = true
@@ -33,9 +39,9 @@ class ChangePwViewController: UIViewController, UITextFieldDelegate {
   }
   
   func textFieldShouldReturn(textField: UITextField) -> Bool {
-    println("textf should ret")
+    print("textf should ret")
     if textField == newPw {
-      println("new pw")
+      print("new pw")
       changePw()
     } else if textField == oldPw {
       newPw.becomeFirstResponder()
@@ -60,7 +66,7 @@ class ChangePwViewController: UIViewController, UITextFieldDelegate {
       ref.changePasswordForUser(e, fromOld: oldPw.text,
         toNew: newPw.text, withCompletionBlock: { error in
           if error != nil {
-            println("error: \(error)")
+            print("error: \(error)")
             
             var msg = "An error occurred while trying to change your password"
             
@@ -71,7 +77,7 @@ class ChangePwViewController: UIViewController, UITextFieldDelegate {
               case .InvalidPassword:
                 msg = "Invalid Password"
               default:
-                println("Handle default situation")
+                print("Handle default situation")
               }
             }
             
@@ -94,11 +100,11 @@ class ChangePwViewController: UIViewController, UITextFieldDelegate {
   }
   
   override func viewWillAppear(animated: Bool) {
-    println("viewWillAppear signin")
+    print("viewWillAppear signin")
     
     stopSpin()
     oldPw.text = ""
     newPw.text = ""
-    println("viewWillAppear")
+    print("viewWillAppear")
   }
 }

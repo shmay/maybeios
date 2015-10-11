@@ -47,14 +47,14 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
   }
   
   @IBAction func textFieldEditingChanged(sender: UITextField) {
-    addButton.enabled = !nameTextField.text.isEmpty
+    addButton.enabled = !nameTextField.text!.isEmpty
   }
   
   @IBAction func onCancel(sender: AnyObject) {
     dismissViewControllerAnimated(true, completion: nil)
   }
   
-  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     nameTextField.resignFirstResponder()
   }
   
@@ -65,7 +65,7 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
   }
   
   private func mapViewRegionDidChangeFromUserInteraction() -> Bool {
-    let view = self.mapView.subviews[0] as! UIView
+    let view = self.mapView.subviews[0] 
     //  Look through gesture recognizers to determine whether this region change is from user interaction
     if let gestureRecognizers = view.gestureRecognizers {
       for recognizer in gestureRecognizers {
@@ -86,46 +86,46 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
   
   func mapView(mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
     if (mapChangedFromUserInteraction) {
-      println("did change region2")
+      print("did change region2")
       
-      mapView.removeOverlay(circle)
+      if let c = circle {
+        mapView.removeOverlay(c)
+      }
+      
       circle = MKCircle(centerCoordinate: mapView.centerCoordinate, radius: radius as CLLocationDistance)
-      mapView.addOverlay(circle)
+      mapView.addOverlay(circle!)
+      
       // user changed map region
     }
   }
 
-  func mapView(mapView: MKMapView!, rendererForOverlay overlay: MKOverlay!) -> MKOverlayRenderer! {
-    if overlay is MKCircle {
-      var circle = MKCircleRenderer(overlay: overlay)
-      circle.strokeColor = UIColor.redColor()
-      circle.fillColor = UIColor(red: 255, green: 0, blue: 0, alpha: 0.1)
-      circle.lineWidth = 1
-      return circle
-    } else {
-      return nil
-    }
+  func mapView(mapView: MKMapView,rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
+    print("render for overlay")
+    let circle = MKCircleRenderer(overlay: overlay)
+    circle.strokeColor = UIColor.redColor()
+    circle.fillColor = UIColor(red: 255, green: 0, blue: 0, alpha: 0.1)
+    circle.lineWidth = 1
+    return circle
   }
   
   // This method is called when the player moves the slider.
   @IBAction func sliderMoved(slider: UISlider) {
-    // The position of the slider is a value between 1 and 100, and may contain
+    print("sliderMoved")
+    // The position of the slider is a value between 1 and 5000, and may contain
     // digits after the decimal point. You round the value to a whole number and
     // store it in the currentValue variable.
     radius = Double(lroundf(slider.value))
     
     radiusLabel.text = "\(Int(radius))m"
-    
-    mapView.removeOverlay(circle)
+  
+    if let c = circle {
+      mapView.removeOverlay(c)
+    }
    
     circle = MKCircle(centerCoordinate: mapView.centerCoordinate, radius: radius as CLLocationDistance)
-    mapView.addOverlay(circle)
+    mapView.addOverlay(circle!)
     
-    // If you want to see the current value as you're moving the slider, then
-    // uncomment the println() line below (remove the //) and keep an eye on the
-    // output console when you run the app.
-    
-    //println("currentValue = \(currentValue)")
+    print("currentValue = \(radius)")
   }
   
   override func didReceiveMemoryWarning() {
@@ -138,13 +138,13 @@ class AddSpotController: UIViewController, CLLocationManagerDelegate, MKMapViewD
   }
   
   @IBAction private func onAdd(sender: AnyObject) {
-    var coordinate = mapView.centerCoordinate
-    var name = nameTextField.text
+    let coordinate = mapView.centerCoordinate
+    let name = nameTextField.text
     
-    delegate!.addSpotController(self, didAddCoordinate: coordinate, radius: radius, name: name)
+    delegate!.addSpotController(self, didAddCoordinate: coordinate, radius: radius, name: name!)
   }
   
-  func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+  func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
     mapView.showsUserLocation = (status == .AuthorizedAlways)
   }
   

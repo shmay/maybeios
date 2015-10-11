@@ -78,7 +78,7 @@ class SignUpController: UIViewController, UITextFieldDelegate {
               
             default:
               self.spinner.hidden = true
-              println("Handle default situation")
+              print("Handle default situation")
             }
           }
         } else {
@@ -107,7 +107,7 @@ class SignUpController: UIViewController, UITextFieldDelegate {
   }
   
   func validate() -> Bool {
-    if count(password.text) < 6 {
+    if password.text!.characters.count < 6 {
       invalidPw.text = "Password must be at least 6 characters"
       invalidPw.hidden = false
       return false
@@ -146,10 +146,10 @@ class SignUpController: UIViewController, UITextFieldDelegate {
   func createUser(uid: String) {
     currentUser = User(name: "", id: uid, state: .Unknown)
     if let name = NSUserDefaults.standardUserDefaults().valueForKey("name") as? String {
-      println("name: \(name)")
-      if count(name) > 0 {
+      print("name: \(name)")
+      if name.characters.count > 0 {
         currentUser!.name = name
-        println("defaults has name: \(name)")
+        print("defaults has name: \(name)")
         self.performSegueWithIdentifier("gogo", sender:self)
       } else {
         self.checkForUsername(uid)
@@ -162,7 +162,7 @@ class SignUpController: UIViewController, UITextFieldDelegate {
   func checkForUsername(uid: String) {
     self.ref.childByAppendingPath("users/\(uid)/name").observeSingleEventOfType(.Value, withBlock: { snapshot in
       if let name = snapshot.value as? String {
-        println("fbname found: \(name)")
+        print("fbname found: \(name)")
         currentUser!.name = name
         NSUserDefaults.standardUserDefaults().setValue(name, forKey: "name")
         self.performSegueWithIdentifier("gogo", sender:self)
@@ -172,15 +172,15 @@ class SignUpController: UIViewController, UITextFieldDelegate {
     })
   }
   
-  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-    if let touch = touches.first as? UITouch {
+  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    if let _ = touches.first {
       self.view.endEditing(true)
     }
     super.touchesBegan(touches , withEvent:event)
   }
   
   override func viewWillAppear(animated: Bool) {
-    println("viewWillAppear signup")
+    print("viewWillAppear signup")
 
     self.stopSpin()
     if appDelegate.justLoggedOut {
@@ -190,8 +190,7 @@ class SignUpController: UIViewController, UITextFieldDelegate {
   }
   
   func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-    let oldText: NSString = textField.text
-    let newText: NSString = oldText.stringByReplacingCharactersInRange(range, withString: string)
+    let oldText: NSString = textField.text!
     invalidEmail.hidden = true
     invalidPw.hidden = true
     invalidUser.hidden = true
@@ -199,7 +198,7 @@ class SignUpController: UIViewController, UITextFieldDelegate {
   }
   
   override func viewDidLoad() {
-    println("viewDidLoad")
+    print("viewDidLoad")
     super.viewDidLoad()
     email.text = emailHold
     password.text = pwHold

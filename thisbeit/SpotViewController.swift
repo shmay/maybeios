@@ -28,9 +28,7 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
     super.viewDidLoad()
     
     title = spot.name
-    
-    let id = NSUserDefaults.standardUserDefaults().valueForKey("uid") as! String
- 
+     
     if spot.admin {
       self.navigationItem.rightBarButtonItems = [self.inviteBtn, self.editBtn, self.actionItem]
     } else {
@@ -66,14 +64,14 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   
   override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
     if (editingStyle == UITableViewCellEditingStyle.Delete) {
-      var alert = UIAlertController(title: "Are you sure?", message: "This will remove the user from this spot", preferredStyle: UIAlertControllerStyle.Alert)
+      let alert = UIAlertController(title: "Are you sure?", message: "This will remove the user from this spot", preferredStyle: UIAlertControllerStyle.Alert)
 
       alert.addAction(UIAlertAction(title: "I'm sure", style: .Destructive, handler: { action in
-        println("destroy")
+        print("destroy")
       }))
       
       alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { action in
-        println("Click of cancel button")
+        print("Click of cancel button")
       }))
       
       self.presentViewController(alert, animated: true, completion: nil)
@@ -132,7 +130,7 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
 //    }
     if (messageComposer.canSendText()) {
       if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-        postRequest("gen_invite", ["spotid": spot.id, "token":token], { json in self.handleToken(json)} , { _ in self.handleErr()})
+        postRequest("gen_invite", params: ["spotid": spot.id, "token":token], success: { json in self.handleToken(json)} , errorCb: { _ in self.handleErr()})
         // Obtain a configured MFMessageComposeViewController
         
         // Present the configured MFMessageComposeViewController instance
@@ -148,7 +146,7 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   
   func handleToken(json:NSDictionary?) {
     if (messageComposer.canSendText()) {
-      println("respjson: \(json)")
+      print("respjson: \(json)")
       if let pjson = json {
         let messageComposeVC = messageComposer.configuredMessageComposeViewController()
         if let pin = pjson["token"] as? String {
@@ -161,25 +159,25 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   }
   
   func handleErr() {
-    println("handleErr")
+    print("handleErr")
   }
 
   func openEmail() {
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-      postRequest("gen_invite", ["spotid": spot.id, "token":token], { json in
+      postRequest("gen_invite", params: ["spotid": spot.id, "token":token], success: { json in
         if let j = json {
           if let pin = j["pin"] as? String {
             let m = "You've been invited to join a spot on Maybe.  Go to http://invite.textmaybe.com/?pin=\(pin) to join the spot."
-            var emailTitle = "You've been invited to join a Spot on Maybe"
-            var messageBody = m
-            var mc: MFMailComposeViewController = MFMailComposeViewController()
+            let emailTitle = "You've been invited to join a Spot on Maybe"
+            let messageBody = m
+            let mc: MFMailComposeViewController = MFMailComposeViewController()
             //    mc.mailComposeDelegate = self
             mc.setSubject(emailTitle)
             mc.setMessageBody(messageBody, isHTML: false)
             self.presentViewController(mc, animated: true, completion: nil)
           }
         }
-      } , { _ in self.handleErr()})
+      } , errorCb: { _ in self.handleErr()})
       // Obtain a configured MFMessageComposeViewController
       
       // Present the configured MFMessageComposeViewController instance
@@ -191,7 +189,7 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
   }
   
   override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCellWithIdentifier("UserCell") as! UITableViewCell
+    let cell = tableView.dequeueReusableCellWithIdentifier("UserCell")!
     
     if indexPath.section == 0 {
       let u = spot.yes[indexPath.row]
@@ -252,7 +250,7 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
     controller.dismissViewControllerAnimated(true, completion: nil)
  
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-      postRequest("remove_user", ["token": token, "uid": user.id, "spotid":spot.id], {json in }, {_ in })
+      postRequest("remove_user", params: ["token": token, "uid": user.id, "spotid":spot.id], success: {json in }, errorCb: {_ in })
     }
   }
 
@@ -262,18 +260,18 @@ class SpotViewController: UITableViewController, EditSpotControllerDelegate,User
     title = name
     spot.name = name
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
-      postRequest("edit_spot", ["name": name, "spotid":spot.id,"token": token], {json in self.handleResp(json)}, {_ in self.handleErr()})
+      postRequest("edit_spot", params: ["name": name, "spotid":spot.id,"token": token], success: {json in self.handleResp(json)}, errorCb: {_ in self.handleErr()})
     }
   }
   
   func editSpotControllerRemoveSpot(controller: EditSpotController) {
     if let token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String {
       self.locationsController.spotCtrl = nil
-      postRequest("remove_spot", ["token": token, "spotid":spot.id], { json in
+      postRequest("remove_spot", params: ["token": token, "spotid":spot.id], success: { json in
         controller.dismissViewControllerAnimated(true, completion: { action in
           self.locationsController.navigationController?.popViewControllerAnimated(true)
         })
-      }, { _ in self.handleErr() })
+      }, errorCb: { _ in self.handleErr() })
     }
   }
   

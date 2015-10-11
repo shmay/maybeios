@@ -20,14 +20,14 @@ class AboutViewController: UIViewController, UIWebViewDelegate {
     webV.delegate = self
     // Load the BullsEye.html file into the web view.
     if let htmlFile = NSBundle.mainBundle().pathForResource("about", ofType: "html") {
-      let htmlData = NSData(contentsOfFile: htmlFile)
+      let htmlData = NSData(contentsOfFile: htmlFile)!
       let baseURL = NSURL.fileURLWithPath(NSBundle.mainBundle().bundlePath)
       webV.loadData(htmlData, MIMEType: "text/html", textEncodingName: "UTF-8", baseURL: baseURL)
     }
   }
   
   func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-    println("request: \(request)")
+    print("request: \(request)")
     if navigationType == UIWebViewNavigationType.LinkClicked {
       UIApplication.sharedApplication().openURL(request.URL!)
       return false;

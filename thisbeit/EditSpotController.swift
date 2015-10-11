@@ -31,7 +31,7 @@ class EditSpotController: UIViewController {
   
   @IBAction func updateTapped(sender: AnyObject) {
     name = textField.text
-    delegate!.editSpotController(self, updatedName: textField.text)
+    delegate!.editSpotController(self, updatedName: textField.text!)
   }
   
   override func viewDidLoad() {
