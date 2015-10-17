@@ -9,12 +9,12 @@
 import UIKit
 import CoreLocation
 //
-let fbaseURL = "https://maybeso.firebaseio.com"
-let twitterAPIKey = "LHOdkJjlt1SyDBxsrUpEirAGl"
-let serverURL = "https://maybeserver.xyz"
-//let fbaseURL = "https://androidkye.firebaseio.com"
-//let twitterAPIKey = "EPOngDM26zvGi5sHuDpYXsAiM"
-//let serverURL = "http://localhost:3000"
+//let fbaseURL = "https://maybeso.firebaseio.com"
+//let twitterAPIKey = "LHOdkJjlt1SyDBxsrUpEirAGl"
+//let serverURL = "https://maybeserver.xyz"
+let fbaseURL = "https://androidkye.firebaseio.com"
+let twitterAPIKey = "EPOngDM26zvGi5sHuDpYXsAiM"
+let serverURL = "http://localhost:3000"
 //let serverURL = "http://192.168.1.108:3000"
 
 @UIApplicationMain
